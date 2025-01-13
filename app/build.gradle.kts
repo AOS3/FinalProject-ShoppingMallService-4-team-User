@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     // ksp
     id("com.google.devtools.ksp")
+    // fireBase
+    id("com.google.gms.google-services")
 }
 
 // api_key를 숨기기 위해 작성
@@ -53,7 +55,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -64,4 +65,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     // fragment
     implementation("androidx.fragment:fragment-ktx:1.8.5")
+    // FireBase
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore:25.1.1")
+    implementation("com.google.firebase:firebase-storage:21.0.1")
 }

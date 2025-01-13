@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "125195443771",
+    "project_id": "bookshopmarket-b3d93",
+    "storage_bucket": "bookshopmarket-b3d93.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125195443771:android:b870a0a29677f9e805461e",
+        "android_client_info": {
+          "package_name": "com.aladin.finalproject_shoppingmallservice_4_team"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQVMl2tZ4nKAPf_VBE2ORy4yPknwNVDdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

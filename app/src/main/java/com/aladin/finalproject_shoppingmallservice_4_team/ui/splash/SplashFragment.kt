@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.aladin.finalproject_shoppingmallservice_4_team.BuildConfig
 import com.aladin.finalproject_shoppingmallservice_4_team.MainActivity
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSplashBinding
 
