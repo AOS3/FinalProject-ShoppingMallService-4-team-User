@@ -3,6 +3,20 @@
     <style name="Base.Theme.FinalProject_ShoppingMallService_4_team" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- 상태바의 색상을 투명하게 설정 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <!-- 상태바의 텍스트 및 아이콘 색상을 밝게 설정 (예: 검정색) -->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- 배경색 하얀색 만들기 -->
+        <item name="android:backgroundTint">@color/white</item>
+
+        <!-- 앱의 주요 색상(primary color)을 흰색으로 설정 -->
+        <item name="colorPrimary">@android:color/white</item>
+
+        <!-- 상태바 어두운 색상을 투명하게 설정 (일부 디바이스에서 사용) -->
+        <item name="colorPrimaryDark">@android:color/transparent</item>
     </style>
 
     <style name="Theme.FinalProject_ShoppingMallService_4_team" parent="Base.Theme.FinalProject_ShoppingMallService_4_team" >

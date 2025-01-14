@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+        <!--리플효과-->
+    <color name="ripple_color">#D3D3D3</color>
+    <color name="ripple_active_color">#D3D3D3</color>
+
+    <!--메인 색상-->
+    <color name="main_color">#01193F</color>
+
+    <color name="gray_color">#898080</color>
 </resources>

@@ -6,9 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.replace
 import com.aladin.finalproject_shoppingmallservice_4_team.BuildConfig
 import com.aladin.finalproject_shoppingmallservice_4_team.MainActivity
+import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSplashBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 
 
 class SplashFragment : Fragment() {
@@ -47,10 +51,6 @@ class SplashFragment : Fragment() {
 
     // 다음 화면 으로 이동하는 함수
     private fun replaceMainFragment() {
-        Toast.makeText(
-            mainActivity,
-            "메인 화면 이동!",
-            Toast.LENGTH_SHORT
-        ).show()
+        replaceMainFragment(MainFragment(),false)
     }
 }
