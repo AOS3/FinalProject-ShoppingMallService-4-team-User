@@ -40,7 +40,7 @@ class MainFragment : Fragment() {
                     true
                 }
                 R.id.nav_info -> {
-                    replaceMainFragment(MainFragment(),false)
+                    replaceMainFragment(LoginFragment(),false)
                     true
                 }
                 R.id.nav_like_list -> {
