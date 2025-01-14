@@ -10,7 +10,8 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:fitsSystemWindows="true">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
