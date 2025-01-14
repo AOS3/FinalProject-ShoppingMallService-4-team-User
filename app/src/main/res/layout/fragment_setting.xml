@@ -17,7 +17,7 @@
 
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/materialToolbar_Setting"
+                android:id="@+id/materialToolbar_setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
@@ -31,12 +31,12 @@
 
             <!--공지사항-->
             <View
-                android:id="@+id/view_Setting_Notice"
+                android:id="@+id/view_setting_notice"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/materialToolbar_Setting" />
+                app:layout_constraintTop_toBottomOf="@+id/materialToolbar_setting" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -44,35 +44,35 @@
                 android:layout_marginLeft="20dp"
                 android:text="공지사항"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Notice"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_notice"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Notice" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_notice" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:src="@drawable/chevron_right_24px"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Notice"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_notice"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Notice" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_notice" />
 
             <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_Setting_Notice"
+                android:id="@+id/divider_setting_notice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/gray_color"
-                app:layout_constraintTop_toBottomOf="@+id/view_Setting_Notice" />
+                app:layout_constraintTop_toBottomOf="@+id/view_setting_notice" />
 
             <!--이용 약관-->
 
             <View
-                android:id="@+id/view_Setting_Guide"
+                android:id="@+id/view_setting_guide"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_Setting_Notice" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_setting_notice" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -80,35 +80,35 @@
                 android:layout_marginLeft="20dp"
                 android:text="이용 약관"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Guide"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_guide"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Guide" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_guide" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:src="@drawable/chevron_right_24px"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Guide"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_guide"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Guide" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_guide" />
 
             <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_Setting_Guide"
+                android:id="@+id/divider_setting_guide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/gray_color"
-                app:layout_constraintTop_toBottomOf="@+id/view_Setting_Guide" />
+                app:layout_constraintTop_toBottomOf="@+id/view_setting_guide" />
 
             <!--비밀번호 변경-->
 
             <View
-                android:id="@+id/view_Setting_Change_Pw"
+                android:id="@+id/view_setting_changePw"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_Setting_Guide" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_setting_guide" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -116,35 +116,35 @@
                 android:layout_marginLeft="20dp"
                 android:text="비밀번호 변경"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Change_Pw"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_changePw"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Change_Pw" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_changePw" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:src="@drawable/chevron_right_24px"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Change_Pw"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_changePw"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Change_Pw" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_changePw" />
 
             <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_Setting_Change_Pw"
+                android:id="@+id/divider_setting_changePw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/gray_color"
-                app:layout_constraintTop_toBottomOf="@+id/view_Setting_Change_Pw" />
+                app:layout_constraintTop_toBottomOf="@+id/view_setting_changePw" />
 
             <!--카메라권한 설정-->
 
             <View
-                android:id="@+id/view_Setting_Camera_Permission"
+                android:id="@+id/view_setting_cameraPermission"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_Setting_Change_Pw" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_setting_changePw" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -152,35 +152,35 @@
                 android:layout_marginLeft="20dp"
                 android:text="카메라 권한 설정"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Camera_Permission"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_cameraPermission"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Camera_Permission" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_cameraPermission" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:src="@drawable/chevron_right_24px"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Camera_Permission"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_cameraPermission"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Camera_Permission" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_cameraPermission" />
 
             <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_Setting_Camera_Permission"
+                android:id="@+id/divider_setting_cameraPermission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/gray_color"
-                app:layout_constraintTop_toBottomOf="@+id/view_Setting_Camera_Permission" />
+                app:layout_constraintTop_toBottomOf="@+id/view_setting_cameraPermission" />
 
             <!--알림 권한 설정-->
 
             <View
-                android:id="@+id/view_Setting_Notification_Permission"
+                android:id="@+id/view_setting_notificationPermission"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_Setting_Camera_Permission" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_setting_cameraPermission" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -188,34 +188,34 @@
                 android:layout_marginLeft="20dp"
                 android:text="알림 권한 설정"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Notification_Permission"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_notificationPermission"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Notification_Permission" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_notificationPermission" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:src="@drawable/chevron_right_24px"
-                app:layout_constraintBottom_toBottomOf="@+id/view_Setting_Notification_Permission"
+                app:layout_constraintBottom_toBottomOf="@+id/view_setting_notificationPermission"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view_Setting_Notification_Permission" />
+                app:layout_constraintTop_toTopOf="@+id/view_setting_notificationPermission" />
 
             <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_Setting_Notification_Permission"
+                android:id="@+id/divider_setting_NotificationPermission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/gray_color"
-                app:layout_constraintTop_toBottomOf="@+id/view_Setting_Notification_Permission" />
+                app:layout_constraintTop_toBottomOf="@+id/view_setting_notificationPermission" />
 
             <Space
-                android:id="@+id/space_Setting"
+                android:id="@+id/space_setting"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_Setting_Notification_Permission" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_setting_NotificationPermission" />
 
             <!--하단 바-->
             <LinearLayout
@@ -225,7 +225,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/space_Setting">
+                app:layout_constraintTop_toBottomOf="@id/space_setting">
 
                 <TextView
                     android:layout_width="wrap_content"
