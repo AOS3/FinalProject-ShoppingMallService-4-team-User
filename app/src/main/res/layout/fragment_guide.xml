@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:transitionGroup="true"
-    tools:context=".guide.GuideFragment">
+    tools:context=".ui.guide.GuideFragment">
 
     <ScrollView
         android:layout_width="match_parent"
