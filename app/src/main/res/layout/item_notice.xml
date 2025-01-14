@@ -10,7 +10,7 @@
         android:layout_margin="20dp">
 
         <ImageView
-            android:id="@+id/imageView_NoticeItem"
+            android:id="@+id/imageView_noticeItem_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/main_logo_small_size" />
@@ -22,13 +22,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView_NoticeItem_Title"
+                android:id="@+id/textView_noticeItem_title"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:text="오늘의 공지" />
 
             <TextView
-                android:id="@+id/textView_NoticeItem_Content"
+                android:id="@+id/textView_noticeItem_content"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:gravity="bottom"
