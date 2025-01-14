@@ -14,7 +14,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
-            android:name="com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment"
+            android:name="com.aladin.finalproject_shoppingmallservice_4_team.ui.splash.SplashFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
