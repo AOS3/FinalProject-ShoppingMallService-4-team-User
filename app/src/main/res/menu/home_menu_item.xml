@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home_menu_shoppingcart"
+        android:icon="@drawable/shopping_cart_24px"
+        android:title="장바구니"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/home_menu_notification"
+        android:icon="@drawable/notifications_24px"
+        android:title="알림"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/home_menu_menuitem"
+        android:icon="@drawable/menu_24px"
+        android:title="메뉴"
+        app:showAsAction="always" />
+</menu>

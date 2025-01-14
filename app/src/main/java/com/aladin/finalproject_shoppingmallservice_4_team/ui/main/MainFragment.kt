@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.ShopFragmentName
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
 
 class MainFragment : Fragment() {
@@ -26,11 +28,11 @@ class MainFragment : Fragment() {
     }
 
     // 네비게이션 아이콘에 클릭에 따라 화면이 변하게
-    fun setBottomNavigationView() {
+    private fun setBottomNavigationView() {
         fragmentMainBinding.bottomAppBarMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    replaceMainFragment(MainFragment(),false)
+                    replaceSubFragment(HomeFragment(),false)
                     true
                 }
                 R.id.nav_barcode -> {
