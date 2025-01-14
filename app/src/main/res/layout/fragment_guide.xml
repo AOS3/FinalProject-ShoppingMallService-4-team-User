@@ -17,7 +17,7 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/materialToolbar_Guide"
+                android:id="@+id/materialToolbar_guide"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
                 app:titleCentered="true" />
 
             <LinearLayout
-                android:id="@+id/view_Guides"
+                android:id="@+id/view_guides"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
@@ -37,7 +37,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/materialToolbar_Guide">
+                app:layout_constraintTop_toBottomOf="@+id/materialToolbar_guide">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -141,10 +141,10 @@
             </LinearLayout>
 
             <Space
-                android:id="@+id/space_Guide"
+                android:id="@+id/space_guide"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                app:layout_constraintTop_toBottomOf="@+id/view_Guides" />
+                app:layout_constraintTop_toBottomOf="@+id/view_guides" />
 
             <!--하단 바-->
             <LinearLayout
@@ -154,7 +154,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/space_Guide">
+                app:layout_constraintTop_toBottomOf="@id/space_guide">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -222,7 +222,7 @@
                     android:layout_weight="2">
 
                     <Button
-                        android:id="@+id/Button_Setting_Ask"
+                        android:id="@+id/button_setting_Ask"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
                         android:textColor="#000000" />
 
                     <Button
-                        android:id="@+id/Button_Setting_FAQ"
+                        android:id="@+id/button_setting_FAQ"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
