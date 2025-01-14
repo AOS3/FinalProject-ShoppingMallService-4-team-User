@@ -10,10 +10,10 @@
         <item name="android:windowLightStatusBar">true</item>
 
         <!-- 배경색 하얀색 만들기 -->
-        <item name="android:backgroundTint">@color/white</item>
+        <!--<item name="android:backgroundTint">@color/white</item>-->
 
         <!-- 앱의 주요 색상(primary color)을 흰색으로 설정 -->
-        <item name="colorPrimary">@android:color/white</item>
+        <!--<item name="colorPrimary">@android:color/white</item>-->
 
         <!-- 상태바 어두운 색상을 투명하게 설정 (일부 디바이스에서 사용) -->
         <item name="colorPrimaryDark">@android:color/transparent</item>
