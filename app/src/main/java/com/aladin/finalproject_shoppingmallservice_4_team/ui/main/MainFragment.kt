@@ -7,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainBinding
-import com.aladin.finalproject_shoppingmallservice_4_team.util.ShopFragmentName
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.changePw.ChangePwFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 
 
 class MainFragment : Fragment() {
-
     private lateinit var fragmentMainBinding: FragmentMainBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +28,7 @@ class MainFragment : Fragment() {
         fragmentMainBinding.bottomAppBarMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    replaceMainFragment(MainFragment(),false)
+                    replaceMainFragment(ChangePwFragment(),false)
                     true
                 }
                 R.id.nav_barcode -> {
