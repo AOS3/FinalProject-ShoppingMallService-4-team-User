@@ -26,9 +26,13 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:hint="현재 비밀번호를 입력"
+        android:hint="현재 비밀번호"
         app:boxBackgroundColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@+id/materialToolbar_ChangePw">
+        app:boxStrokeColor="@color/main_color"
+        app:cursorColor="@color/main_color"
+        app:hintTextColor="@color/main_color"
+        app:layout_constraintTop_toBottomOf="@+id/materialToolbar_ChangePw"
+        app:placeholderText="현재 비밀번호를 입력해주세요.">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -44,11 +48,16 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:hint="새로운 비밀번호 입력"
+        android:hint="새로운 비밀번호"
+        app:boxBackgroundColor="@android:color/white"
+        app:boxStrokeColor="@color/main_color"
+        app:cursorColor="@color/main_color"
         app:endIconMode="password_toggle"
+        app:hintTextColor="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textField_ChangePw_Current_Password">
+        app:layout_constraintTop_toBottomOf="@+id/textField_ChangePw_Current_Password"
+        app:placeholderText="새로운 비밀번호를 입력해주세요.">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -65,10 +74,15 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:hint="새로운 비밀번호 재입력"
+        app:boxBackgroundColor="@android:color/white"
+        app:boxStrokeColor="@color/main_color"
+        app:cursorColor="@color/main_color"
         app:endIconMode="password_toggle"
+        app:hintTextColor="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textField_ChangePw_New_Password">
+        app:layout_constraintTop_toBottomOf="@+id/textField_ChangePw_New_Password"
+        app:placeholderText="새로운 비밀번호를 재 입력 해주세요.">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
