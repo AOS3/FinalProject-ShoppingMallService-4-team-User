@@ -17,7 +17,6 @@ class MainFragment : Fragment() {
 
     private lateinit var fragmentMainBinding: FragmentMainBinding
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
