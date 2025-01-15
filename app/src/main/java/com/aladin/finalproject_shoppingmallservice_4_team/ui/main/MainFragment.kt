@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.ShopFragmentName
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
@@ -39,7 +40,7 @@ class MainFragment : Fragment() {
                     true
                 }
                 R.id.nav_info -> {
-                    replaceMainFragment(MainFragment(),false)
+                    replaceMainFragment(LoginFragment(),false)
                     true
                 }
                 R.id.nav_like_list -> {
