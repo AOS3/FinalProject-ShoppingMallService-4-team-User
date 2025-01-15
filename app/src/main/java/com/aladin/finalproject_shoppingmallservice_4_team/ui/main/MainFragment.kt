@@ -7,16 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainBinding
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.ShopFragmentName
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.changePw.ChangePwFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
 
 class MainFragment : Fragment() {
-
     private lateinit var fragmentMainBinding: FragmentMainBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
