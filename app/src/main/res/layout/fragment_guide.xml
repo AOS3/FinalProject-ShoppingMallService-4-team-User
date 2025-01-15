@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
     android:transitionGroup="true"
     tools:context=".ui.guide.GuideFragment">
 
@@ -14,7 +13,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolbar_guide"
@@ -34,6 +33,7 @@
                 android:layout_margin="20dp"
                 android:layout_marginTop="20dp"
                 android:background="#adadad"
+                android:backgroundTint="#adadad"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -150,8 +150,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:background="#F3F3F5"
                 android:orientation="vertical"
+                android:background="@color/gray_color"
+                android:backgroundTint="#F3F3F5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/space_guide">
@@ -222,7 +223,7 @@
                     android:layout_weight="2">
 
                     <Button
-                        android:id="@+id/button_setting_Ask"
+                        android:id="@+id/button_guide_Ask"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -232,7 +233,7 @@
                         android:textColor="#000000" />
 
                     <Button
-                        android:id="@+id/button_setting_FAQ"
+                        android:id="@+id/button_guide_FAQ"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
