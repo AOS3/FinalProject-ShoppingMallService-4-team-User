@@ -7,7 +7,7 @@
     tools:context=".ui.home.HomeFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/materialToolbar"
+        android:id="@+id/materialToolbar_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -18,7 +18,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/materialToolbar"
+        app:layout_constraintTop_toBottomOf="@id/materialToolbar_home"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="0dp">
 
@@ -31,14 +31,17 @@
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
                 android:textColor="@color/black"
                 app:cornerRadius="15dp"
-                android:paddingBottom="5dp"
-                android:paddingEnd="10dp"
                 app:icon="@drawable/search_24px"
                 app:iconGravity="end"
                 app:iconTint="@color/black"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/main_color"
+                tools:layout_editor_absoluteX="10dp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout_home"
