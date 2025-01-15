@@ -85,23 +85,23 @@ class HomeFragment : Fragment() {
                 when(tab?.position) {
                     // 중고
                     0 -> {
-                        replaceMainFragment(HomeFragment())
+                        replaceMainFragment(HomeFragment(), false)
                     }
                     // 신작
                     1 -> {
-                        replaceMainFragment(HomeFragment())
+                        replaceMainFragment(HomeFragment(), false)
                     }
                     // 베스트셀러
                     2 -> {
-                        replaceMainFragment(HomeFragment())
+                        replaceMainFragment(HomeFragment(), false)
                     }
                     // 국내
                     3 -> {
-                        replaceMainFragment(HomeFragment())
+                        replaceMainFragment(HomeFragment(), false)
                     }
                     // 해외
                     4 -> {
-                        replaceMainFragment(HomeFragment())
+                        replaceMainFragment(HomeFragment(), false)
                     }
                 }
             }
