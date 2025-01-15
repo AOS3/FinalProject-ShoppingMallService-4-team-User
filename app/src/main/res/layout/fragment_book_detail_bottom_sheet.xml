@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.bookdetail.BookDetailBottomSheetFragment">
+
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_sheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="50dp"
+        app:layout_constraintTop_toBottomOf="@id/bottom_sheet"
+        android:text="상품 등급" />
+
+    <TextView
+        android:id="@+id/textView_sheet_highQualityBook"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textView_sheet"
+        app:layout_constraintStart_toStartOf="@id/textView_sheet"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="구매 -상-" />
+
+    <TextView
+        android:id="@+id/textView_sheet_highQualityStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/textView_sheet_highQualityBook"
+        app:layout_constraintStart_toEndOf="@id/textView_sheet_highQualityBook"
+        android:text="재고 : 0권" />
+
+    <TextView
+        android:id="@+id/textView_sheet_highQualityPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="판매가 : 9,000원"
+        app:layout_constraintStart_toStartOf="@id/textView_sheet_highQualityStock"
+        app:layout_constraintTop_toBottomOf="@id/textView_sheet_highQualityStock" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="40dp"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/textView_sheet_highQualityBook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView_sheet_highQualityBook">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <Button
+                android:id="@+id/button_sheet_plusHigh"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:text="Button"
+                app:icon="@drawable/add_24px"
+                app:iconTint="@color/main_color"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_sheet_numberHigh"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:text="20"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@id/button_sheet_minusHigh"
+                app:layout_constraintEnd_toStartOf="@id/button_sheet_plusHigh"
+                app:layout_constraintStart_toEndOf="@id/button_sheet_minusHigh"
+                app:layout_constraintTop_toTopOf="@id/button_sheet_minusHigh" />
+
+            <Button
+                android:id="@+id/button_sheet_minusHigh"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:text="Button"
+                app:icon="@drawable/remove_24px"
+                app:iconTint="@color/main_color"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        app:layout_constraintTop_toBottomOf="@id/textView_sheet_highQualityPrice"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray_color" />
+
+    <TextView
+        android:id="@+id/textView_sheet_normalQualityBook"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintStart_toStartOf="@id/textView_sheet_highQualityBook"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="구매 -중-" />
+
+    <TextView
+        android:id="@+id/textView_sheet_normalQualityStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/textView_sheet_normalQualityBook"
+        app:layout_constraintStart_toEndOf="@id/textView_sheet_normalQualityBook"
+        android:text="재고 : 0권" />
+
+    <TextView
+        android:id="@+id/textView_sheet_normalQualityPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="판매가 : 8,000원"
+        app:layout_constraintStart_toStartOf="@id/textView_sheet_normalQualityStock"
+        app:layout_constraintTop_toBottomOf="@id/textView_sheet_normalQualityStock" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="40dp"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/textView_sheet_normalQualityBook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView_sheet_normalQualityBook">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <Button
+                android:id="@+id/button_sheet_plusNormal"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:text="Button"
+                app:icon="@drawable/add_24px"
+                app:iconTint="@color/main_color"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_sheet_numberNormal"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:text="20"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@id/button_sheet_minusNormal"
+                app:layout_constraintEnd_toStartOf="@id/button_sheet_plusNormal"
+                app:layout_constraintStart_toEndOf="@id/button_sheet_minusNormal"
+                app:layout_constraintTop_toTopOf="@id/button_sheet_minusNormal" />
+
+            <Button
+                android:id="@+id/button_sheet_minusNormal"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:text="Button"
+                app:icon="@drawable/remove_24px"
+                app:iconTint="@color/main_color"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        app:layout_constraintTop_toBottomOf="@id/textView_sheet_normalQualityPrice"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray_color" />
+
+    <TextView
+        android:id="@+id/textView_sheet_lowQualityBook"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/divider2"
+        app:layout_constraintStart_toStartOf="@id/textView_sheet_highQualityBook"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="구매 -하-" />
+
+    <TextView
+        android:id="@+id/textView_sheet_lowQualityStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/textView_sheet_lowQualityBook"
+        app:layout_constraintStart_toEndOf="@id/textView_sheet_lowQualityBook"
+        android:text="재고 : 0권" />
+
+    <TextView
+        android:id="@+id/textView_sheet_lowQualityPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="판매가 : 6,000원"
+        app:layout_constraintStart_toStartOf="@id/textView_sheet_lowQualityStock"
+        app:layout_constraintTop_toBottomOf="@id/textView_sheet_lowQualityStock" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="40dp"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/textView_sheet_lowQualityBook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView_sheet_lowQualityBook">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <Button
+                android:id="@+id/button_sheet_plusLow"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:text="Button"
+                app:icon="@drawable/add_24px"
+                app:iconTint="@color/main_color"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_sheet_numberLow"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:text="20"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@id/button_sheet_minusLow"
+                app:layout_constraintEnd_toStartOf="@id/button_sheet_plusLow"
+                app:layout_constraintStart_toEndOf="@id/button_sheet_minusLow"
+                app:layout_constraintTop_toTopOf="@id/button_sheet_minusLow" />
+
+            <Button
+                android:id="@+id/button_sheet_minusLow"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:text="Button"
+                app:icon="@drawable/remove_24px"
+                app:iconTint="@color/main_color"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        app:layout_constraintTop_toBottomOf="@id/textView_sheet_lowQualityPrice"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray_color" />
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/divider3"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@id/divider3"
+        android:id="@+id/textView_sheet_totalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="전체 구매 가격 : 9,000원" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="5dp"
+        app:layout_constraintTop_toBottomOf="@id/textView_sheet_totalPrice"
+        android:layout_marginTop="40dp"
+        android:layout_height="90dp"
+        android:backgroundTint="#32BE07"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="장바구니에 추가"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

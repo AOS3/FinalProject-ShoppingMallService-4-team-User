@@ -1,11 +1,10 @@
-package com.aladin.finalproject_shoppingmallservice_4_team.ui.bookDetail
+package com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookListBinding
 
 

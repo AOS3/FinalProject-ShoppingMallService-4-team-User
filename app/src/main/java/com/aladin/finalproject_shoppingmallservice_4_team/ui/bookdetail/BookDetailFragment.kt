@@ -6,8 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookDetailBinding
 
 
@@ -22,6 +20,7 @@ class BookDetailFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentBookDetailBinding.inflate(inflater, container, false)
         textViewSetting()
+        buyButtonListener()
         return binding.root
     }
 
@@ -30,5 +29,16 @@ class BookDetailFragment : Fragment() {
      */
     private fun textViewSetting() {
         binding.textViewBookDetailBookPrice.paintFlags = binding.textViewBookDetailBookPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+    }
+
+    /*
+    버튼
+     */
+
+    private fun buyButtonListener() {
+        binding.buttonBookDetailBuyUsedBook.setOnClickListener {
+            val bottomSheetFragment = BookDetailBottomSheetFragment()
+            bottomSheetFragment.show(parentFragmentManager, "BottomSheetFragment")
+        }
     }
 }
