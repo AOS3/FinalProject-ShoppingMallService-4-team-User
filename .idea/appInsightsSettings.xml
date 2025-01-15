@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.aladin.finalproject_shoppingmallservice_4_team" />
-                  <option name="mobileSdkAppId" value="1:125195443771:android:b870a0a29677f9e805461e" />
-                  <option name="projectId" value="bookshopmarket-b3d93" />
-                  <option name="projectNumber" value="125195443771" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

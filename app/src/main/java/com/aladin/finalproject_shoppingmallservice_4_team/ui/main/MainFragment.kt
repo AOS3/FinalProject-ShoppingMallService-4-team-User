@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainBinding
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.setting.SettingFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.ShopFragmentName
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 
@@ -35,7 +34,7 @@ class MainFragment : Fragment() {
                     true
                 }
                 R.id.nav_barcode -> {
-                    replaceMainFragment(SettingFragment(),false)
+                    replaceMainFragment(MainFragment(),false)
                     true
                 }
                 R.id.nav_info -> {
