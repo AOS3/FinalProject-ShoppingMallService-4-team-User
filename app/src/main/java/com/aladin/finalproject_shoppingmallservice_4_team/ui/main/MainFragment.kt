@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
@@ -37,7 +38,7 @@ class MainFragment : Fragment() {
                     true
                 }
                 R.id.nav_barcode -> {
-                    replaceMainFragment(MainFragment(),false)
+                    replaceSubFragment(BarcodeScannerFragment(),false)
                     true
                 }
                 R.id.nav_info -> {
