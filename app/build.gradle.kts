@@ -70,4 +70,9 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore:25.1.1")
     implementation("com.google.firebase:firebase-storage:21.0.1")
+    // CameraX
+    implementation ("androidx.camera:camera-core:1.2.2")
+    implementation ("androidx.camera:camera-lifecycle:1.2.2")
+    implementation ("androidx.camera:camera-view:1.2.2")
+    implementation ("androidx.camera:camera-camera2:1.2.2")
 }
