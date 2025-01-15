@@ -38,7 +38,7 @@ class MainFragment : Fragment() {
                     true
                 }
                 R.id.nav_barcode -> {
-                    replaceSubFragment(BarcodeScannerFragment(),false)
+                    replaceMainFragment(MainFragment(),false)
                     true
                 }
                 R.id.nav_info -> {
