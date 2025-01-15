@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayoutMain"
     android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:background="#FFFFFF">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
