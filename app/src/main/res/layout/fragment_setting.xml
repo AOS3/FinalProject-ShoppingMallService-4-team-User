@@ -43,8 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:text="공지사항"
-                android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/view_setting_notice"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view_setting_notice" />
@@ -79,8 +79,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:text="이용 약관"
-                android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/view_setting_guide"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view_setting_guide" />
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="비밀번호 변경"
-                android:textSize="20dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintBottom_toBottomOf="@+id/view_setting_changePw"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view_setting_changePw" />
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="카메라 권한 설정"
-                android:textSize="20dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintBottom_toBottomOf="@+id/view_setting_cameraPermission"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view_setting_cameraPermission" />
@@ -188,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="알림 권한 설정"
-                android:textSize="20dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintBottom_toBottomOf="@+id/view_setting_notificationPermission"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view_setting_notificationPermission" />
