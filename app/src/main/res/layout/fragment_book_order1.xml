@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.bookOrder.BookOrderFragment1">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolbar_bookOrder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:menu="@menu/home_menu_item"
+                app:navigationIcon="@drawable/arrow_back_ios_24px" />
+
+            <TextView
+                android:id="@+id/textView_bookOrder_orderName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="구매자 정보"
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialToolbar_bookOrder" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookOrder_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="이름"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_bookOrder_orderName"
+                app:placeholderText="이름을 입력해주세요">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookOrder_phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="전화번호"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookOrder_name"
+                app:placeholderText="전화번호를 입력해주세요">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookOrder_postCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="우편번호"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintEnd_toStartOf="@+id/button_bookOrder_postCode"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookOrder_phoneNumber"
+
+                app:placeholderText="우편번호를 입력해주세요">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button_bookOrder_postCode"
+                android:layout_width="150dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/main_color"
+                android:text="도로명 검색"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/textField_bookOrder_phoneNumber"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookOrder_phoneNumber" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookOrder_roadNameAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="도로명 주소"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookOrder_postCode"
+                app:placeholderText="도로명 주소를 입력해주세요">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookOrder_detailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="상세 주소"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookOrder_roadNameAddress"
+                app:placeholderText="상세 주소를 입력해주세요">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:id="@+id/space_bookOrder"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookOrder_detailAddress" />
+
+            <TextView
+                android:id="@+id/textView_bookOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_marginStart="10dp"
+                android:text="상품 정보"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/space_bookOrder" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_bookOrder_bookList"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                tools:listitem="@layout/item_book_order_list"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_bookOrder" />
+
+            <TextView
+                android:id="@+id/textView_bookOrder_totalSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="총 수량 : 2개"
+                app:layout_constraintStart_toStartOf="@+id/recyclerView_bookOrder_bookList"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerView_bookOrder_bookList" />
+
+            <TextView
+                android:id="@+id/textView_bookOrder_totalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="총 구매 가격: 80,000원"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView_bookOrder_totalSize" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView_bookOrder_totalSize" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button_bookOrder_buyBook"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:backgroundTint="@color/main_color"
+        android:text="구매하기"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
