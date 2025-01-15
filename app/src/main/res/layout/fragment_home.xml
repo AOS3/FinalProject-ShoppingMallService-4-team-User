@@ -13,6 +13,7 @@
         android:background="@android:color/transparent"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        app:navigationIcon="@drawable/logo"
         app:menu="@menu/home_menu_item"
         app:layout_constraintTop_toTopOf="parent" />
 
