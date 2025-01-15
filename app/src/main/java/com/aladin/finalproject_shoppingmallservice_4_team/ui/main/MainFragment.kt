@@ -10,6 +10,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMa
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
@@ -24,7 +25,7 @@ class MainFragment : Fragment() {
     ): View? {
         fragmentMainBinding = FragmentMainBinding.inflate(layoutInflater,container,false)
         setBottomNavigationView()
-        replaceSubFragment(HomeFragment(), false)
+        replaceSubFragment(ShoppingCartFragment(), false)
         return fragmentMainBinding.root
     }
 
