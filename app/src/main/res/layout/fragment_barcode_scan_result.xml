@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.barcodescanresult.BarcodeScanResultFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_barcodeScanResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_barcodeScanResult_bookAndInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_barcodeScanResult">
+
+        <ImageView
+            android:id="@+id/imageView_barcodeScanResult_bookImage"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_marginStart="20dp"
+            android:src="@mipmap/ic_launcher_foreground" />
+
+        <LinearLayout
+            android:id="@+id/LinearLayout_barcodeScanResult_bookInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_barcodeScanResult_bookName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:text="도서명" />
+
+            <TextView
+                android:id="@+id/textView_barcodeScanResult_bookAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:text="저자" />
+
+            <TextView
+                android:id="@+id/textView_barcodeScanResult_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="정가" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_barcodeScanResult_purchase"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="구매하기"
+        android:textColor="@color/main_color"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toStartOf="@id/button_barcodeScanResult_selling"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_barcodeScanResult_bookAndInfo"
+        app:strokeColor="@color/main_color" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_barcodeScanResult_selling"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="중고로 팔기"
+        android:textColor="@color/main_color"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_barcodeScanResult_purchase"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_barcodeScanResult_bookAndInfo"
+        app:strokeColor="@color/main_color" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
