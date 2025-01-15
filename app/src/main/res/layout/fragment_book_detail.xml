@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.bookdetail.BookDetailFragment" >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar_bookDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:navigationIcon="@drawable/arrow_back_ios_24px"
+        app:menu="@menu/home_menu_item"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/materialToolbar_bookDetail"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/button_bookDetail_search"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/black"
+                app:cornerRadius="15dp"
+                app:icon="@drawable/search_24px"
+                app:iconGravity="end"
+                app:iconTint="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/main_color"
+                tools:layout_editor_absoluteX="10dp" />
+
+            <ImageView
+                android:id="@+id/imageView_bookDetail"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:src="@drawable/main_logo"
+                app:layout_constraintTop_toBottomOf="@id/button_bookDetail_search" />
+
+            <Button
+                android:id="@+id/button_bookDetail_likeList"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/bookmark_star_24px"
+                app:iconSize="30dp"
+                app:iconTint="@color/main_color"
+                app:layout_constraintBottom_toBottomOf="@id/textView_bookDetail_bookName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textView_bookDetail_bookName" />
+
+            <Button
+                android:id="@+id/button_bookDetail_buyNewBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_color"
+                android:layout_marginStart="100dp"
+                app:layout_constraintStart_toEndOf="@id/textView_bookDetail_bookPrice"
+                app:layout_constraintBottom_toBottomOf="@id/textView_bookDetail_bookPrice"
+                app:layout_constraintTop_toTopOf="@id/textView_bookDetail_bookPrice"
+                android:text="새 책 사러가기" />
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookName"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:text="깡샘의 안드로이드 앱 프로그래밍 with 코틀린"
+                app:layout_constraintStart_toStartOf="@id/imageView_bookDetail"
+                app:layout_constraintTop_toBottomOf="@id/imageView_bookDetail" />
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookWriter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookName"
+                app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookName"
+                android:text="강성윤(지은이)" />
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookPublisher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookWriter"
+                app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookWriter"
+                android:text="OO출판" />
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookPublisherDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookPublisher"
+                app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookPublisher"
+                android:text="2024-09-24" />
+
+
+            <View
+                android:id="@+id/view_bookDetail_price"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookPublisherDate"
+                android:layout_width="match_parent"
+                android:backgroundTint="@null"
+                android:background="@drawable/book_price_custom"
+                android:layout_height="100dp"/>
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                app:layout_constraintTop_toTopOf="@id/view_bookDetail_price"
+                app:layout_constraintStart_toStartOf="@id/view_bookDetail_price"
+                android:text="정가 : 40000원" />
+
+
+            <TextView
+                android:id="@+id/textView_bookDetail_usedBookPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookPrice"
+                app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookPrice"
+                android:text="판매가 : 6000원 ~ 9000원" />
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookCategoryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/view_bookDetail_price"
+                app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookPublisherDate"
+                android:text="주제 분류" />
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookCategoryText"
+                app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookCategoryText"
+                android:text="참고서/OOO > OOO > OOO" />
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookIntroductionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookCategory"
+                app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookCategoryText"
+                android:text="책 소개" />
+
+            <TextView
+                android:id="@+id/textView_bookDetail_bookIntroduction"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookIntroductionText"
+                app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookCategory"
+                android:text="이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/footer_home"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:layout_marginTop="100dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookIntroduction"
+                android:background="@color/gray_color"
+                android:backgroundTint="#F3F3F5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="0dp">
+
+                <TextView
+                    android:id="@+id/textview_home_footer1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="쇼핑몰 프로젝트 - 4조"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_home"
+                    app:layout_constraintStart_toStartOf="@id/footer_home"
+                    app:layout_constraintTop_toTopOf="@id/footer_home" />
+
+                <TextView
+                    android:id="@+id/textview_home_footer2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="LikeLion AOS3"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_home"
+                    app:layout_constraintStart_toStartOf="@id/footer_home"
+                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer1" />
+
+                <TextView
+                    android:id="@+id/textview_home_footer3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="전화번호: 010-1234-5678"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_home"
+                    app:layout_constraintStart_toStartOf="@id/footer_home"
+                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer2" />
+
+                <TextView
+                    android:id="@+id/textview_home_footer4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="이메일 : likeLion@naver.com"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_home"
+                    app:layout_constraintStart_toStartOf="@id/footer_home"
+                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer3" />
+
+                <TextView
+                    android:id="@+id/textview_home_footer5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="©책방마켓 Communication. All Rights Reserved."
+                    android:textColor="#dcdcdd"
+                    app:layout_constraintEnd_toEndOf="@id/footer_home"
+                    app:layout_constraintStart_toStartOf="@id/footer_home"
+                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer4" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_home_footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray_color"
+                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer5" />
+
+                <TextView
+                    android:id="@+id/textview_home_footer6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="일반문의(발신자 부담)"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_home"
+                    app:layout_constraintHorizontal_bias="0.35"
+                    app:layout_constraintStart_toStartOf="@id/footer_home"
+                    app:layout_constraintTop_toBottomOf="@id/divider_home_footer" />
+
+                <TextView
+                    android:id="@+id/textview_home_footer7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="1544-2544"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/textview_home_footer6"
+                    app:layout_constraintStart_toEndOf="@id/textview_home_footer6"
+                    app:layout_constraintTop_toTopOf="@id/textview_home_footer6" />
+
+                <Button
+                    android:id="@+id/button_home_ask"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="1:1 문의"
+                    android:textColor="#000000"
+                    app:cornerRadius="0dp"
+                    app:layout_constraintStart_toStartOf="@id/footer_home"
+                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer6"
+                    app:strokeColor="@color/white" />
+
+                <Button
+                    android:id="@+id/button_home_FAQ"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="FAQ"
+                    android:textColor="#000000"
+                    app:cornerRadius="0dp"
+                    app:layout_constraintStart_toEndOf="@id/button_home_ask"
+                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer6"
+                    app:strokeColor="@color/white" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/button"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="5dp"
+        android:text="판매하기"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:backgroundTint="#F82371"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="5dp"
+        android:backgroundTint="@color/main_color"
+        android:text="구매하기"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
