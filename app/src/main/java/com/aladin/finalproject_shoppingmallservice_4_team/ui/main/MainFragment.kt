@@ -25,7 +25,7 @@ class MainFragment : Fragment() {
     ): View? {
         fragmentMainBinding = FragmentMainBinding.inflate(layoutInflater,container,false)
         setBottomNavigationView()
-        replaceSubFragment(BookListFragment(), false)
+        replaceSubFragment(HomeFragment(), false)
         return fragmentMainBinding.root
     }
 
