@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookDetail.BookListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
@@ -24,7 +25,7 @@ class MainFragment : Fragment() {
     ): View? {
         fragmentMainBinding = FragmentMainBinding.inflate(layoutInflater,container,false)
         setBottomNavigationView()
-        replaceSubFragment(HomeFragment(), false)
+        replaceSubFragment(BookListFragment(), false)
         return fragmentMainBinding.root
     }
 
