@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentHomeBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.tabs.TabLayout
 
 
@@ -60,7 +62,7 @@ class HomeFragment : Fragment() {
             when(it.itemId) {
                 // 메뉴
                 R.id.home_menu_menuitem -> {
-
+                    replaceSubFragment(MainMenuFragment(), true)
                 }
                 // 알림
                 R.id.home_menu_notification -> {
