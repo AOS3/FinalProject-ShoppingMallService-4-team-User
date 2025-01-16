@@ -10,6 +10,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentHo
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
@@ -41,6 +42,7 @@ class HomeFragment : Fragment(), HomeOnClickListener {
         toolbarButton()
         tabLayoutButton()
         settingSearchButton()
+        settingMoreButton()
     }
 
     override fun onDestroyView() {
@@ -137,11 +139,13 @@ class HomeFragment : Fragment(), HomeOnClickListener {
     private fun settingSearchButton() {
         binding.buttonHomeSearch.setOnClickListener {
             // 검색 화면으로 이동한다.
+            replaceSubFragment(SearchFragment(), true)
         }
     }
 
     private fun settingMoreButton() {
         binding.buttonHomeMore.setOnClickListener {
+            // 추천 도서 목록으로 이동한다.
             replaceSubFragment(BookListFragment(), true)
         }
     }
