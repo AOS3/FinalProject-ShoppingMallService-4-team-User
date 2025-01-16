@@ -6,11 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.HomeListItemBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.HomeBookModel
 
-class HomeAdapter: RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+class HomeAdapter(
+    private val listener: HomeOnClickListener,
+): RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     private var items = mutableListOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
-        return HomeViewHolder(HomeListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return HomeViewHolder(
+            HomeListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            itemClickListener = { position -> listener.itemClickListener(position) }
+        )
     }
 
     override fun getItemCount(): Int = 5
@@ -25,7 +30,16 @@ class HomeAdapter: RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class HomeViewHolder(private val binding: HomeListItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class HomeViewHolder(
+        private val binding: HomeListItemBinding,
+        private val itemClickListener: (Int) -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                itemClickListener(adapterPosition)
+            }
+        }
 
         fun bind(item: String) {
             binding.apply {
