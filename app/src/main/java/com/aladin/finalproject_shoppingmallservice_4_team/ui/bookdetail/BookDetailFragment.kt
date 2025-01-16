@@ -31,8 +31,7 @@ class BookDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         textViewSetting()
-        buyButtonListener()
-        toolbarButton()
+        combineButtonMethod()
     }
 
     /*
@@ -40,6 +39,38 @@ class BookDetailFragment : Fragment() {
      */
     private fun textViewSetting() {
         binding.textViewBookDetailBookPrice.paintFlags = binding.textViewBookDetailBookPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+    }
+
+    /*
+    버튼
+     */
+
+    private fun combineButtonMethod() {
+        // 개별 버튼
+        settingAskButton()
+        settingBuyButton()
+        settingFABButton()
+        // 툴바 버튼
+        toolbarButton()
+    }
+
+    private fun settingBuyButton() {
+        binding.buttonBookDetailBuyUsedBook.setOnClickListener {
+            val bottomSheetFragment = BookDetailBottomSheetFragment()
+            bottomSheetFragment.show(parentFragmentManager, "BottomSheetFragment")
+        }
+    }
+
+    private fun settingAskButton() {
+        binding.buttonBookDetailAsk.setOnClickListener {
+            // 문의 화면으로 변경한다.
+        }
+    }
+
+    private fun settingFABButton() {
+        binding.fabBookDetailUp.setOnClickListener {
+            // 위로 올라가게 한다.
+        }
     }
 
     /*
@@ -66,14 +97,4 @@ class BookDetailFragment : Fragment() {
         }
     }
 
-    /*
-    버튼
-     */
-
-    private fun buyButtonListener() {
-        binding.buttonBookDetailBuyUsedBook.setOnClickListener {
-            val bottomSheetFragment = BookDetailBottomSheetFragment()
-            bottomSheetFragment.show(parentFragmentManager, "BottomSheetFragment")
-        }
-    }
 }
