@@ -21,7 +21,15 @@ class OrderInquiryAdapter: RecyclerView.Adapter<OrderInquiryAdapter.OrderInquiry
 
     class OrderInquiryViewHolder(private val binding: OrderInquiryListItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: String) {
-
+            binding.apply {
+                textViewOrderInquiryListName.text = item
+                textViewOrderInquiryListWriter.text = item
+                textViewOrderInquiryListQuality.text = item
+                textViewOrderInquiryListOrderDate.text = item
+                textViewOrderInquiryListDelivery.text = item
+                textViewOrderInquiryListPrice.text = item
+                textViewOrderInquiryListOrderNumber.text = item
+            }
         }
     }
 }
