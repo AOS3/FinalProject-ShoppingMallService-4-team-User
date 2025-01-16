@@ -29,9 +29,9 @@ class HomeAdapter: RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
         fun bind(item: String) {
             binding.apply {
-                textView.text = item
-                textview2.text = item
-                textview3.text = "판매가 : ${item}"
+                textViewHomeListName.text = item
+                textViewHomeListWriter.text = item
+                textviewHomeListPrice.text = "판매가 : ${item}"
             }
         }
     }
