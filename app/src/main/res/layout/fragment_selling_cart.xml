@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.sellingcart.SellingCartFragment">
+
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar_sellingCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/materialToolbar_sellingCart">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/LinearLayout_sellingCart_"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <Button
+                    android:id="@+id/button_sellingCart_search"
+                    style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="4"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="@color/black"
+                    app:cornerRadius="15dp"
+                    app:icon="@drawable/search_24px"
+                    app:iconGravity="end"
+                    app:iconTint="@color/black"
+                    app:rippleColor="@color/main_color" />
+
+                <Button
+                    android:id="@+id/button_sellingCart_barcodeScanner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/main_color"
+                    android:text="바코드 찍기"
+                    android:textColor="@color/white"
+                    app:cornerRadius="10dp"
+                    tools:layout_marginBottom="5dp" />
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="전체 선택"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/LinearLayout_sellingCart_" />
+
+            <Button
+                android:id="@+id/button_sellingCart_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="4"
+                android:backgroundTint="@color/gray_color"
+                android:text="삭제"
+                android:textColor="@color/white"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/LinearLayout_sellingCart_"
+                tools:layout_marginBottom="5dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_sellingCart_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+
+            <TextView
+                android:id="@+id/textView_sellingCart_totalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="120dp"
+                android:text="총 판매 가격 : "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerView_sellingCart_info" />
+
+            <Button
+                android:id="@+id/button_sellingCart_addBookForSelling"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/main_color"
+                android:text="상품 승인 신청"
+                android:textColor="@color/white"
+                app:cornerRadius="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/footer_sellingCart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_sellingCart_totalPrice"
+                tools:layout_marginBottom="5dp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/footer_sellingCart"
+                android:layout_width="0dp"
+                android:layout_height="270dp"
+                android:background="@color/gray_color"
+                android:backgroundTint="#F3F3F5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button_sellingCart_addBookForSelling"
+                app:layout_constraintVertical_bias="0.0">
+
+                <TextView
+                    android:id="@+id/textview_sellingCart_footer1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="쇼핑몰 프로젝트 - 4조"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_sellingCart"
+                    app:layout_constraintStart_toStartOf="@id/footer_sellingCart"
+                    app:layout_constraintTop_toTopOf="@id/footer_sellingCart" />
+
+                <TextView
+                    android:id="@+id/textview_sellingCart_footer2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="LikeLion AOS3"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_sellingCart"
+                    app:layout_constraintStart_toStartOf="@id/footer_sellingCart"
+                    app:layout_constraintTop_toBottomOf="@id/textview_sellingCart_footer1" />
+
+                <TextView
+                    android:id="@+id/textview_sellingCart_footer3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="전화번호: 010-1234-5678"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_sellingCart"
+                    app:layout_constraintStart_toStartOf="@id/footer_sellingCart"
+                    app:layout_constraintTop_toBottomOf="@id/textview_sellingCart_footer2" />
+
+                <TextView
+                    android:id="@+id/textview_sellingCart_footer4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="이메일 : likeLion@naver.com"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_sellingCart"
+                    app:layout_constraintStart_toStartOf="@id/footer_sellingCart"
+                    app:layout_constraintTop_toBottomOf="@id/textview_sellingCart_footer3" />
+
+                <TextView
+                    android:id="@+id/textview_sellingCart_footer5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="©책방마켓 Communication. All Rights Reserved."
+                    android:textColor="#dcdcdd"
+                    app:layout_constraintEnd_toEndOf="@id/footer_sellingCart"
+                    app:layout_constraintStart_toStartOf="@id/footer_sellingCart"
+                    app:layout_constraintTop_toBottomOf="@id/textview_sellingCart_footer4" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_sellingCart_footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray_color"
+                    app:layout_constraintTop_toBottomOf="@id/textview_sellingCart_footer5" />
+
+                <TextView
+                    android:id="@+id/textview_sellingCart_footer6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="일반문의(발신자 부담)"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_sellingCart"
+                    app:layout_constraintHorizontal_bias="0.35"
+                    app:layout_constraintStart_toStartOf="@id/footer_sellingCart"
+                    app:layout_constraintTop_toBottomOf="@id/divider_sellingCart_footer" />
+
+                <TextView
+                    android:id="@+id/textview_sellingCart_footer7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="1544-2544"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/textview_sellingCart_footer6"
+                    app:layout_constraintStart_toEndOf="@id/textview_sellingCart_footer6"
+                    app:layout_constraintTop_toTopOf="@id/textview_sellingCart_footer6" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textview_sellingCart_footer7"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:layout_editor_absoluteX="0dp">
+
+                    <Button
+                        android:id="@+id/button_sellingCart_ask"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="1:1 문의"
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/button_sellingCart_FAQ"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="FAQ"
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
