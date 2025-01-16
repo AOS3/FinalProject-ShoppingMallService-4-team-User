@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentGuideBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 
 
 class GuideFragment : Fragment() {
@@ -18,6 +19,16 @@ class GuideFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         fragmentGuideBinding = FragmentGuideBinding.inflate(layoutInflater,container,false)
+        // 툴바 설정
+        settingToolbar()
         return fragmentGuideBinding.root
+    }
+
+    private fun settingToolbar() {
+        fragmentGuideBinding.apply {
+            materialToolbarGuide.setNavigationOnClickListener {
+                removeFragment()
+            }
+        }
     }
 }
