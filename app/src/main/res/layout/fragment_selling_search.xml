@@ -75,7 +75,6 @@
                         android:tint="@color/black" />
                 </LinearLayout>
 
-                <!-- 바코드 찍기 버튼 -->
                 <Button
                     android:id="@+id/button_sellingSearch_barcodeScanner"
                     android:layout_width="wrap_content"
