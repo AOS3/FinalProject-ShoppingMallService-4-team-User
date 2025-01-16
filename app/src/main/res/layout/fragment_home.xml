@@ -267,7 +267,7 @@
                     tools:layout_editor_absoluteX="0dp">
 
                     <Button
-                        android:id="@+id/button_sellingCart_ask"
+                        android:id="@+id/button_home_ask"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -281,7 +281,7 @@
                         app:strokeColor="@color/white" />
 
                     <Button
-                        android:id="@+id/button_sellingCart_FAQ"
+                        android:id="@+id/button_home_FAQ"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
