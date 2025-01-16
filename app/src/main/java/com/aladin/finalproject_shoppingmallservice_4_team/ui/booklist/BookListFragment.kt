@@ -46,33 +46,44 @@ class BookListFragment : Fragment() {
     }
 
     private fun settingDropMenu() {
-        // 드롭다운 아이템 목록
-        val sortOptions = arrayOf("이름순", "최고가", "최저가")
+        fragmentBookListBinding.apply {
+            // 드롭다운 아이템 목록
+            val sortOptions = arrayOf("이름순", "최고가", "최저가")
 
-        // 어댑터 설정
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sortOptions)
-        fragmentBookListBinding.autoCompleteTextViewBookListSortOrder.setAdapter(adapter)
+            // 어댑터 설정
+            val adapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, sortOptions)
+            autoCompleteTextViewBookListSortOrder.setAdapter(adapter)
 
-        // 드롭다운 선택 시 동작
-        fragmentBookListBinding.autoCompleteTextViewBookListSortOrder.setOnItemClickListener { _, _, position, _ ->
-            when (sortOptions[position]) {
-                "이름순" -> {
-                    renewalRecyclerViewFromDropDown(1)
-                }
+            // 드롭다운 선택 시 동작
+            autoCompleteTextViewBookListSortOrder.setOnItemClickListener { _, _, position, _ ->
+                when (sortOptions[position]) {
+                    "이름순" -> {
+                        renewalRecyclerViewFromDropDown(1)
+                        imageViewBookListDropDownText.text = "이름순"
+                    }
 
-                "최고가" -> {
-                    renewalRecyclerViewFromDropDown(2)
-                }
+                    "최고가" -> {
+                        renewalRecyclerViewFromDropDown(2)
+                        imageViewBookListDropDownText.text = "최고가"
+                    }
 
-                "최저가" -> {
-                    renewalRecyclerViewFromDropDown(3)
+                    "최저가" -> {
+                        renewalRecyclerViewFromDropDown(3)
+                        imageViewBookListDropDownText.text = "최저가"
+                    }
                 }
             }
-        }
+            // 드롭다운이 닫혔을 때 화살표 모양 바뀌게
+            autoCompleteTextViewBookListSortOrder.setOnDismissListener {
+                imageViewBookListDropDownIcon.setImageResource(R.drawable.arrow_drop_up_24px)
+            }
 
-        fragmentBookListBinding.linearLayoutBookListSortOrder.setOnClickListener {
-            fragmentBookListBinding.autoCompleteTextViewBookListSortOrder.showDropDown()
+            // 드롭다운 열리게 설정, 화살표 변경
+            linearLayoutBookListSortOrder.setOnClickListener {
+                autoCompleteTextViewBookListSortOrder.showDropDown()
+                imageViewBookListDropDownIcon.setImageResource(R.drawable.arrow_drop_down_24px)
+            }
         }
     }
 
