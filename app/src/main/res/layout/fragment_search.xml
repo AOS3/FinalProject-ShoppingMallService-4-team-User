@@ -16,28 +16,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textField_search_text"
+    <LinearLayout
+        android:id="@+id/linearLayout_search_search"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        app:boxStrokeColor="@color/main_color"
-        app:cursorColor="@color/main_color"
-        app:endIconDrawable="@android:drawable/ic_menu_search"
-        app:endIconMode="custom"
-        app:endIconTint="@color/main_color"
-        app:hintEnabled="false"
-        app:layout_constraintBottom_toBottomOf="@id/button_search_back"
-        app:layout_constraintEnd_toStartOf="@id/button_search_barcode"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:background="@drawable/search_background"
         app:layout_constraintStart_toEndOf="@id/button_search_back"
-        app:layout_constraintTop_toTopOf="@id/button_search_back">
+        app:layout_constraintEnd_toStartOf="@id/button_search_barcode"
+        android:backgroundTint="@null"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="5dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/editText_search_search"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="검색"
-            android:textSize="12sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="판매할 서적 검색"
+            android:imeOptions="actionSearch"
+            android:paddingStart="8dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/button_search_searchIcon"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Search Icon"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            app:icon="@drawable/search_24px"
+            app:iconTint="@color/main_color" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_search_barcode"
@@ -57,14 +74,14 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textField_search_text" />
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_search_search" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textField_search_text"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_search_search"
         app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
