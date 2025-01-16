@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.search.SearchFragment">
+
+    <Button
+        android:id="@+id/button_search_back"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/arrow_back_ios_24px"
+        app:iconTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textField_search_text"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        app:boxStrokeColor="@color/main_color"
+        app:cursorColor="@color/main_color"
+        app:endIconDrawable="@android:drawable/ic_menu_search"
+        app:endIconMode="custom"
+        app:endIconTint="@color/main_color"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toBottomOf="@id/button_search_back"
+        app:layout_constraintEnd_toStartOf="@id/button_search_barcode"
+        app:layout_constraintStart_toEndOf="@id/button_search_back"
+        app:layout_constraintTop_toTopOf="@id/button_search_back">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="검색"
+            android:textSize="12sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button_search_barcode"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/barcode_scanner_24px"
+        app:iconTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        app:layout_constraintTop_toBottomOf="@id/textField_search_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/textView_search_searchResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="검색 상품" />
+
+            <TextView
+                android:id="@+id/textView_search_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이름순"
+                app:drawableRightCompat="@drawable/keyboard_arrow_down_24px"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:clickable="true"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintTop_toTopOf="@id/textView_search_searchResult" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_search"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                tools:listitem="@layout/home_list_item"
+                app:layout_constraintTop_toBottomOf="@id/textView_search_searchResult"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:id="@+id/space_search"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:layout_constraintTop_toBottomOf="@id/button_search_more"/>
+
+            <Button
+                android:id="@+id/button_search_more"
+                android:layout_width="150dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/recyclerView_search"
+                app:layout_constraintEnd_toEndOf="@id/recyclerView_search"
+                android:backgroundTint="@color/main_color"
+                android:textColor="@color/white"
+                android:text="더보기"
+                app:layout_constraintTop_toBottomOf="@id/recyclerView_search"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/footer_search"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                app:layout_constraintTop_toBottomOf="@id/space_search"
+                android:background="@color/gray_color"
+                android:backgroundTint="#F3F3F5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="0dp">
+
+                <TextView
+                    android:id="@+id/textview_search_footer1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="쇼핑몰 프로젝트 - 4조"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_search"
+                    app:layout_constraintStart_toStartOf="@id/footer_search"
+                    app:layout_constraintTop_toTopOf="@id/footer_search" />
+
+                <TextView
+                    android:id="@+id/textview_search_footer2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="LikeLion AOS3"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_search"
+                    app:layout_constraintStart_toStartOf="@id/footer_search"
+                    app:layout_constraintTop_toBottomOf="@id/textview_search_footer1" />
+
+                <TextView
+                    android:id="@+id/textview_search_footer3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="전화번호: 010-1234-5678"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_search"
+                    app:layout_constraintStart_toStartOf="@id/footer_search"
+                    app:layout_constraintTop_toBottomOf="@id/textview_search_footer2" />
+
+                <TextView
+                    android:id="@+id/textview_search_footer4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="이메일 : likeLion@naver.com"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_search"
+                    app:layout_constraintStart_toStartOf="@id/footer_search"
+                    app:layout_constraintTop_toBottomOf="@id/textview_search_footer3" />
+
+                <TextView
+                    android:id="@+id/textview_search_footer5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="©책방마켓 Communication. All Rights Reserved."
+                    android:textColor="#dcdcdd"
+                    app:layout_constraintEnd_toEndOf="@id/footer_search"
+                    app:layout_constraintStart_toStartOf="@id/footer_search"
+                    app:layout_constraintTop_toBottomOf="@id/textview_search_footer4" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_search_footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray_color"
+                    app:layout_constraintTop_toBottomOf="@id/textview_search_footer5" />
+
+                <TextView
+                    android:id="@+id/textview_search_footer6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="일반문의(발신자 부담)"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_search"
+                    app:layout_constraintHorizontal_bias="0.35"
+                    app:layout_constraintStart_toStartOf="@id/footer_search"
+                    app:layout_constraintTop_toBottomOf="@id/divider_search_footer" />
+
+                <TextView
+                    android:id="@+id/textview_search_footer7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="1544-2544"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/textview_search_footer6"
+                    app:layout_constraintStart_toEndOf="@id/textview_search_footer6"
+                    app:layout_constraintTop_toTopOf="@id/textview_search_footer6" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textview_search_footer7"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:layout_editor_absoluteX="0dp">
+
+                    <Button
+                        android:id="@+id/button_search_ask"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="1:1 문의"
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/button_search_FAQ"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="FAQ"
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
