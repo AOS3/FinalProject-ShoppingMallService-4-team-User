@@ -26,7 +26,7 @@ class NoticeFragment : Fragment() {
 
     private fun settingToolbar() {
         fragmentNoticeBinding.apply {
-            materialToolbarChangePw.setNavigationOnClickListener {
+            materialToolbarNotice.setNavigationOnClickListener {
                 removeFragment()
             }
         }
