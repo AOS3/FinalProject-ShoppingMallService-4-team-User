@@ -16,6 +16,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragmen
 class OrderInquiryFragment : Fragment() {
 
     private lateinit var binding: FragmentOrderInquiryBinding
+    private val adapter: OrderInquiryAdapter by lazy { OrderInquiryAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,21 +30,40 @@ class OrderInquiryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbarButton()
+        combineButtonMethod()
+        settingRecyclerView()
     }
 
     /*
     리사이클러 뷰
      */
 
+    private fun settingRecyclerView() {
+        binding.recyclerViewOrderInquiry.adapter = adapter
+    }
+
+    /*
+    버튼
+     */
+
+    private fun combineButtonMethod() {
+        // 개별 버튼
+        settingAskButton()
+        // 툴바 버튼
+        toolbarBackButton()
+        toolbarMenuButton()
+    }
+
+    private fun settingAskButton() {
+        binding.buttonOrderInquiryAsk.setOnClickListener {
+            // 문의 화면으로 변경한다.
+        }
+    }
+
     /*
     툴바
      */
 
-    private fun toolbarButton() {
-        toolbarBackButton()
-        toolbarMenuButton()
-    }
 
     private fun toolbarBackButton() = binding.materialToolbarOrderInquiry.setNavigationOnClickListener { removeFragment() }
 
@@ -67,13 +87,5 @@ class OrderInquiryFragment : Fragment() {
         }
     }
 
-    /*
-    버튼
-     */
 
-    private fun settingAskButton() {
-        binding.buttonOrderInquiryAsk.setOnClickListener {
-            // 문의 화면으로 변경한다.
-        }
-    }
 }
