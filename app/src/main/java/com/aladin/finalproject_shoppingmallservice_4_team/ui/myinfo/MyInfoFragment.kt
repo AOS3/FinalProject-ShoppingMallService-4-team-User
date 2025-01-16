@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.aladin.finalproject_shoppingmallservice_4_team.R
+import androidx.core.view.isEmpty
+import androidx.core.view.isNotEmpty
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMyInfoBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
@@ -24,6 +24,8 @@ class MyInfoFragment : Fragment() {
 
         settingFooterButton()
 
+        settingButtonChangeMyInfo()
+
         return fragmentMyInfoBinding.root
     }
 
@@ -39,6 +41,30 @@ class MyInfoFragment : Fragment() {
         fragmentMyInfoBinding.apply {
             buttonMyInfoAccountDelete.setOnClickListener {
                 replaceSubFragment(AccountDeleteFragment(),true)
+            }
+        }
+    }
+
+    // 내정보 수정 버튼 세팅
+    fun settingButtonChangeMyInfo(){
+        fragmentMyInfoBinding.apply {
+            buttonMyInfoChangeMyInfo.setOnClickListener {
+                // 유효성 검사
+
+                // 이름이 비어져있다면
+                if(textFieldMyInfoUserName.editText?.text.toString().isEmpty()){
+                    textFieldMyInfoUserName.error = "아이디를 입력해주세요"
+                } else if (textFieldMyInfoUserName.editText?.text.toString().isNotEmpty()){
+                    textFieldMyInfoUserName.helperText = " "
+                }
+
+                // 상세 주소가 비어져있다면
+                if(textFieldMyInfoAddress2.editText?.text.toString().isEmpty()){
+                    textFieldMyInfoAddress2.error = "상세 주소를 입력해주세요"
+                } else if (textFieldMyInfoAddress2.editText?.text.toString().isNotEmpty()){
+                    textFieldMyInfoAddress2.helperText = " "
+                }
+
             }
         }
     }
