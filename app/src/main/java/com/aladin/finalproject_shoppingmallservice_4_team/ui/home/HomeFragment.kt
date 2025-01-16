@@ -7,17 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentHomeBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.tabs.TabLayout
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeOnClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val adapter: HomeAdapter by lazy { HomeAdapter() }
+    private val adapter: HomeAdapter by lazy { HomeAdapter(this) }
     private var list = MutableList(30) {
         "항목 $it"
     }
@@ -117,5 +118,9 @@ class HomeFragment : Fragment() {
             }
 
         })
+    }
+
+    override fun itemClickListener(position: Int) {
+        replaceMainFragment(BookDetailFragment(), true)
     }
 }
