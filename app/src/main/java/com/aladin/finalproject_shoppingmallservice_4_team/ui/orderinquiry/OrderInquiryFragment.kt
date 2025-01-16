@@ -7,16 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentOrderInquiryBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
-class OrderInquiryFragment : Fragment() {
+class OrderInquiryFragment : Fragment(),HomeOnClickListener {
 
+    private val list = MutableList(30) {
+        "항목 $it"
+    }
     private lateinit var binding: FragmentOrderInquiryBinding
-    private val adapter: OrderInquiryAdapter by lazy { OrderInquiryAdapter() }
+    private val adapter: OrderInquiryAdapter by lazy { OrderInquiryAdapter(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +44,12 @@ class OrderInquiryFragment : Fragment() {
 
     private fun settingRecyclerView() {
         binding.recyclerViewOrderInquiry.adapter = adapter
+        adapter.updateItemList(list)
+    }
+
+    override fun itemClickListener(position: Int) {
+        // 상세 화면으로 변경한다.
+        replaceSubFragment(OrderInquiryDetailFragment(), true)
     }
 
     /*
@@ -64,7 +74,6 @@ class OrderInquiryFragment : Fragment() {
     툴바
      */
 
-
     private fun toolbarBackButton() = binding.materialToolbarOrderInquiry.setNavigationOnClickListener { removeFragment() }
 
     private fun toolbarMenuButton() {
@@ -86,6 +95,8 @@ class OrderInquiryFragment : Fragment() {
             false
         }
     }
+
+
 
 
 }
