@@ -58,11 +58,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="아이디*"
-                        app:endIconMode="clear_text"
                         app:boxStrokeColor="@color/main_color"
-                        app:placeholderText="아이디를 입력해주세요"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="clear_text"
+                        app:helperText="영어,숫자로만 입력해주세요"
                         app:hintTextColor="@color/main_color"
-                        app:cursorColor="@color/main_color">
+                        app:placeholderText="아이디를 입력해주세요">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -80,14 +81,21 @@
 
                 </LinearLayout>
 
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textField_registerStep2_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="비밀번호*"
-                    android:paddingTop="10dp"
                     app:cursorColor="@color/main_color"
                     app:endIconMode="password_toggle"
+                    app:helperText="6자리 이상 입력 해주세요"
                     app:hintTextColor="@color/main_color"
                     app:placeholderText="비밀번호를 입력해주세요">
 
@@ -104,6 +112,7 @@
                     android:hint="비밀번호 확인*"
                     app:cursorColor="@color/main_color"
                     app:endIconMode="password_toggle"
+                    app:helperText=" "
                     app:hintTextColor="@color/main_color"
                     app:placeholderText="비밀번호를 입력해주세요">
 
@@ -113,41 +122,55 @@
                         android:inputType="text|textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textField_registerStep2_userName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="이름*"
-                    android:paddingTop="10dp"
-                    app:endIconMode="clear_text"
                     app:boxStrokeColor="@color/main_color"
-                    app:placeholderText="이름을 입력해주세요"
+                    app:cursorColor="@color/main_color"
+                    app:endIconMode="clear_text"
+                    app:helperText=" "
                     app:hintTextColor="@color/main_color"
-                    app:cursorColor="@color/main_color">
+                    app:placeholderText="이름을 입력해주세요">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="10dp">
+                    android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textField_registerStep2_postCode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="우편 번호">
+                        android:hint="우편 번호"
+                        app:helperText=" ">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:clickable="false" />
+                            android:clickable="false"
+                            android:focusable="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
@@ -164,13 +187,14 @@
                     android:id="@+id/textField_registerStep2_address1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="도로명 주소">
+                    android:hint="도로명 주소"
+                    app:helperText=" ">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:clickable="false"/>
+                        android:clickable="false"
+                        android:focusable="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -178,16 +202,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="상세 주소*"
-                    app:endIconMode="clear_text"
                     app:boxStrokeColor="@color/main_color"
-                    app:placeholderText="상세 주소를 입력해주세요"
+                    app:cursorColor="@color/main_color"
+                    app:endIconMode="clear_text"
+                    app:helperText=" "
                     app:hintTextColor="@color/main_color"
-                    app:cursorColor="@color/main_color">
+                    app:placeholderText="상세 주소를 입력해주세요">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -201,11 +233,12 @@
                         android:layout_weight="1"
                         android:hint="휴대전화*"
                         android:paddingTop="10dp"
-                        app:endIconMode="clear_text"
                         app:boxStrokeColor="@color/main_color"
-                        app:placeholderText="01012345678"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="clear_text"
+                        app:helperText="- 없이 입력해주세요"
                         app:hintTextColor="@color/main_color"
-                        app:cursorColor="@color/main_color">
+                        app:placeholderText="01012345678">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -227,11 +260,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="인증번호*"
-                    app:endIconMode="clear_text"
                     app:boxStrokeColor="@color/main_color"
-                    app:placeholderText="인증번호를 입력해주세요"
+                    app:cursorColor="@color/main_color"
+                    app:endIconMode="clear_text"
+                    app:helperText=" "
                     app:hintTextColor="@color/main_color"
-                    app:cursorColor="@color/main_color">
+                    app:placeholderText="인증번호를 입력해주세요">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -239,14 +273,17 @@
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Space
+                <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" />
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/listDivider" />
 
                 <Button
                     android:id="@+id/button_registerStep2_register"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="60dp"
                     android:backgroundTint="@color/main_color"
                     android:text="가입하기"
                     app:cornerRadius="10dp" />
