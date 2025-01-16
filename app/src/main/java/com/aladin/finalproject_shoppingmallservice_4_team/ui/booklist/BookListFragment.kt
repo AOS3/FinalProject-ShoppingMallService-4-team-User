@@ -76,13 +76,18 @@ class BookListFragment : Fragment() {
             }
             // 드롭다운이 닫혔을 때 화살표 모양 바뀌게
             autoCompleteTextViewBookListSortOrder.setOnDismissListener {
-                imageViewBookListDropDownIcon.setImageResource(R.drawable.arrow_drop_up_24px)
+                imageViewBookListDropDownIcon.setImageResource(R.drawable.arrow_drop_down_24px)
             }
 
-            // 드롭다운 열리게 설정, 화살표 변경
+            // 드롭다운 열리게 설정, 화살표 변경 / 이미 열려있으면 닫히게 설정
             linearLayoutBookListSortOrder.setOnClickListener {
-                autoCompleteTextViewBookListSortOrder.showDropDown()
-                imageViewBookListDropDownIcon.setImageResource(R.drawable.arrow_drop_down_24px)
+                if (!autoCompleteTextViewBookListSortOrder.isPopupShowing) { // 드롭다운이 열려 있는지 확인
+                    autoCompleteTextViewBookListSortOrder.showDropDown()
+                    imageViewBookListDropDownIcon.setImageResource(R.drawable.arrow_drop_up_24px)
+                } else {
+                    autoCompleteTextViewBookListSortOrder.dismissDropDown() // 이미 열려 있으면 닫기
+                    imageViewBookListDropDownIcon.setImageResource(R.drawable.arrow_drop_down_24px)
+                }
             }
         }
     }
