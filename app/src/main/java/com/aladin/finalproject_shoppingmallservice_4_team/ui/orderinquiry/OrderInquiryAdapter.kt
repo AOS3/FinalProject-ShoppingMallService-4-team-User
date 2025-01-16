@@ -4,13 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.OrderInquiryListItemBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
 
-class OrderInquiryAdapter: RecyclerView.Adapter<OrderInquiryAdapter.OrderInquiryViewHolder>() {
+class OrderInquiryAdapter(
+    private val listener: HomeOnClickListener
+): RecyclerView.Adapter<OrderInquiryAdapter.OrderInquiryViewHolder>() {
 
     private val items = mutableListOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderInquiryViewHolder {
-        return OrderInquiryViewHolder(OrderInquiryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return OrderInquiryViewHolder(
+            OrderInquiryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            itemClickListener = {position -> listener.itemClickListener(position)}
+        )
     }
 
     override fun getItemCount(): Int = items.size
@@ -19,7 +25,22 @@ class OrderInquiryAdapter: RecyclerView.Adapter<OrderInquiryAdapter.OrderInquiry
         holder.bind(items[position])
     }
 
-    class OrderInquiryViewHolder(private val binding: OrderInquiryListItemBinding): RecyclerView.ViewHolder(binding.root) {
+    fun updateItemList(item: MutableList<String>) {
+        items.clear()
+        items.addAll(item)
+        notifyDataSetChanged()
+    }
+
+    class OrderInquiryViewHolder(
+        private val binding: OrderInquiryListItemBinding,
+        private val itemClickListener: (Int) -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                itemClickListener(adapterPosition)
+            }
+        }
+
         fun bind(item: String) {
             binding.apply {
                 textViewOrderInquiryListName.text = item
