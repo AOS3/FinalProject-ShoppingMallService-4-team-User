@@ -6,26 +6,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.HomeFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/materialToolbar_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:navigationIcon="@drawable/logo"
-        app:menu="@menu/home_menu_item"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/materialToolbar_home"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolbar_home"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:menu="@menu/home_menu_item"
+                app:navigationIcon="@drawable/logo" />
 
             <Button
                 android:id="@+id/button_home_search"
@@ -40,7 +40,7 @@
                 app:icon="@drawable/search_24px"
                 app:iconGravity="end"
                 app:iconTint="@color/black"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/materialToolbar_home"
                 app:rippleColor="@color/main_color"
                 tools:layout_editor_absoluteX="10dp" />
 
@@ -122,8 +122,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_home"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/home_list_item"
+                app:layout_constraintBottom_toTopOf="@id/imageView2"
                 android:layout_marginTop="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/textView1" />
@@ -265,7 +267,7 @@
                     tools:layout_editor_absoluteX="0dp">
 
                     <Button
-                        android:id="@+id/button_sellingCart_ask"
+                        android:id="@+id/button_home_ask"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -279,7 +281,7 @@
                         app:strokeColor="@color/white" />
 
                     <Button
-                        android:id="@+id/button_sellingCart_FAQ"
+                        android:id="@+id/button_home_FAQ"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

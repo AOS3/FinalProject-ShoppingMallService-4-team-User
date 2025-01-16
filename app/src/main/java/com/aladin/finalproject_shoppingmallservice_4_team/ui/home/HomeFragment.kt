@@ -7,17 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentHomeBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.tabs.TabLayout
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeOnClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val adapter: HomeAdapter by lazy { HomeAdapter() }
+    private val adapter: HomeAdapter by lazy { HomeAdapter(this) }
     private var list = MutableList(30) {
         "항목 $it"
     }
@@ -37,6 +40,7 @@ class HomeFragment : Fragment() {
         settingRecyclerView()
         toolbarButton()
         tabLayoutButton()
+        settingSearchButton()
     }
 
     override fun onDestroyView() {
@@ -47,9 +51,16 @@ class HomeFragment : Fragment() {
     /*
     리사이클러 뷰
      */
+
     private fun settingRecyclerView() {
+        // 리사이클러 뷰 구성
         binding.recyclerViewHome.adapter = adapter
         adapter.updateList(list)
+    }
+
+    override fun itemClickListener(position: Int) {
+        // 상세 화면으로 이동한다
+        replaceMainFragment(BookDetailFragment(), true)
     }
 
 
@@ -70,7 +81,7 @@ class HomeFragment : Fragment() {
                 }
                 // 장바구니
                 R.id.home_menu_shoppingcart -> {
-
+                    replaceMainFragment(ShoppingCartFragment(), true)
                 }
             }
             true
@@ -87,23 +98,23 @@ class HomeFragment : Fragment() {
                 when(tab?.position) {
                     // 중고
                     0 -> {
-                        replaceMainFragment(HomeFragment(), false)
+                        replaceSubFragment(BookListFragment(), true)
                     }
                     // 신작
                     1 -> {
-                        replaceMainFragment(HomeFragment(), false)
+                        replaceSubFragment(BookListFragment(), true)
                     }
                     // 베스트셀러
                     2 -> {
-                        replaceMainFragment(HomeFragment(), false)
+                        replaceSubFragment(BookListFragment(), true)
                     }
                     // 국내
                     3 -> {
-                        replaceMainFragment(HomeFragment(), false)
+                        replaceSubFragment(BookListFragment(), true)
                     }
                     // 해외
                     4 -> {
-                        replaceMainFragment(HomeFragment(), false)
+                        replaceSubFragment(BookListFragment(), true)
                     }
                 }
             }
@@ -117,5 +128,21 @@ class HomeFragment : Fragment() {
             }
 
         })
+    }
+
+    /*
+    버튼
+     */
+
+    private fun settingSearchButton() {
+        binding.buttonHomeSearch.setOnClickListener {
+            // 검색 화면으로 이동한다.
+        }
+    }
+
+    private fun settingMoreButton() {
+        binding.buttonHomeMore.setOnClickListener {
+            replaceSubFragment(BookListFragment(), true)
+        }
     }
 }
