@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/textView_bookSellingInquiryList_name"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="깡샘의 안드로이드 앱 프로그래밍 with 코틀린" />
+
+    <TextView
+        android:id="@+id/textView_bookSellingInquiryList_writer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="강성윤"
+        app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiryList_name" />
+
+    <TextView
+        android:id="@+id/textView_bookSellingInquiryList_quality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="예상 판매가 :"
+        app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiryList_writer" />
+
+    <TextView
+        android:id="@+id/textView_bookSellingInquiryList_orderDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내가 선택한 품질 : 상"
+        android:textColor="@color/red_color"
+        app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiryList_quality" />
+
+    <TextView
+        android:id="@+id/textView_bookSellingInquiryList_delivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="승인신청"
+        android:textColor="@color/red_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView_bookSellingInquiryList_name" />
+
+    <TextView
+        android:id="@+id/textView_bookSellingInquiryList_price"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiryList_delivery"
+        app:layout_constraintEnd_toEndOf="@id/textView_bookSellingInquiryList_delivery"
+        android:text="주문 금액 : 20,000원" />
+
+    <TextView
+        android:id="@+id/textView_bookSellingInquiryList_orderNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="등록 날짜 : 2024년 01월 09일"
+        android:textColor="@color/gray_color"
+        app:layout_constraintEnd_toEndOf="@id/textView_bookSellingInquiryList_price"
+        app:layout_constraintTop_toTopOf="@id/textView_bookSellingInquiryList_orderDate" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_bookSellingInquiryList_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiryList_orderDate"
+        android:background="@color/gray_color" />
+</androidx.constraintlayout.widget.ConstraintLayout>
