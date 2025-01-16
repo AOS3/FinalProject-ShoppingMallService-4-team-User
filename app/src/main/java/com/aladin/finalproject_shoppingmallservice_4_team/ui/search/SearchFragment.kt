@@ -33,6 +33,7 @@ class SearchFragment : Fragment(),HomeOnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbarButton()
+        settingRecyclerView()
     }
 
     /*
@@ -40,17 +41,23 @@ class SearchFragment : Fragment(),HomeOnClickListener {
      */
 
     private fun toolbarButton() {
-        binding.buttonSearchBack.setOnClickListener {
-            removeFragment()
-        }
-        binding.buttonSearchBarcode.setOnClickListener {
-            replaceMainFragment(BarcodeScannerFragment(), true)
-        }
+        toolbarBackButton()
+        toolbarBarcodeButton()
     }
+
+    private fun toolbarBackButton() = binding.buttonSearchBack.setOnClickListener { removeFragment() }
+
+    private fun toolbarBarcodeButton() = binding.buttonSearchBarcode.setOnClickListener { replaceMainFragment(BarcodeScannerFragment(), true) }
 
     /*
     버튼
      */
+
+    private fun settingSearchButton() {
+        binding.buttonSearchSearchIcon.setOnClickListener {
+            // 검색한다.
+        }
+    }
 
     private fun settingMoreButton() {
         binding.buttonSearchMore.setOnClickListener {
