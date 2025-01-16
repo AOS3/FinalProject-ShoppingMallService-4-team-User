@@ -68,7 +68,7 @@
         <Button
             android:id="@+id/button_findPw2_confirm"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:backgroundTint="@color/main_color"
             android:text="확인"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"

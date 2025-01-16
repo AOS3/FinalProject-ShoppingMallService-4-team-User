@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentFindIdBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.findpw.FindPwFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
@@ -53,11 +54,12 @@ class FindIdFragment : Fragment() {
         dialogBuilder.setTitle("아이디 찾기")
         dialogBuilder.setMessage("${userName}님의 아이디는 $userId 입니다.")
         dialogBuilder.setPositiveButton("로그인 하기") { dialog, _ ->
+            // 로그인 화면으로 이동
             replaceMainFragment(LoginFragment(),false)
         }
         dialogBuilder.setNegativeButton("비밀번호 찾기") { dialog, _ ->
-            // TODO: 로그인 하기 리스너 구현
-            dialog.dismiss()
+            // 비밀번호 찾기 화면으로 이동
+            replaceMainFragment(FindPwFragment1(),false)
         }
         dialogBuilder.create().show()
     }
