@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentHomeBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
@@ -98,10 +99,6 @@ class HomeFragment : Fragment(), HomeOnClickListener {
         binding.tabLayoutHome.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(tab?.position) {
-                    // 중고
-                    0 -> {
-                        replaceSubFragment(BookListFragment(), true)
-                    }
                     // 신작
                     1 -> {
                         replaceSubFragment(BookListFragment(), true)
@@ -126,7 +123,12 @@ class HomeFragment : Fragment(), HomeOnClickListener {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-
+                when(tab?.position) {
+                    // 중고
+                    0 -> {
+                        replaceSubFragment(BookListFragment(), true)
+                    }
+                }
             }
 
         })
