@@ -46,7 +46,7 @@
         <Button
             android:id="@+id/button_registerStep3_login"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/main_color"
             android:text="로그인 하러가기"
