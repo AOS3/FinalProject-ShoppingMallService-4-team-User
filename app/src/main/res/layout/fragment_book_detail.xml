@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_home_up"
+        android:id="@+id/fab_bookDetail_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -201,7 +201,7 @@
                 android:text="이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/footer_home"
+                android:id="@+id/footer_bookDetail"
                 android:layout_width="match_parent"
                 android:layout_height="270dp"
                 android:layout_marginTop="100dp"
@@ -212,7 +212,7 @@
                 tools:layout_editor_absoluteX="0dp">
 
                 <TextView
-                    android:id="@+id/textview_home_footer1"
+                    android:id="@+id/textview_bookDetail_footer1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -220,12 +220,12 @@
                     android:text="쇼핑몰 프로젝트 - 4조"
                     android:textColor="#000000"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/footer_home"
-                    app:layout_constraintStart_toStartOf="@id/footer_home"
-                    app:layout_constraintTop_toTopOf="@id/footer_home" />
+                    app:layout_constraintEnd_toEndOf="@id/footer_bookDetail"
+                    app:layout_constraintStart_toStartOf="@id/footer_bookDetail"
+                    app:layout_constraintTop_toTopOf="@id/footer_bookDetail" />
 
                 <TextView
-                    android:id="@+id/textview_home_footer2"
+                    android:id="@+id/textview_bookDetail_footer2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -233,12 +233,12 @@
                     android:text="LikeLion AOS3"
                     android:textColor="#c9c9ca"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/footer_home"
-                    app:layout_constraintStart_toStartOf="@id/footer_home"
-                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer1" />
+                    app:layout_constraintEnd_toEndOf="@id/footer_bookDetail"
+                    app:layout_constraintStart_toStartOf="@id/footer_bookDetail"
+                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer1" />
 
                 <TextView
-                    android:id="@+id/textview_home_footer3"
+                    android:id="@+id/textview_bookDetail_footer3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -246,12 +246,12 @@
                     android:text="전화번호: 010-1234-5678"
                     android:textColor="#c9c9ca"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/footer_home"
-                    app:layout_constraintStart_toStartOf="@id/footer_home"
-                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer2" />
+                    app:layout_constraintEnd_toEndOf="@id/footer_bookDetail"
+                    app:layout_constraintStart_toStartOf="@id/footer_bookDetail"
+                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer2" />
 
                 <TextView
-                    android:id="@+id/textview_home_footer4"
+                    android:id="@+id/textview_bookDetail_footer4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -259,57 +259,57 @@
                     android:text="이메일 : likeLion@naver.com"
                     android:textColor="#c9c9ca"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/footer_home"
-                    app:layout_constraintStart_toStartOf="@id/footer_home"
-                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer3" />
+                    app:layout_constraintEnd_toEndOf="@id/footer_bookDetail"
+                    app:layout_constraintStart_toStartOf="@id/footer_bookDetail"
+                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer3" />
 
                 <TextView
-                    android:id="@+id/textview_home_footer5"
+                    android:id="@+id/textview_bookDetail_footer5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:text="©책방마켓 Communication. All Rights Reserved."
                     android:textColor="#dcdcdd"
-                    app:layout_constraintEnd_toEndOf="@id/footer_home"
-                    app:layout_constraintStart_toStartOf="@id/footer_home"
-                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer4" />
+                    app:layout_constraintEnd_toEndOf="@id/footer_bookDetail"
+                    app:layout_constraintStart_toStartOf="@id/footer_bookDetail"
+                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer4" />
 
                 <com.google.android.material.divider.MaterialDivider
-                    android:id="@+id/divider_home_footer"
+                    android:id="@+id/divider_bookDetail_footer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@color/gray_color"
-                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer5" />
+                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer5" />
 
                 <TextView
-                    android:id="@+id/textview_home_footer6"
+                    android:id="@+id/textview_bookDetail_footer6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="일반문의(발신자 부담)"
                     android:textColor="#c9c9ca"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/footer_home"
+                    app:layout_constraintEnd_toEndOf="@id/footer_bookDetail"
                     app:layout_constraintHorizontal_bias="0.35"
-                    app:layout_constraintStart_toStartOf="@id/footer_home"
-                    app:layout_constraintTop_toBottomOf="@id/divider_home_footer" />
+                    app:layout_constraintStart_toStartOf="@id/footer_bookDetail"
+                    app:layout_constraintTop_toBottomOf="@id/divider_bookDetail_footer" />
 
                 <TextView
-                    android:id="@+id/textview_home_footer7"
+                    android:id="@+id/textview_bookDetail_footer7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="1544-2544"
                     android:textColor="#000000"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/textview_home_footer6"
-                    app:layout_constraintStart_toEndOf="@id/textview_home_footer6"
-                    app:layout_constraintTop_toTopOf="@id/textview_home_footer6" />
+                    app:layout_constraintBottom_toBottomOf="@id/textview_bookDetail_footer6"
+                    app:layout_constraintStart_toEndOf="@id/textview_bookDetail_footer6"
+                    app:layout_constraintTop_toTopOf="@id/textview_bookDetail_footer6" />
 
                 <Button
-                    android:id="@+id/button_home_ask"
+                    android:id="@+id/button_bookDetail_ask"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
@@ -318,12 +318,12 @@
                     android:text="1:1 문의"
                     android:textColor="#000000"
                     app:cornerRadius="0dp"
-                    app:layout_constraintStart_toStartOf="@id/footer_home"
-                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer6"
+                    app:layout_constraintStart_toStartOf="@id/footer_bookDetail"
+                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer6"
                     app:strokeColor="@color/white" />
 
                 <Button
-                    android:id="@+id/button_home_FAQ"
+                    android:id="@+id/button_bookDetail_FAQ"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
@@ -332,8 +332,8 @@
                     android:text="FAQ"
                     android:textColor="#000000"
                     app:cornerRadius="0dp"
-                    app:layout_constraintStart_toEndOf="@id/button_home_ask"
-                    app:layout_constraintTop_toBottomOf="@id/textview_home_footer6"
+                    app:layout_constraintStart_toEndOf="@id/button_bookDetail_ask"
+                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer6"
                     app:strokeColor="@color/white" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
