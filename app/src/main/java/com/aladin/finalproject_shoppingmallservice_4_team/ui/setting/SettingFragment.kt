@@ -9,10 +9,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import com.aladin.finalproject_shoppingmallservice_4_team.MainActivity
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSettingBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.changePw.ChangePwFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.guide.GuideFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 
 
@@ -28,22 +33,32 @@ class SettingFragment : Fragment() {
         mainActivity = activity as MainActivity
         // 버튼 클릭 메서드
         onClickSettingView()
+        // 툴바 메서드
+        settingToolbar()
         return fragmentSettingBinding.root
+    }
+
+    private fun settingToolbar() {
+        fragmentSettingBinding.apply {
+            materialToolbarSetting.setNavigationOnClickListener {
+                removeFragment()
+            }
+        }
     }
 
     private fun onClickSettingView() {
         fragmentSettingBinding.apply {
             // 공지사항
             viewSettingNotice.setOnClickListener {
-                replaceMainFragment(MainFragment(), false)
+                replaceMainFragment(NoticeFragment(), true)
             }
             // 이용 약관
             viewSettingGuide.setOnClickListener {
-                replaceMainFragment(MainFragment(), false)
+                replaceMainFragment(GuideFragment(), true)
             }
             // 비밀번호 변경
             viewSettingChangePw.setOnClickListener {
-                replaceMainFragment(MainFragment(), false)
+                replaceMainFragment(ChangePwFragment(), true)
             }
             // 카메라 권한 설정
             viewSettingCameraPermission.setOnClickListener {
