@@ -202,22 +202,32 @@
                     <Button
                         android:id="@+id/Button_ChangePw_Ask"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="1:1 문의"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
 
                     <Button
                         android:id="@+id/Button_ChangePw_FAQ"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="FAQ"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
