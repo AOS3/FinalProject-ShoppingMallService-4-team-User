@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:transitionGroup="true"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:context=".ui.main.MainFragment">
 
         <androidx.fragment.app.FragmentContainerView
@@ -25,11 +25,13 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:background="@android:color/transparent"
-            app:itemActiveIndicatorStyle="@null"
-            app:itemRippleColor="@android:color/transparent"
+            app:itemActiveIndicatorStyle="@style/ActiveIndicatorStyle"
+            app:itemIconTint="@color/black"
+            app:itemRippleColor="@color/ripple_color"
             app:labelVisibilityMode="unlabeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/bottom_nav" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
