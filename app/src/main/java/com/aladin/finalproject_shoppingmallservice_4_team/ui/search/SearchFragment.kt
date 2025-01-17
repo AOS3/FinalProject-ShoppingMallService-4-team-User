@@ -142,8 +142,8 @@ class SearchFragment : Fragment(),HomeOnClickListener {
     private fun settingEmptyResult() {
         // 검색 결과가 없을 경우
         binding.apply {
-            includeSearchEmpty.emptyLayout.isVisible = true
-            scrollSearch.isVisible = false
+            includeSearchEmpty.emptyLayout.isVisible = false
+            scrollSearch.isVisible = true
         }
     }
 
