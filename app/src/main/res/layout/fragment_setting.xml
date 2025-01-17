@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:transitionGroup="true"
     android:layout_height="match_parent"
+    android:transitionGroup="true"
     tools:context=".ui.setting.SettingFragment">
 
     <ScrollView
@@ -43,8 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:text="공지사항"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintBottom_toBottomOf="@+id/view_setting_notice"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view_setting_notice" />
@@ -79,8 +79,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:text="이용 약관"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintBottom_toBottomOf="@+id/view_setting_guide"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view_setting_guide" />
@@ -297,22 +297,32 @@
                     <Button
                         android:id="@+id/button_setting_Ask"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="1:1 문의"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
 
                     <Button
                         android:id="@+id/button_setting_FAQ"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="FAQ"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
                 </LinearLayout>
             </LinearLayout>
 

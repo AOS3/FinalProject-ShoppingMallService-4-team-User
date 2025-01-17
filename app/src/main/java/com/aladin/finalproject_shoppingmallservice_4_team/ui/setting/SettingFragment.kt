@@ -50,15 +50,15 @@ class SettingFragment : Fragment() {
         fragmentSettingBinding.apply {
             // 공지사항
             viewSettingNotice.setOnClickListener {
-                replaceMainFragment(NoticeFragment(), false)
+                replaceMainFragment(NoticeFragment(), true)
             }
             // 이용 약관
             viewSettingGuide.setOnClickListener {
-                replaceMainFragment(GuideFragment(), false)
+                replaceMainFragment(GuideFragment(), true)
             }
             // 비밀번호 변경
             viewSettingChangePw.setOnClickListener {
-                replaceMainFragment(ChangePwFragment(), false)
+                replaceMainFragment(ChangePwFragment(), true)
             }
             // 카메라 권한 설정
             viewSettingCameraPermission.setOnClickListener {
