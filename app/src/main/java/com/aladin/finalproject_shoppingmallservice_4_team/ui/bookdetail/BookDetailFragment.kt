@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookDetailBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
@@ -50,8 +52,10 @@ class BookDetailFragment : Fragment() {
         settingAskButton()
         settingBuyButton()
         settingFABButton()
+        settingSearchButton()
         // 툴바 버튼
-        toolbarButton()
+        toolbarMenuButton()
+        toolbarBackButton()
     }
 
     private fun settingBuyButton() {
@@ -73,11 +77,17 @@ class BookDetailFragment : Fragment() {
         }
     }
 
+    private fun settingSearchButton() {
+        binding.buttonBookDetailSearch.setOnClickListener {
+            replaceMainFragment(SearchFragment(), true)
+        }
+    }
+
     /*
     툴바
      */
 
-    private fun toolbarButton() {
+    private fun toolbarMenuButton() {
         binding.materialToolbarBookDetail.setOnMenuItemClickListener {
             when(it.itemId) {
                 // 메뉴
@@ -96,5 +106,7 @@ class BookDetailFragment : Fragment() {
             true
         }
     }
+
+    private fun toolbarBackButton() = binding.materialToolbarBookDetail.setNavigationOnClickListener { removeFragment() }
 
 }

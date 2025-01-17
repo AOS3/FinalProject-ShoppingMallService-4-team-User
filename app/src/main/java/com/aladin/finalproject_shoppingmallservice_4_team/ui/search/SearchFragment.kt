@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSearchBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
@@ -36,6 +37,7 @@ class SearchFragment : Fragment(),HomeOnClickListener {
         super.onViewCreated(view, savedInstanceState)
         combineButtonMethod()
         settingRecyclerView()
+        settingEmptyResult()
     }
 
     /*
@@ -139,6 +141,10 @@ class SearchFragment : Fragment(),HomeOnClickListener {
 
     private fun settingEmptyResult() {
         // 검색 결과가 없을 경우
+        binding.apply {
+            includeSearchEmpty.emptyLayout.isVisible = false
+            scrollSearch.isVisible = true
+        }
     }
 
     private fun settingRecyclerView() {
