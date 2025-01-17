@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentHomeBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
@@ -38,9 +40,7 @@ class HomeFragment : Fragment(), HomeOnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         settingRecyclerView()
-        toolbarButton()
-        tabLayoutButton()
-        settingSearchButton()
+        combineButtonMethod()
     }
 
     override fun onDestroyView() {
@@ -63,9 +63,37 @@ class HomeFragment : Fragment(), HomeOnClickListener {
         replaceMainFragment(BookDetailFragment(), true)
     }
 
+    /*
+    버튼
+     */
+
+    private fun combineButtonMethod() {
+        // 개별 버튼
+        settingSearchButton()
+        settingMoreButton()
+        // 탭 버튼
+        tabLayoutButton()
+        // 툴바 버튼
+        toolbarButton()
+    }
+
+    private fun settingSearchButton() {
+        binding.buttonHomeSearch.setOnClickListener {
+            // 검색 화면으로 이동한다.
+            replaceSubFragment(SearchFragment(), true)
+        }
+    }
+
+    private fun settingMoreButton() {
+        binding.buttonHomeMore.setOnClickListener {
+            // 추천 도서 목록으로 이동한다.
+            replaceSubFragment(BookListFragment(), true)
+        }
+    }
+
 
     /*
-    툴바 버튼 리스너
+    툴바
      */
 
     private fun toolbarButton() {
@@ -89,17 +117,13 @@ class HomeFragment : Fragment(), HomeOnClickListener {
     }
 
     /*
-    탭 카테고리 관리
+    탭
      */
 
     private fun tabLayoutButton() {
         binding.tabLayoutHome.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(tab?.position) {
-                    // 중고
-                    0 -> {
-                        replaceSubFragment(BookListFragment(), true)
-                    }
                     // 신작
                     1 -> {
                         replaceSubFragment(BookListFragment(), true)
@@ -124,25 +148,16 @@ class HomeFragment : Fragment(), HomeOnClickListener {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-
+                when(tab?.position) {
+                    // 중고
+                    0 -> {
+                        replaceSubFragment(BookListFragment(), true)
+                    }
+                }
             }
 
         })
     }
 
-    /*
-    버튼
-     */
 
-    private fun settingSearchButton() {
-        binding.buttonHomeSearch.setOnClickListener {
-            // 검색 화면으로 이동한다.
-        }
-    }
-
-    private fun settingMoreButton() {
-        binding.buttonHomeMore.setOnClickListener {
-            replaceSubFragment(BookListFragment(), true)
-        }
-    }
 }
