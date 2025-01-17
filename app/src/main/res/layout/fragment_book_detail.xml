@@ -83,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
                 android:backgroundTint="@color/main_color"
+                app:layout_constraintEnd_toEndOf="@id/view_bookDetail_price"
                 android:text="새 책 사러가기"
                 app:layout_constraintBottom_toBottomOf="@id/textView_bookDetail_bookPrice"
                 app:layout_constraintStart_toEndOf="@id/textView_bookDetail_bookPrice"
