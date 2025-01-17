@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ask.AskFragment" >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_ask"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleCentered="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_ask">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textField_ask_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="제목*"
+                        app:boxStrokeColor="@color/main_color"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="clear_text"
+                        app:helperText=" "
+                        app:hintTextColor="@color/main_color"
+                        app:placeholderText="제목을 입력해주세요">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textField_ask_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="내용*"
+                        app:boxStrokeColor="@color/main_color"
+                        app:cursorColor="@color/main_color"
+                        app:helperText=" "
+                        app:hintTextColor="@color/main_color"
+                        app:placeholderText="문의 내용을 입력해주세요">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textField_ask_attach"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:background="@color/gray_color"
+                            android:backgroundTint="@color/gray_color"
+                            android:clickable="false"
+                            android:enabled="false"
+                            android:hint="첨부파일"
+                            app:boxStrokeColor="@color/main_color"
+                            app:cursorColor="@color/main_color"
+                            app:hintTextColor="@color/main_color">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:editable="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/button_ask_attach"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/main_color"
+                            android:text="첨부하기" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="최대 5mb 파일"
+                        android:textAlignment="viewEnd"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textField_ask_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="email*"
+                    android:paddingBottom="20dp"
+                    app:boxStrokeColor="@color/main_color"
+                    app:cursorColor="@color/main_color"
+                    app:endIconMode="clear_text"
+                    app:helperText="답변은 적어주신 이메일로 보내드리겠습니다"
+                    app:hintTextColor="@color/main_color"
+                    app:placeholderText="OOOOOO@naver.com">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_ask_send"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/main_color"
+                    android:text="문의 하기"
+                    app:cornerRadius="10dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/footer_ask"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="80dp"
+                    android:background="@color/gray_color"
+                    android:backgroundTint="#F3F3F5">
+
+                    <TextView
+                        android:id="@+id/textview_ask_footer1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="쇼핑몰 프로젝트 - 4조"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_ask"
+                        app:layout_constraintStart_toStartOf="@id/footer_ask"
+                        app:layout_constraintTop_toTopOf="@id/footer_ask" />
+
+                    <TextView
+                        android:id="@+id/textview_ask_footer2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="LikeLion AOS3"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_ask"
+                        app:layout_constraintStart_toStartOf="@id/footer_ask"
+                        app:layout_constraintTop_toBottomOf="@id/textview_ask_footer1" />
+
+                    <TextView
+                        android:id="@+id/textview_ask_footer3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="전화번호: 010-1234-5678"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_ask"
+                        app:layout_constraintStart_toStartOf="@id/footer_ask"
+                        app:layout_constraintTop_toBottomOf="@id/textview_ask_footer2" />
+
+                    <TextView
+                        android:id="@+id/textview_ask_footer4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="이메일 : likeLion@naver.com"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_ask"
+                        app:layout_constraintStart_toStartOf="@id/footer_ask"
+                        app:layout_constraintTop_toBottomOf="@id/textview_ask_footer3" />
+
+                    <TextView
+                        android:id="@+id/textview_ask_footer5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="©책방마켓 Communication. All Rights Reserved."
+                        android:textColor="#dcdcdd"
+                        app:layout_constraintEnd_toEndOf="@id/footer_ask"
+                        app:layout_constraintStart_toStartOf="@id/footer_ask"
+                        app:layout_constraintTop_toBottomOf="@id/textview_ask_footer4" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_ask_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_color"
+                        app:layout_constraintTop_toBottomOf="@id/textview_ask_footer5" />
+
+                    <TextView
+                        android:id="@+id/textview_ask_footer6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="일반문의(발신자 부담)"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_ask"
+                        app:layout_constraintHorizontal_bias="0.35"
+                        app:layout_constraintStart_toStartOf="@id/footer_ask"
+                        app:layout_constraintTop_toBottomOf="@id/divider_ask_footer" />
+
+                    <TextView
+                        android:id="@+id/textview_ask_footer7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="1544-2544"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/textview_ask_footer6"
+                        app:layout_constraintStart_toEndOf="@id/textview_ask_footer6"
+                        app:layout_constraintTop_toTopOf="@id/textview_ask_footer6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textview_ask_footer7"
+                        app:layout_constraintVertical_bias="1.0"
+                        tools:layout_editor_absoluteX="0dp">
+
+                        <Button
+                            android:id="@+id/button_ask_ask"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:text="1:1 문의"
+                            android:textColor="#000000"
+                            app:cornerRadius="0dp"
+                            app:strokeColor="@color/white" />
+
+                        <Button
+                            android:id="@+id/button_ask_FAQ"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:text="FAQ"
+                            android:textColor="#000000"
+                            app:cornerRadius="0dp"
+                            app:strokeColor="@color/white" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
