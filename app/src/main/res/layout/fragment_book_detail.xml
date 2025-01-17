@@ -81,11 +81,11 @@
                 android:id="@+id/button_bookDetail_buyNewBook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="100dp"
                 android:backgroundTint="@color/main_color"
-                app:layout_constraintEnd_toEndOf="@id/view_bookDetail_price"
                 android:text="새 책 사러가기"
                 app:layout_constraintBottom_toBottomOf="@id/textView_bookDetail_bookPrice"
+                app:layout_constraintEnd_toEndOf="@id/view_bookDetail_price"
+                app:layout_constraintHorizontal_bias="0.7"
                 app:layout_constraintStart_toEndOf="@id/textView_bookDetail_bookPrice"
                 app:layout_constraintTop_toTopOf="@id/textView_bookDetail_bookPrice" />
 
