@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookDetailBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
@@ -51,6 +52,7 @@ class BookDetailFragment : Fragment() {
         settingAskButton()
         settingBuyButton()
         settingFABButton()
+        settingSearchButton()
         // 툴바 버튼
         toolbarMenuButton()
         toolbarBackButton()
@@ -72,6 +74,12 @@ class BookDetailFragment : Fragment() {
     private fun settingFABButton() {
         binding.fabBookDetailUp.setOnClickListener {
             // 위로 올라가게 한다.
+        }
+    }
+
+    private fun settingSearchButton() {
+        binding.buttonBookDetailSearch.setOnClickListener {
+            replaceMainFragment(SearchFragment(), true)
         }
     }
 
