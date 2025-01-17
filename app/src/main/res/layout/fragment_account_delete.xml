@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.myinfo.AccountDeleteFragment" >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_accountDelete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_accountDelete">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView_accountDelete_termsOfUse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/darker_gray"
+                        android:backgroundTint="@android:color/darker_gray"
+                        android:padding="10dp"
+                        android:text="탈퇴 약관"
+                        android:textColor="@color/white" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textField_accountDelete_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="50dp"
+                        android:hint="비밀번호*"
+                        app:boxStrokeColor="@color/main_color"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="password_toggle"
+                        app:helperText=" "
+                        app:hintTextColor="@color/main_color"
+                        app:placeholderText="비밀번호를 입력해주세요">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text|textPassword" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/button_accountDelete_deleteAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@android:color/darker_gray"
+                        android:text="회원 탈퇴"
+                        app:cornerRadius="10dp" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/footer_accountDelete"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="80dp"
+                    android:background="@color/gray_color"
+                    android:backgroundTint="#F3F3F5">
+
+                    <TextView
+                        android:id="@+id/textview_accountDelete_footer1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="쇼핑몰 프로젝트 - 4조"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_accountDelete"
+                        app:layout_constraintStart_toStartOf="@id/footer_accountDelete"
+                        app:layout_constraintTop_toTopOf="@id/footer_accountDelete" />
+
+                    <TextView
+                        android:id="@+id/textview_accountDelete_footer2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="LikeLion AOS3"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_accountDelete"
+                        app:layout_constraintStart_toStartOf="@id/footer_accountDelete"
+                        app:layout_constraintTop_toBottomOf="@id/textview_accountDelete_footer1" />
+
+                    <TextView
+                        android:id="@+id/textview_accountDelete_footer3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="전화번호: 010-1234-5678"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_accountDelete"
+                        app:layout_constraintStart_toStartOf="@id/footer_accountDelete"
+                        app:layout_constraintTop_toBottomOf="@id/textview_accountDelete_footer2" />
+
+                    <TextView
+                        android:id="@+id/textview_accountDelete_footer4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="이메일 : likeLion@naver.com"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_accountDelete"
+                        app:layout_constraintStart_toStartOf="@id/footer_accountDelete"
+                        app:layout_constraintTop_toBottomOf="@id/textview_accountDelete_footer3" />
+
+                    <TextView
+                        android:id="@+id/textview_accountDelete_footer5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="©책방마켓 Communication. All Rights Reserved."
+                        android:textColor="#dcdcdd"
+                        app:layout_constraintEnd_toEndOf="@id/footer_accountDelete"
+                        app:layout_constraintStart_toStartOf="@id/footer_accountDelete"
+                        app:layout_constraintTop_toBottomOf="@id/textview_accountDelete_footer4" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_accountDelete_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_color"
+                        app:layout_constraintTop_toBottomOf="@id/textview_accountDelete_footer5" />
+
+                    <TextView
+                        android:id="@+id/textview_accountDelete_footer6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="일반문의(발신자 부담)"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_accountDelete"
+                        app:layout_constraintHorizontal_bias="0.35"
+                        app:layout_constraintStart_toStartOf="@id/footer_accountDelete"
+                        app:layout_constraintTop_toBottomOf="@id/divider_accountDelete_footer" />
+
+                    <TextView
+                        android:id="@+id/textview_accountDelete_footer7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="1544-2544"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/textview_accountDelete_footer6"
+                        app:layout_constraintStart_toEndOf="@id/textview_accountDelete_footer6"
+                        app:layout_constraintTop_toTopOf="@id/textview_accountDelete_footer6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@+id/textview_accountDelete_footer7"
+                        tools:layout_editor_absoluteX="0dp">
+
+                        <Button
+                            android:id="@+id/button_accountDelete_ask"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:text="1:1 문의"
+                            android:textColor="#000000"
+                            app:cornerRadius="0dp"
+                            app:strokeColor="@color/white" />
+
+                        <Button
+                            android:id="@+id/button_accountDelete_FAQ"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:text="FAQ"
+                            android:textColor="#000000"
+                            app:cornerRadius="0dp"
+                            app:strokeColor="@color/white" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.myinfo.MyInfoFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_myInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleCentered="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_myInfo">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textField_myInfo_userName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="이름"
+                        app:boxStrokeColor="@color/main_color"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="clear_text"
+                        app:helperText=" "
+                        app:hintTextColor="@color/main_color"
+                        app:placeholderText="이름을 입력해주세요">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=" " />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textField_myInfo_phoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:hint="휴대폰"
+                        app:boxStrokeColor="@color/main_color"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="clear_text"
+                        app:helperText=" "
+                        app:hintTextColor="@color/main_color"
+                        app:placeholderText="전화번호를 입력해주세요">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:inputType="phone"
+                            android:text=" " />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textField_myInfo_userId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:hint="아이디"
+                        app:boxStrokeColor="@color/main_color"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="clear_text"
+                        app:helperText=" "
+                        app:hintTextColor="@color/main_color"
+                        app:placeholderText="아이디를 입력해주세요">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:text=" " />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textField_myInfo_postCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:hint="우편번호"
+                            android:paddingRight="10dp"
+                            app:boxStrokeColor="@color/main_color"
+                            app:cursorColor="@color/main_color"
+                            app:endIconMode="clear_text"
+                            app:helperText=" "
+                            app:hintTextColor="@color/main_color"
+                            app:placeholderText="아이디를 입력해주세요">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:editable="false"
+                                android:text=" " />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/button_myInfo_search_postCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/main_color"
+                            android:text="도로명 검색" />
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textField_myInfo_address1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:hint="도로명 주소"
+                        app:boxStrokeColor="@color/main_color"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="clear_text"
+                        app:helperText=" "
+                        app:hintTextColor="@color/main_color"
+                        app:placeholderText="아이디를 입력해주세요">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:text=" " />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textField_myInfo_address2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="50dp"
+                        android:hint="상세 주소"
+                        app:boxStrokeColor="@color/main_color"
+                        app:cursorColor="@color/main_color"
+                        app:endIconMode="clear_text"
+                        app:helperText=" "
+                        app:hintTextColor="@color/main_color"
+                        app:placeholderText="아이디를 입력해주세요">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=" " />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/button_myInfo_accountDelete"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="회원 탈퇴"
+                        android:textColor="@color/red_color" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/footer_myInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
+                    android:layout_marginBottom="80dp"
+                    android:background="@color/gray_color"
+                    android:backgroundTint="#F3F3F5">
+
+                    <TextView
+                        android:id="@+id/textview_myInfo_footer1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="쇼핑몰 프로젝트 - 4조"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_myInfo"
+                        app:layout_constraintStart_toStartOf="@id/footer_myInfo"
+                        app:layout_constraintTop_toTopOf="@id/footer_myInfo" />
+
+                    <TextView
+                        android:id="@+id/textview_myInfo_footer2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="LikeLion AOS3"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_myInfo"
+                        app:layout_constraintStart_toStartOf="@id/footer_myInfo"
+                        app:layout_constraintTop_toBottomOf="@id/textview_myInfo_footer1" />
+
+                    <TextView
+                        android:id="@+id/textview_myInfo_footer3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="전화번호: 010-1234-5678"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_myInfo"
+                        app:layout_constraintStart_toStartOf="@id/footer_myInfo"
+                        app:layout_constraintTop_toBottomOf="@id/textview_myInfo_footer2" />
+
+                    <TextView
+                        android:id="@+id/textview_myInfo_footer4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="이메일 : likeLion@naver.com"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_myInfo"
+                        app:layout_constraintStart_toStartOf="@id/footer_myInfo"
+                        app:layout_constraintTop_toBottomOf="@id/textview_myInfo_footer3" />
+
+                    <TextView
+                        android:id="@+id/textview_myInfo_footer5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="©책방마켓 Communication. All Rights Reserved."
+                        android:textColor="#dcdcdd"
+                        app:layout_constraintEnd_toEndOf="@id/footer_myInfo"
+                        app:layout_constraintStart_toStartOf="@id/footer_myInfo"
+                        app:layout_constraintTop_toBottomOf="@id/textview_myInfo_footer4" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider_myInfo_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_color"
+                        app:layout_constraintTop_toBottomOf="@id/textview_myInfo_footer5" />
+
+                    <TextView
+                        android:id="@+id/textview_myInfo_footer6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="일반문의(발신자 부담)"
+                        android:textColor="#c9c9ca"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@id/footer_myInfo"
+                        app:layout_constraintHorizontal_bias="0.35"
+                        app:layout_constraintStart_toStartOf="@id/footer_myInfo"
+                        app:layout_constraintTop_toBottomOf="@id/divider_myInfo_footer" />
+
+                    <TextView
+                        android:id="@+id/textview_myInfo_footer7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="1544-2544"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/textview_myInfo_footer6"
+                        app:layout_constraintStart_toEndOf="@id/textview_myInfo_footer6"
+                        app:layout_constraintTop_toTopOf="@id/textview_myInfo_footer6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textview_myInfo_footer7"
+                        app:layout_constraintVertical_bias="1.0"
+                        tools:layout_editor_absoluteX="0dp">
+
+                        <Button
+                            android:id="@+id/button_myInfo_ask"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:text="1:1 문의"
+                            android:textColor="#000000"
+                            app:cornerRadius="0dp"
+                            app:strokeColor="@color/white" />
+
+                        <Button
+                            android:id="@+id/button_myInfo_FAQ"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
+                            android:text="FAQ"
+                            android:textColor="#000000"
+                            app:cornerRadius="0dp"
+                            app:strokeColor="@color/white" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_myInfo_changeMyInfo"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="내 정보 수정"
+        android:textColor="@color/main_color"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar_myInfo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
