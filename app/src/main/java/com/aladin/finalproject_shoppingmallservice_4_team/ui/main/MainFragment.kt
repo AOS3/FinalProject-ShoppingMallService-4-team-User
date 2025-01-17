@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
@@ -33,23 +35,23 @@ class MainFragment : Fragment() {
         fragmentMainBinding.bottomAppBarMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
+                    clearAllBackStack()
                     replaceSubFragment(HomeFragment(),false)
-                    true
                 }
                 R.id.nav_barcode -> {
-                    replaceMainFragment(MainFragment(),false)
-                    true
+                    clearAllBackStack()
+                    replaceMainFragment(BarcodeScannerFragment(),true)
                 }
                 R.id.nav_info -> {
-                    replaceMainFragment(LoginFragment(),false)
-                    true
+                    clearAllBackStack()
+                    replaceSubFragment(LoginFragment(),true)
                 }
                 R.id.nav_like_list -> {
-                    replaceMainFragment(LikeListFragment(),false)
-                    true
+                    clearAllBackStack()
+                    replaceSubFragment(LikeListFragment(),true)
                 }
-                else -> false
             }
+            true
         }
     }
 }
