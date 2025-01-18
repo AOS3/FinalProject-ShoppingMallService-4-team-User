@@ -14,6 +14,15 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainMenuBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.myinfo.MyInfoFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.orderinquiry.OrderInquiryFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.setting.SettingFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
 class MainMenuFragment : Fragment() {
 
@@ -54,8 +63,8 @@ class MainMenuFragment : Fragment() {
                 paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
                 // 로그인 해 주세요 클릭
                 setOnClickListener {
-                    // 로그인
-                    Toast.makeText(requireContext(), "로그인 화면으로 이동", Toast.LENGTH_SHORT).show()
+                    // 로그인 화면으로 이동
+                    replaceMainFragment(LoginFragment(),true)
                     visibility = View.GONE
                     toolbarMainMenu.title = "000 사용자님"
 
@@ -91,7 +100,7 @@ class MainMenuFragment : Fragment() {
                     // toolbar_mainMenu_goSettings
                     1 -> {
                         // 환경 설정으로 이동
-                        Toast.makeText(requireContext(), "환경 설정으로 이동", Toast.LENGTH_SHORT).show()
+                        replaceSubFragment(SettingFragment(),true)
                     }
                 }
                 true
@@ -104,21 +113,21 @@ class MainMenuFragment : Fragment() {
         fragmentMainMenuBinding.apply {
             buttonMainMenuMyInfo.setOnClickListener {
                 // 내 정보로 이동
-                Toast.makeText(requireContext(), "내 정보로 이동", Toast.LENGTH_SHORT).show()
+                replaceSubFragment(MyInfoFragment(),true)
             }
         }
 
         fragmentMainMenuBinding.apply {
             buttonMainMenuOrderHistory.setOnClickListener {
                 // 주문 조회로 이동
-                Toast.makeText(requireContext(), "주문 조회로 이동", Toast.LENGTH_SHORT).show()
+                replaceSubFragment(OrderInquiryFragment(),true)
             }
         }
 
         fragmentMainMenuBinding.apply {
             buttonMainMenuWishlist.setOnClickListener {
                 // 찜 목록으로 이동
-                Toast.makeText(requireContext(), "찜 목록으로 이동", Toast.LENGTH_SHORT).show()
+                replaceSubFragment(LikeListFragment(),true)
             }
         }
     }
@@ -140,7 +149,8 @@ class MainMenuFragment : Fragment() {
                     R.drawable.chevron_right_24px,
                     0
                 )
-                view.compoundDrawablePadding = 16 // 텍스트와 아이콘 간 간격 설정
+                // 텍스트와 아이콘 간 간격 설정
+                view.compoundDrawablePadding = 16
 
                 return view
             }
@@ -155,27 +165,27 @@ class MainMenuFragment : Fragment() {
             val targetFragment = when (position) {
                 0 -> {
                     // 내가 판매하는 중고 도서로 이동
-                    Toast.makeText(requireContext(), "$selectedItem 으로 이동", Toast.LENGTH_SHORT).show()
+                    replaceSubFragment(BookListFragment(),true)
                 }
                 1 -> {
                     // 중고 도서로 이동
-                    Toast.makeText(requireContext(), "$selectedItem 으로 이동", Toast.LENGTH_SHORT).show()
+                    replaceSubFragment(BookListFragment(),true)
                 }
                 2 -> {
                     // 신간 도서로 이동
-                    Toast.makeText(requireContext(), "$selectedItem 으로 이동", Toast.LENGTH_SHORT).show()
+                    replaceSubFragment(BookListFragment(),true)
                 }
                 3 -> {
                     // 베스트 셀러로 이동
-                    Toast.makeText(requireContext(), "$selectedItem 으로 이동", Toast.LENGTH_SHORT).show()
+                    replaceSubFragment(BookListFragment(),true)
                 }
                 4 -> {
                     // 국내 도서로 이동
-                    Toast.makeText(requireContext(), "$selectedItem 으로 이동", Toast.LENGTH_SHORT).show()
+                    replaceSubFragment(BookListFragment(),true)
                 }
                 5 -> {
                     // 해외 도서로 이동
-                    Toast.makeText(requireContext(), "$selectedItem 으로 이동", Toast.LENGTH_SHORT).show()
+                    replaceSubFragment(BookListFragment(),true)
                 }
                 else -> null
             }
