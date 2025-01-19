@@ -46,10 +46,11 @@
 
             var fullRoadAddr = data.roadAddress ? data.roadAddress : data.autoRoadAddress;
             var jibunAddr = data.jibunAddress ? data.jibunAddress : data.autoJibunAddress;
+            var zoneCode = data.zonecode; //우편번호
 
             // Android 객체가 제대로 설정되었는지 확인
             if (window.Android) {
-                window.Android.setAddress(fullRoadAddr, jibunAddr);
+                window.Android.setAddress(zoneCode, fullRoadAddr);
             } else {
                 console.log("Android 인터페이스가 설정되지 않았습니다.");
             }
