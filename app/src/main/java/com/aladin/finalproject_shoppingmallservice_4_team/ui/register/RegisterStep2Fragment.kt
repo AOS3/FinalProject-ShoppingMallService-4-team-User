@@ -47,8 +47,15 @@ class RegisterStep2Fragment : Fragment() {
     fun settingRegister2Toolbar(){
         fragmentRegisterStep2Binding.apply {
             toolbarRegisterStep2.setNavigationIcon(R.drawable.arrow_back_ios_24px)
+
+            // 뒤로 가는 메서드 분기
             toolbarRegisterStep2.setNavigationOnClickListener {
-                removeFragment()
+                // 만약 도로명주소 검색화면 이라면
+                if (webViewRegisterStep2Address.visibility == View.VISIBLE){
+                    webViewRegisterStep2Address.visibility = View.GONE
+                } else {
+                    removeFragment()
+                }
             }
 
         }
