@@ -96,4 +96,7 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    // MLKit
+    implementation ("com.google.mlkit:barcode-scanning:17.0.3")
+
 }
