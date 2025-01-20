@@ -12,11 +12,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBarcodeScannerBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanresult.BarcodeScanResultFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import android.widget.Button
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.app.AlertDialog
+import androidx.fragment.app.commit
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 
 class BarcodeScannerFragment : Fragment() {
 
@@ -34,8 +43,11 @@ class BarcodeScannerFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        fragmentBarcodeScannerBinding = FragmentBarcodeScannerBinding.inflate(inflater, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        fragmentBarcodeScannerBinding = FragmentBarcodeScannerBinding.inflate(layoutInflater,container,false)
 
         // Toolbar 설정 메서드 호출
         settingToolbar()
@@ -108,29 +120,56 @@ class BarcodeScannerFragment : Fragment() {
 
     // 바코드 입력 버튼 클릭 메서드
     private fun inISBNButtonOnCLick() {
-        fragmentBarcodeScannerBinding.buttonBarcodeScannerInISBN.setOnClickListener {
-            val builder = android.app.AlertDialog.Builder(requireContext())
-            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_barcode_scanner_input, null)
+        fragmentBarcodeScannerBinding.apply {
+            buttonBarcodeScannerInISBN.setOnClickListener {
+                val dialogView = LayoutInflater.from(requireContext())
+                    .inflate(R.layout.dialog_barcode_scanner_input, null)
 
-            builder.setView(dialogView)
-                .setCancelable(true)
+                // 다이얼로그 생성
+                val dialog = AlertDialog.Builder(requireContext())
+                    .setView(dialogView)
+                    .create()
 
-            val editTextISBN = dialogView.findViewById<EditText>(R.id.editTextISBN)
+                // 다이얼로그 배경을 투명하게 설정
+                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            builder.setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
+                // 레이아웃 내부의 요소 참조 및 설정
+                val editTextISBN = dialogView.findViewById<EditText>(R.id.editTextISBN)
+                val buttonCancel = dialogView.findViewById<Button>(R.id.button_dialog_negative)
+                val buttonConfirm = dialogView.findViewById<Button>(R.id.button_dialog_positive)
 
-            builder.setPositiveButton("확인") { dialog, _ ->
-                val isbnInput = editTextISBN.text.toString()
-                if (isbnInput.length == 13) {
-                    Toast.makeText(requireContext(), "입력된 ISBN: $isbnInput", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(requireContext(), "ISBN은 13자리여야 합니다.", Toast.LENGTH_SHORT).show()
+                // 취소 버튼 클릭 이벤트
+                buttonCancel.setOnClickListener {
+                    dialog.dismiss()
                 }
-            }
 
-            builder.create().show()
+                buttonConfirm.setOnClickListener {
+                    val isbnInput = editTextISBN.text.toString()
+                    if (isbnInput.length == 13) {
+                        Toast.makeText(requireContext(), "입력된 ISBN: $isbnInput", Toast.LENGTH_SHORT).show()
+
+                        // MainFragment 확인 및 전환
+                        val mainFragment = activity?.supportFragmentManager?.findFragmentById(R.id.fragmentContainerView) as? MainFragment
+                        if (mainFragment == null) {
+                            // MainFragment로 전환 후 SubFragment 설정
+                            activity?.supportFragmentManager?.commit {
+                                replace(R.id.fragmentContainerView, MainFragment())
+                                addToBackStack(null)
+                            }
+                            activity?.supportFragmentManager?.executePendingTransactions()
+                        }
+
+                        replaceSubFragment(BarcodeScanResultFragment(),true)
+
+                        dialog.dismiss()
+                    } else {
+                        Toast.makeText(requireContext(), "ISBN은 13자리여야 합니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                // 다이얼로그 표시
+                dialog.show()
+            }
         }
     }
 }

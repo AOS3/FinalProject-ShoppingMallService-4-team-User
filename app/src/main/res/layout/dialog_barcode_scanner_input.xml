@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp" >
+    android:background="@drawable/background_radius_6_fffff"
+    android:paddingHorizontal="16dp"
+    android:layout_margin="0dp"
+    android:backgroundTint="@null">
 
-    <!-- 바코드 이미지 -->
     <ImageView
         android:id="@+id/imageViewBarcode"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="100dp"
         android:src="@drawable/barcode_example_image"
         android:scaleType="fitCenter"
-        android:contentDescription="바코드 이미지" />
+        android:contentDescription="바코드 이미지"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- ISBN 입력 필드 -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutISBN"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:boxStrokeColor="@color/main_color"
         app:hintTextColor="@color/main_color"
         app:endIconMode="clear_text"
-        app:placeholderText="ISBN 13자리">
+        app:placeholderText="ISBN 13자리"
+        app:layout_constraintTop_toBottomOf="@id/imageViewBarcode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextISBN"
@@ -35,4 +42,40 @@
             android:hint="ISBN 13자리" />
     </com.google.android.material.textfield.TextInputLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_dialog_buttons"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutISBN"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/button_dialog_negative"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/gray_color"
+            android:gravity="center"
+            android:text="취소"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/button_dialog_positive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/main_color"
+            android:gravity="center"
+            android:text="확인"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
