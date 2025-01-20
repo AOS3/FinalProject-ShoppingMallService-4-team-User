@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.aladin.apiTestApplication.dto.RecommendBookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentOrderInquiryBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
@@ -14,7 +15,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
-class OrderInquiryFragment : Fragment(),HomeOnClickListener {
+class OrderInquiryFragment : Fragment(),OrderOnClickListener {
 
     private val list = MutableList(30) {
         "항목 $it"
@@ -47,7 +48,7 @@ class OrderInquiryFragment : Fragment(),HomeOnClickListener {
         adapter.updateItemList(list)
     }
 
-    override fun itemClickListener(position: Int) {
+    override fun itemClickListener(item: String) {
         // 상세 화면으로 변경한다.
         replaceSubFragment(OrderInquiryDetailFragment(), true)
     }

@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
+import com.aladin.apiTestApplication.dto.RecommendBookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSearchBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeAdapter
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.HomeAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
@@ -151,7 +152,7 @@ class SearchFragment : Fragment(),HomeOnClickListener {
         binding.recyclerViewSearch.adapter = adapter
     }
 
-    override fun itemClickListener(position: Int) {
+    override fun itemClickListener(item: RecommendBookItem) {
         // 상세 화면으로 변경한다.
         replaceMainFragment(BookDetailFragment(), true)
     }

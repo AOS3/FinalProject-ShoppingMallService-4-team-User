@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.text.TextUtils.replace
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.aladin.finalproject_shoppingmallservice_4_team.R
+import com.bumptech.glide.Glide
 import java.util.concurrent.TimeUnit
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -112,4 +114,22 @@ fun provideLoggingInterceptor(): HttpLoggingInterceptor {
     return HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT).apply {
         level = HttpLoggingInterceptor.Level.BODY // 요청/응답 본문 전체를 출력 (디버깅용)
     }
+}
+
+fun ImageView.loadImage(uri: String) {
+    Glide.with(context)
+        .load(uri)
+        .centerCrop()
+        .into(this)
+}
+
+fun ImageView.loadBannerImage(uri: Int) {
+    Glide.with(context)
+        .load(uri)
+        .centerCrop()
+        .into(this)
+}
+
+fun Number.toCommaString(): String {
+    return String.format("%,d", this)
 }

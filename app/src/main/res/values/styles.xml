@@ -11,4 +11,15 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <!--  뷰페이저 탭 인디케이터 스타일  -->
+    <style name="AppTabIndicatorStyle" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="tabBackground">@drawable/selector_tab_indicator</item>
+        <item name="tabGravity">center</item>
+        <item name="tabIndicator">@null</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabPaddingEnd">4dp</item>
+        <item name="tabRippleColor">@null</item>
+    </style>
 </resources>

@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.OrderInquiryListItemBinding
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
 
 class OrderInquiryAdapter(
-    private val listener: HomeOnClickListener
+    private val listener: OrderOnClickListener
 ): RecyclerView.Adapter<OrderInquiryAdapter.OrderInquiryViewHolder>() {
 
     private val items = mutableListOf<String>()
@@ -15,7 +14,7 @@ class OrderInquiryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderInquiryViewHolder {
         return OrderInquiryViewHolder(
             OrderInquiryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            itemClickListener = {position -> listener.itemClickListener(position)}
+            itemClickListener = {position -> listener.itemClickListener(items[position])}
         )
     }
 
@@ -53,4 +52,8 @@ class OrderInquiryAdapter(
             }
         }
     }
+}
+
+interface OrderOnClickListener {
+    fun itemClickListener(item: String)
 }
