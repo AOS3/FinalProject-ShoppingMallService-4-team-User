@@ -15,6 +15,12 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainMenuBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.RowSellingCartBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.booksellinginquiry.BookSellingInquiryFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellinglastpage.SellingLastPageFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingsearch.SellingSearchFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.divider.MaterialDividerItemDecoration
 
@@ -71,6 +77,8 @@ class SellingCartFragment : Fragment() {
         // RecyclerView를 구성하는 메서드 호출
         settingRecyclerView()
 
+        buttonSellingCartOnClick()
+
         return fragmentSellingCartBinding.root
     }
 
@@ -93,7 +101,7 @@ class SellingCartFragment : Fragment() {
                     // toolbar_mainMenu_goSettings
                     1 -> {
                         // 판매 조회로 이동
-                        Toast.makeText(requireContext(), "판매 조회 이동", Toast.LENGTH_SHORT).show()
+                        replaceSubFragment(BookSellingInquiryFragment(), true)
                     }
                 }
                 true
@@ -106,17 +114,17 @@ class SellingCartFragment : Fragment() {
         fragmentSellingCartBinding.apply {
             buttonSellingCartSearch.setOnClickListener{
                 // 도서 팔기 검색 화면으로 이동
-                Toast.makeText(requireContext(), "도서 팔기 검색 화면으로 이동", Toast.LENGTH_SHORT).show()
+                replaceSubFragment(SellingSearchFragment(), true)
             }
 
             buttonSellingCartBarcodeScanner.setOnClickListener{
                 // 바코드 찍는 화면으로 이동
-                Toast.makeText(requireContext(), "바코드 찍는 화면으로 이동", Toast.LENGTH_SHORT).show()
+                replaceMainFragment(BarcodeScannerFragment(), true)
             }
 
             buttonSellingCartAddBookForSelling.setOnClickListener {
                 // 중고 도서 팔기 마지막 화면으로 이동
-                Toast.makeText(requireContext(), "중도 도서 팔기 마지막 화면으로 이동", Toast.LENGTH_SHORT).show()
+                replaceSubFragment(SellingLastPageFragment(), true)
             }
         }
     }
@@ -213,7 +221,5 @@ class SellingCartFragment : Fragment() {
                 button.setTextColor(ContextCompat.getColor(button.context, R.color.black))
             }
         }
-
     }
-
 }
