@@ -15,25 +15,31 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.MainActivity
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookListBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class BookListFragment : Fragment() {
     private lateinit var fragmentBookListBinding: FragmentBookListBinding
+    private val bookListViewModel: BookListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         fragmentBookListBinding = FragmentBookListBinding.inflate(layoutInflater, container, false)
+
         // 드롭다운 세팅
         settingDropMenu()
+
         // 툴바 세팅
         settingToolbar()
+
         return fragmentBookListBinding.root
     }
 
@@ -99,4 +105,12 @@ class BookListFragment : Fragment() {
     private fun renewalRecyclerViewFromDropDown(value: Int) {
         Log.e("asdasd", "$value")
     }
+
+
+    // ItemNewAll : 신간 전체 리스트
+    // ItemNewSpecial : 주목할 만한 신간 리스트
+    // Bestseller : 베스트셀러
+    // BlogBest : 블로거 베스트셀러
+    // Used : 중고
+
 }
