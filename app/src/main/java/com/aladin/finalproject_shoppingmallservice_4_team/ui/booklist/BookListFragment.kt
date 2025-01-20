@@ -1,32 +1,33 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist
 
-import android.annotation.SuppressLint
-import android.graphics.drawable.InsetDrawable
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.viewModels
-import com.aladin.finalproject_shoppingmallservice_4_team.MainActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookListBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.NewBookListAdapter
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.UsedBookListAdapter
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BookListFragment : Fragment() {
     private lateinit var fragmentBookListBinding: FragmentBookListBinding
+
+    // 중고책 adapter
+    private lateinit var usedBookListAdapter: UsedBookListAdapter
+
+    // 신책 adapter
+    private lateinit var newBookListAdapter: NewBookListAdapter
+
     private val bookListViewModel: BookListViewModel by viewModels()
+    private lateinit var queryData: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,15 +35,41 @@ class BookListFragment : Fragment() {
     ): View? {
         fragmentBookListBinding = FragmentBookListBinding.inflate(layoutInflater, container, false)
 
+        // 상황에 맞는 BookList 가져오기
+        checkBookQuery()
+
         // 드롭다운 세팅
         settingDropMenu()
 
         // 툴바 세팅
         settingToolbar()
 
+        // 옵저버 세팅
+        observeBookListData()
+
+        // 리싸이클러뷰 세팅
+        setupRecyclerView()
+
+        // Progress Dialog
+        observeProgressDialog()
+
         return fragmentBookListBinding.root
     }
 
+    // Dialog
+    private fun observeProgressDialog() {
+        // 화면 입장 시 공지사항 로딩을 위한 Dialog
+        val progressBarDialog = CustomDialogProgressbar(requireContext())
+        progressBarDialog.show()
+
+        bookListViewModel.isLoadBookList.observe(viewLifecycleOwner) {
+            if (it) {
+                progressBarDialog.dismiss()
+            }
+        }
+    }
+
+    // Toolbar
     private fun settingToolbar() {
         fragmentBookListBinding.apply {
             materialToolbarBookList.setNavigationOnClickListener {
@@ -51,6 +78,79 @@ class BookListFragment : Fragment() {
         }
     }
 
+    // Setting
+    private fun checkBookQuery() {
+        if (arguments != null) {
+            val query = arguments?.getString("bookQuery")!!
+            queryData = query
+            bookListViewModel.gettingBookList(queryData)
+        }
+    }
+
+    // RecyclerView
+    private fun setupRecyclerView() {
+        fragmentBookListBinding.apply {
+            arguments?.getString("bookQuery")?.let { value ->
+                if (value == "Used") {
+                    usedBookListAdapter =
+                        UsedBookListAdapter(emptyList(), this@BookListFragment) // 초기값으로 빈 리스트
+                    recyclerViewBookList.layoutManager = LinearLayoutManager(context)
+                    recyclerViewBookList.adapter = usedBookListAdapter
+                } else {
+                    newBookListAdapter =
+                        NewBookListAdapter(emptyList(), this@BookListFragment) // 초기값으로 빈 리스트
+                    recyclerViewBookList.layoutManager = LinearLayoutManager(context)
+                    recyclerViewBookList.adapter = newBookListAdapter
+                }
+            }
+
+        }
+    }
+
+    // Observer
+    private fun observeBookListData() {
+        fragmentBookListBinding.apply {
+            arguments?.getString("bookQuery")?.let { value ->
+                if (value == "Used") {
+                    // LiveData에서 데이터를 받아와서 RecyclerView 업데이트
+                    bookListViewModel.usedBookList.observe(viewLifecycleOwner) { usedBookList ->
+                        if (usedBookList.isNotEmpty()) {
+                            // 데이터를 받아왔을 때, RecyclerView에 전달
+                            usedBookListAdapter =
+                                UsedBookListAdapter(
+                                    usedBookList,
+                                    this@BookListFragment
+                                ) // 새 데이터로 Adapter를 갱신
+                            recyclerViewBookList.adapter = usedBookListAdapter
+                            linearLayoutBookListEmptyBookList.visibility = View.GONE
+                        } else {
+                            // 데이터가 없을 시
+                            linearLayoutBookListEmptyBookList.visibility = View.VISIBLE
+                        }
+                    }
+                } else {
+                    bookListViewModel.newBookList.observe(viewLifecycleOwner) { newBookList ->
+                        if (newBookList.isNotEmpty()) {
+                            // 데이터를 받아왔을 때, RecyclerView에 전달
+                            // 데이터를 받아왔을 때, RecyclerView에 전달
+                            newBookListAdapter =
+                                NewBookListAdapter(
+                                    newBookList,
+                                    this@BookListFragment
+                                ) // 새 데이터로 Adapter를 갱신
+                            recyclerViewBookList.adapter = newBookListAdapter
+                            linearLayoutBookListEmptyBookList.visibility = View.GONE
+                        } else {
+                            // 데이터가 없을 시
+                            linearLayoutBookListEmptyBookList.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // DropDown
     private fun settingDropMenu() {
         fragmentBookListBinding.apply {
             // 드롭다운 아이템 목록
@@ -102,15 +202,25 @@ class BookListFragment : Fragment() {
     // 1 -> 최고가
     // 1 -> 최저가
     // 드롭다운 선택에 따라 recyclerView가 갱신
-    private fun renewalRecyclerViewFromDropDown(value: Int) {
-        Log.e("asdasd", "$value")
+    private fun renewalRecyclerViewFromDropDown(dropDownValue: Int) {
+        fragmentBookListBinding.apply {
+            arguments?.getString("bookQuery")?.let { value ->
+                if (value == "Used") {
+                    // 중고인 경우
+                    when (dropDownValue) {
+                        1 -> newBookListAdapter.sortByName()
+                        2 -> newBookListAdapter.sortByHighestPrice()
+                        else -> newBookListAdapter.sortByLowestPrice()
+                    }
+                } else {
+                    // 새거인 경우
+                    when (dropDownValue) {
+                        1 -> newBookListAdapter.sortByName()
+                        2 -> newBookListAdapter.sortByHighestPrice()
+                        else -> newBookListAdapter.sortByLowestPrice()
+                    }
+                }
+            }
+        }
     }
-
-
-    // ItemNewAll : 신간 전체 리스트
-    // ItemNewSpecial : 주목할 만한 신간 리스트
-    // Bestseller : 베스트셀러
-    // BlogBest : 블로거 베스트셀러
-    // Used : 중고
-
 }
