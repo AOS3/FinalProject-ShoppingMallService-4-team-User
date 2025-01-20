@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.TextView
+import android.widget.Toast
 import android.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.aladin.finalproject_shoppingmallservice_4_team.R
@@ -32,6 +35,9 @@ class RegisterStep2Fragment : Fragment() {
 
         sendingVerifyCodeButton()
 
+        // 카카오 주소 api
+        settingKakaoPostCode()
+
         checkingIdValidation()
 
         return fragmentRegisterStep2Binding.root
@@ -41,8 +47,15 @@ class RegisterStep2Fragment : Fragment() {
     fun settingRegister2Toolbar(){
         fragmentRegisterStep2Binding.apply {
             toolbarRegisterStep2.setNavigationIcon(R.drawable.arrow_back_ios_24px)
+
+            // 뒤로 가는 메서드 분기
             toolbarRegisterStep2.setNavigationOnClickListener {
-                removeFragment()
+                // 만약 도로명주소 검색화면 이라면
+                if (webViewRegisterStep2Address.visibility == View.VISIBLE){
+                    webViewRegisterStep2Address.visibility = View.GONE
+                } else {
+                    removeFragment()
+                }
             }
 
         }
@@ -61,6 +74,49 @@ class RegisterStep2Fragment : Fragment() {
                 else{
                     textFieldRegisterStep2Id.helperText = "사용 가능한 아이디입니다"
                 }
+            }
+        }
+    }
+
+    fun settingKakaoPostCode(){
+        fragmentRegisterStep2Binding.apply {
+
+            // 도로명 주소 찾기 버튼 눌렀을 때
+            buttonRegisterStep2SearchPostCode.setOnClickListener {
+
+                // webView 투명도 조절
+                webViewRegisterStep2Address.visibility = View.VISIBLE
+
+                webViewRegisterStep2Address.settings.javaScriptEnabled = true
+                webViewRegisterStep2Address.settings.javaScriptCanOpenWindowsAutomatically = true
+                webViewRegisterStep2Address.settings.allowUniversalAccessFromFileURLs = true
+
+                webViewRegisterStep2Address.addJavascriptInterface(object {
+                    @android.webkit.JavascriptInterface
+                    fun setAddress(zoneCode: String, fullRoadAddr: String) {
+                        // UI 변경은 UI 스레드에서 실행
+                        requireActivity().runOnUiThread {
+                            Toast.makeText(requireContext(), "우편번호: $zoneCode\n지번 주소: $fullRoadAddr", Toast.LENGTH_LONG).show()
+
+                            // WebView 숨김 처리
+                            webViewRegisterStep2Address.visibility = View.GONE
+
+                            // 선택한 주소를 입력 필드에 반영
+                            textFieldRegisterStep2PostCode.editText?.setText(zoneCode)
+                            textFieldRegisterStep2Address1.editText?.setText(fullRoadAddr)
+                        }
+                    }
+                }, "Android")
+
+                webViewRegisterStep2Address.webViewClient = object : WebViewClient(){
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        // 페이지가 완전히 로드 되면, JavaScript를 메서드 호출
+                        view?.loadUrl("javascript:sample2_execDaumPostcode();")
+                    }
+                }
+                // assets 폴더에 저장된 daum.html 파일을 로드
+                webViewRegisterStep2Address.loadUrl("file:///android_asset/daum.html")
             }
         }
     }
