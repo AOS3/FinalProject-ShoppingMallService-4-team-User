@@ -1,57 +1,101 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanresult
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.aladin.finalproject_shoppingmallservice_4_team.R
+import androidx.lifecycle.lifecycleScope
+import com.aladin.apiTestApplication.dto.BookItem
+import com.aladin.apiTestApplication.network.AladdinApiService
+import com.aladin.finalproject_shoppingmallservice_4_team.BuildConfig
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBarcodeScanResultBinding
-import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainMenuBinding
+import com.bumptech.glide.Glide
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class BarcodeScanResultFragment : Fragment() {
 
     private lateinit var fragmentBarcodeScanResultBinding: FragmentBarcodeScanResultBinding
+    private var isbn: String? = null
+    private val TTBKey = BuildConfig.API_KEY // API 키
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isbn = arguments?.getString("ISBN")
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         fragmentBarcodeScanResultBinding =
-            FragmentBarcodeScanResultBinding.inflate(layoutInflater, container, false)
+            FragmentBarcodeScanResultBinding.inflate(inflater, container, false)
 
-        // Toolbar를 구성하는 메서드를 호출한다.
-        settingToolbar()
-        // 버튼을 클릭 했을 때 메서드
-        buttonBarcodeScanResultPurchaseOnClick()
-//        // List를 구성하는 메서드를 호출한다.
-//        setupMenuList()
-
+        isbn?.let { fetchBookData(it) }
         return fragmentBarcodeScanResultBinding.root
     }
 
-    // Toolbar를 구성하는 메서드
-    private fun settingToolbar() {
-        fragmentBarcodeScanResultBinding.apply {
-            toolbarBarcodeScanResult.title = "검색 결과"
-            // 네비게이션 아이콘을 설정하고 누를 경우 NavigationView가 나타나도록 한다.
-            toolbarBarcodeScanResult.setNavigationIcon(R.drawable.arrow_back_ios_24px)
-            toolbarBarcodeScanResult.setNavigationOnClickListener {
-                // 전 화면으로 이동
+    private fun createRetrofitInstance(): AladdinApiService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://www.aladin.co.kr/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(AladdinApiService::class.java)
+    }
+
+    private fun fetchBookData(isbn: String) {
+        val apiService = createRetrofitInstance()
+
+        lifecycleScope.launch {
+            try {
+                val response = apiService.searchBooks(
+                    apiKey = TTBKey,
+                    query = isbn,
+                    queryType = "ISBN"
+                )
+
+                // Raw JSON 확인
+                Log.d("API_CALL", "Raw Response: $response")
+
+                // items 확인
+                if (response.items.isNullOrEmpty()) {
+                    Log.e("API_CALL", "No items found in response.")
+                    showToast("책 정보를 찾을 수 없습니다.")
+                    return@launch
+                }
+
+                val book = response.items.firstOrNull()
+                if (book != null) {
+                    updateUI(book)
+                } else {
+                    Log.e("API_CALL", "No valid book found in items.")
+                    showToast("책 정보를 찾을 수 없습니다.")
+                }
+            } catch (e: Exception) {
+                Log.e("API_CALL", "Exception during API call", e)
+                showToast("API 호출 중 오류가 발생했습니다.")
             }
         }
     }
 
-    // 버튼을 클릭 했을 때 메서드
-    private fun buttonBarcodeScanResultPurchaseOnClick() {
-        fragmentBarcodeScanResultBinding.apply {
-            buttonBarcodeScanResultPurchase.setOnClickListener{
-                // 제품 상세 정보 화면으로 이동
-                Toast.makeText(requireContext(), "제품 상세 정보 화면으로 이동", Toast.LENGTH_SHORT).show()
-            }
 
-            buttonBarcodeScanResultSelling.setOnClickListener{
-                // 팔기 장바구니 화면으로 이동
-                Toast.makeText(requireContext(), "팔기 장바구니 화면으로 이동", Toast.LENGTH_SHORT).show()
-            }
+    private fun updateUI(book: BookItem) {
+        with(fragmentBarcodeScanResultBinding) {
+            Glide.with(requireContext())
+                .load(book.cover)
+                .into(imageViewBarcodeScanResultBookImage)
+
+            textViewBarcodeScanResultBookName.text = book.title
+            textViewBarcodeScanResultBookAuthor.text = book.author
+            textViewBarcodeScanResultPrice.text = "₩${book.priceStandard}"
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }
