@@ -20,6 +20,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFr
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.myinfo.MyInfoFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.orderinquiry.OrderInquiryFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.setting.SettingFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
@@ -165,7 +166,7 @@ class MainMenuFragment : Fragment() {
             val targetFragment = when (position) {
                 0 -> {
                     // 내가 판매하는 중고 도서로 이동
-                    replaceSubFragment(BookListFragment(),true)
+                    replaceSubFragment(SellingCartFragment(),true)
                 }
                 1 -> {
                     // 중고 도서로 이동
