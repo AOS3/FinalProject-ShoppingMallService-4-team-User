@@ -28,7 +28,7 @@
                 android:id="@+id/textView_noticeDetail_emptyNotice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="공지사항이 없습니다."
+                android:text=""
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="오늘의 공지"
+                android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,10 +61,11 @@
                 android:id="@+id/textView_noticeDetail_noticeContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="300dp"
                 android:layout_marginTop="20dp"
                 android:padding="20dp"
+                android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:text="반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)반송(반송비 고객 부담, 보낸 주소로 반송)"
                 android:textColor="@color/gray_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,9 +76,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:text="작성일 : 24년 01월 16일"
-                android:textColor="#000000"
+                android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#000000"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_noticeDetail_noticeContent" />
@@ -167,22 +168,30 @@
                     <Button
                         android:id="@+id/Button_noticeDetail_ask"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="1:1 문의"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
 
                     <Button
                         android:id="@+id/Button_noticeDetail_FAQ"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="FAQ"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
