@@ -9,11 +9,16 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentChangePwBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.showSoftInput
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class ChangePwFragment : Fragment() {
@@ -22,6 +27,7 @@ class ChangePwFragment : Fragment() {
     private lateinit var changePwRepository: ChangePwRepository
     // 화면 입장 시 비동기로 원래 비밀번호 받아와서 변수에 저장 후 실시간 비밀번호 비교
     // 비밀번호 변경 버튼 클릭시에만 유효성 검사 진행 예정
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,8 +118,14 @@ class ChangePwFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                // 모든 조건 통과시 비밀번호 변경 메서드 실행
-                changePwViewModel.changeUserPw(changePwViewModel.newUserPassword.value.toString())
+                CoroutineScope(Dispatchers.Main).launch {
+                    val work1 = async(Dispatchers.IO) {
+                        // 모든 조건 통과시 비밀번호 변경 메서드 실행
+                        changePwViewModel.changeUserPw("asd",changePwViewModel.newUserPassword.value.toString())
+                    }
+                    work1.join()
+                    removeFragment()
+                }
             }
         }
     }

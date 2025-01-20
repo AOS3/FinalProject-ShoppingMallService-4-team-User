@@ -19,12 +19,12 @@ class ChangePwViewModel
     val newCheckUserPassword = MutableLiveData("")
 
     // 현재 비밀번호와 똑같은지 확인 하는 함수
-    fun checkCurrentPassword(currentPassword:String):Boolean {
+    fun checkCurrentPassword(currentPassword: String): Boolean {
         return changePwRepository.isUserPasswordMatch(currentPassword)
     }
 
     // 비밀번호 변경 메서드
-    fun changeUserPw(newPassword:String) {
-        changePwRepository.changeUserPassword(newPassword)
+    suspend fun changeUserPw(userDocumentId: String, newPassword: String) {
+        changePwRepository.changeUserPassword(userDocumentId, newPassword)
     }
 }
