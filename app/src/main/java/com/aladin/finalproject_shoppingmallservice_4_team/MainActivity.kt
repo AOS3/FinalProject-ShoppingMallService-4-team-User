@@ -13,8 +13,9 @@ import androidx.fragment.app.replace
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ActivityMainBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.hideSoftInput
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
