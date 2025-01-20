@@ -119,7 +119,6 @@ fun provideLoggingInterceptor(): HttpLoggingInterceptor {
 fun ImageView.loadImage(uri: String) {
     Glide.with(context)
         .load(uri)
-        .centerCrop()
         .into(this)
 }
 

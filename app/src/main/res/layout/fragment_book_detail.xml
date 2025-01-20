@@ -60,9 +60,12 @@
 
             <ImageView
                 android:id="@+id/imageView_bookDetail"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="250dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/main_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/button_bookDetail_search" />
 
             <Button
@@ -95,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="깡샘의 안드로이드 앱 프로그래밍 with 코틀린"
+                android:text="책 이름"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/imageView_bookDetail"
                 app:layout_constraintTop_toBottomOf="@id/imageView_bookDetail" />
@@ -105,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="강성윤(지은이)"
+                android:text="지은이"
                 app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookName"
                 app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookName" />
 
@@ -114,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="OO출판"
+                android:text="출판사"
                 app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookWriter"
                 app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookWriter" />
 
@@ -123,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="2024-09-24"
+                android:text="2025-01-20"
                 app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookPublisher"
                 app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookPublisher" />
 
