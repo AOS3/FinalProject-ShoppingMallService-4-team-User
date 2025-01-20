@@ -10,8 +10,6 @@ plugins {
     id("com.google.gms.google-services")
     // Serialization
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.0"
-    //hilt
-    id("com.google.dagger.hilt.android")
 }
 
 // api_key를 숨기기 위해 작성
@@ -94,7 +92,6 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
-    // hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    // MLKit
+    implementation ("com.google.mlkit:barcode-scanning:17.0.3")
 }
