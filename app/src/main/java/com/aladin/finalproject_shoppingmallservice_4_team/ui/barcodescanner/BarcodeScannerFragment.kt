@@ -22,10 +22,16 @@ import android.widget.Button
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.app.AlertDialog
+import androidx.annotation.OptIn
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 import androidx.fragment.app.commit
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.common.InputImage
 
 class BarcodeScannerFragment : Fragment() {
 
@@ -104,18 +110,77 @@ class BarcodeScannerFragment : Fragment() {
             // 후면 카메라 선택
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
+            // ImageAnalysis 설정
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .also {
+                    it.setAnalyzer(ContextCompat.getMainExecutor(requireContext())) { imageProxy ->
+                        processBarcodeFromImage(imageProxy)
+                    }
+                }
+
             try {
                 // 기존에 바인딩된 카메라가 있으면 해제
                 cameraProvider.unbindAll()
 
-                // 카메라와 미리보기 연결
-                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+                // 카메라와 미리보기, 이미지 분석 연결
+                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(requireContext(), "카메라를 시작할 수 없습니다.", Toast.LENGTH_LONG).show()
             }
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    // 바코드 이미지 처리
+    @OptIn(ExperimentalGetImage::class)
+    private fun processBarcodeFromImage(imageProxy: ImageProxy) {
+        val mediaImage = imageProxy.image
+        if (mediaImage != null) {
+            val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+            val scanner: BarcodeScanner = BarcodeScanning.getClient()
+
+            scanner.process(image)
+                .addOnSuccessListener { barcodes ->
+                    for (barcode in barcodes) {
+                        // ISBN 코드인지 확인
+                        if (barcode.valueType == Barcode.TYPE_ISBN) {
+                            val isbn = barcode.displayValue
+                            isbn?.let {
+                                Toast.makeText(requireContext(), "ISBN: $isbn", Toast.LENGTH_SHORT).show()
+
+                                // MainFragment 확인 및 전환
+                                val mainFragment = activity?.supportFragmentManager?.findFragmentById(R.id.fragmentContainerView) as? MainFragment
+                                if (mainFragment == null) {
+                                    // MainFragment로 전환 후 SubFragment 설정
+                                    activity?.supportFragmentManager?.commit {
+                                        replace(R.id.fragmentContainerView, MainFragment())
+                                        addToBackStack(null)
+                                    }
+                                    activity?.supportFragmentManager?.executePendingTransactions()
+                                }
+
+                                val fragment = BarcodeScanResultFragment().apply {
+                                    arguments = Bundle().apply {
+                                        putString("ISBN", isbn)
+                                    }
+                                }
+                                replaceSubFragment(fragment, true)
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    it.printStackTrace()
+                }
+                .addOnCompleteListener {
+                    imageProxy.close() // 이미지 리소스 해제
+                }
+        } else {
+            imageProxy.close() // 이미지 리소스 해제
+        }
     }
 
     // 바코드 입력 버튼 클릭 메서드
@@ -159,7 +224,12 @@ class BarcodeScannerFragment : Fragment() {
                             activity?.supportFragmentManager?.executePendingTransactions()
                         }
 
-                        replaceSubFragment(BarcodeScanResultFragment(),true)
+                        val fragment = BarcodeScanResultFragment().apply {
+                            arguments = Bundle().apply {
+                                putString("ISBN", isbnInput)
+                            }
+                        }
+                        replaceSubFragment(fragment, true)
 
                         dialog.dismiss()
                     } else {
