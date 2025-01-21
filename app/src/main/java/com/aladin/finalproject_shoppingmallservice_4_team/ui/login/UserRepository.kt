@@ -43,4 +43,11 @@ class UserRepository @Inject constructor(private val firebaseFireStore: Firebase
 
         return userList
     }
+
+    // 유저 ID 중복 확인 메서드
+    suspend fun isUserIdAvailable(userId: String): Boolean {
+        val collectionReference = firebaseFireStore.collection("UserTable")
+        val result = collectionReference.whereEqualTo("userId", userId).get().await()
+        return result.isEmpty // Firestore에 해당 아이디가 없으면 true 반환
+    }
 }
