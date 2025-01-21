@@ -3,7 +3,6 @@ package com.aladin.finalproject_shoppingmallservice_4_team.ui.register
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aladin.finalproject_shoppingmallservice_4_team.model.UserModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,17 +13,12 @@ class RegisterViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    val isIdAvailable = MutableLiveData<Boolean?>()
+    val isIdAvailable = MutableLiveData<Boolean>()
     val idCheckErrorMessage = MutableLiveData<String>()
-    val saveUserSuccess = MutableLiveData<Boolean>()
 
     fun checkUserIdAvailability(userId: String) {
         viewModelScope.launch {
             try {
-                // 상태 초기화
-                isIdAvailable.value = null
-                idCheckErrorMessage.value = ""
-
                 if (userId.isBlank()) {
                     idCheckErrorMessage.value = "아이디를 입력해주세요."
                     isIdAvailable.value = false
@@ -42,13 +36,6 @@ class RegisterViewModel @Inject constructor(
                 idCheckErrorMessage.value = "아이디 확인 중 오류가 발생했습니다."
                 isIdAvailable.value = false
             }
-        }
-    }
-
-    fun saveUser(user:UserModel){
-        viewModelScope.launch {
-            val result = userRepository.saveUser(user)
-            //
         }
     }
 
