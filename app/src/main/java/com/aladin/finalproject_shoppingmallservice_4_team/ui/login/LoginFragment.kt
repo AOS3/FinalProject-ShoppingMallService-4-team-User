@@ -59,7 +59,8 @@ class LoginFragment : Fragment() {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                     if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-                        return LoginViewModel(userRepository) as T
+                        val application = requireContext().applicationContext as BookApplication
+                        return LoginViewModel(userRepository, application) as T
                     }
                     throw IllegalArgumentException("Unknown ViewModel class")
                 }

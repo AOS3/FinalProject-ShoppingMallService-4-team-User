@@ -1,5 +1,6 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.login
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val application: Application // 어플리케이션 객체를 주입받음
 ) : ViewModel() {
 
     // val bookApplication = context as BookApplication
@@ -79,8 +81,21 @@ class LoginViewModel @Inject constructor(
                     }
 
                     else -> {
+                        // 로그인 성공 시 사용자 정보 저장
+                        val bookApplication = application as BookApplication
+                        bookApplication.loginUserModel = user // 사용자 정보를 Application 객채에 저장
+
                         loginResult.value = true
-                        Log.d("test100", "로그인 성공!")
+                        // 사용자 정보 로그 출력
+                        Log.d("test100", """
+                        로그인 성공!
+                        사용자 정보:
+                        ID: ${user.userId}
+                        이름: ${user.userName}
+                        주소: ${user.userAddress}
+                        전화번호: ${user.userPhoneNumber}
+                        상태: ${user.userState}
+                    """.trimIndent())
                     }
                 }
             } catch (e: Exception) {

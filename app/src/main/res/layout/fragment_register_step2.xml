@@ -279,6 +279,15 @@
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Button
+                    android:id="@+id/button_registerStep2_verifyCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/main_color"
+                    android:text="휴대번호 인증하기"
+                    android:visibility="gone"
+                    app:cornerRadius="10dp" />
+
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -292,6 +301,7 @@
                     android:layout_height="60dp"
                     android:backgroundTint="@color/main_color"
                     android:text="가입하기"
+                    android:visibility="gone"
                     app:cornerRadius="10dp" />
 
                 <Space

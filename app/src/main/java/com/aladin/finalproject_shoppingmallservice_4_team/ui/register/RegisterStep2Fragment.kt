@@ -1,6 +1,7 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.register
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -20,12 +21,28 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
+import java.util.concurrent.TimeUnit
 
 class RegisterStep2Fragment : Fragment() {
 
     lateinit var fragmentRegisterStep2Binding: FragmentRegisterStep2Binding
+    private var verificationId: String? = null
+    private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
+    private lateinit var auth: FirebaseAuth
+
+    // 중복확인 디폴트값 false
+    private var checkIdUsable = false
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        auth = FirebaseAuth.getInstance()
+
         // Inflate the layout for this fragment
         fragmentRegisterStep2Binding = FragmentRegisterStep2Binding.inflate(layoutInflater)
 
@@ -33,7 +50,7 @@ class RegisterStep2Fragment : Fragment() {
 
         registerButtonListener()
 
-        sendingVerifyCodeButton()
+        settingPhoneVerification()
 
         // 카카오 주소 api
         settingKakaoPostCode()
@@ -58,6 +75,110 @@ class RegisterStep2Fragment : Fragment() {
                 }
             }
 
+        }
+    }
+
+    private fun formatPhoneNumber(phoneNumber: String): String {
+        val formattedNumber = if (phoneNumber.startsWith("0")) {
+            "+82" + phoneNumber.substring(1)
+        } else {
+            phoneNumber
+        }
+        Log.d("PhoneVerification", "Formatted phone number: $formattedNumber")
+        return formattedNumber
+    }
+
+    private fun settingPhoneVerification() {
+        fragmentRegisterStep2Binding.apply {
+            buttonRegisterStep2VerifyPhoneNumber.setOnClickListener {
+                val phoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString()
+                if (phoneNumber.isBlank()) {
+                    textFieldRegisterStep2PhoneNumber.error = "전화번호를 입력해주세요"
+                    return@setOnClickListener
+                } else {
+                    textFieldRegisterStep2PhoneNumber.helperText = " "
+                }
+
+                val formattedPhoneNumber = formatPhoneNumber(phoneNumber)
+                startPhoneVerification(formattedPhoneNumber)
+            }
+
+            buttonRegisterStep2VerifyCode.setOnClickListener {
+                val code = textFieldRegisterStep2VerifyNumber.editText?.text.toString()
+                if (code.isBlank()) {
+                    textFieldRegisterStep2VerifyNumber.error = "인증번호를 입력해주세요"
+                    return@setOnClickListener
+                } else {
+                    textFieldRegisterStep2VerifyNumber.helperText = " "
+                }
+
+                verifyPhoneNumberWithCode(verificationId!!, code)
+            }
+        }
+    }
+
+    private fun startPhoneVerification(phoneNumber:String) {
+
+        verificationId = null
+
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(phoneNumber)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(requireActivity())
+            .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                    // 자동 인증완료
+                    signInWithPhoneAuthCredential(credential)
+                }
+
+                override fun onVerificationFailed(exception: FirebaseException) {
+                    fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.error = "유효한 번호를 입력해주세요"
+                    Toast.makeText(requireContext(), "인증 실패: ${exception.message}", Toast.LENGTH_LONG).show()
+                    Log.e("PhoneVerification", "Verification failed: ${exception.message}", exception)
+                    Log.d("test100", "Verification failed")
+                }
+
+                override fun onCodeSent(verificationId:String, token: PhoneAuthProvider.ForceResendingToken) {
+                    this@RegisterStep2Fragment.verificationId = verificationId
+                    this@RegisterStep2Fragment.resendToken = token
+                    fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.helperText = " "
+                    fragmentRegisterStep2Binding.textFieldRegisterStep2VerifyNumber.helperText = " "
+
+                    Toast.makeText(requireContext(), "인증번호 전송 성공!", Toast.LENGTH_SHORT).show()
+                    fragmentRegisterStep2Binding.buttonRegisterStep2VerifyCode.visibility = View.VISIBLE
+                }
+            }).build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    private fun verifyPhoneNumberWithCode(verificationId: String?, code: String){
+
+        if (verificationId == null) {
+            Toast.makeText(requireContext(), "인증 요청을 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+        signInWithPhoneAuthCredential(credential)
+    }
+
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential){
+        auth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(requireContext(), "인증 성공!", Toast.LENGTH_SHORT).show()
+                fragmentRegisterStep2Binding.buttonRegisterStep2Register.visibility = View.VISIBLE
+                fragmentRegisterStep2Binding.textFieldRegisterStep2VerifyNumber.helperText = " "
+                // 인증했으니까 휴대폰 입력, 인증번호입력, 인증버튼2개, 비활성화
+                fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.isEnabled = false
+                fragmentRegisterStep2Binding.textFieldRegisterStep2VerifyNumber.isEnabled = false
+                fragmentRegisterStep2Binding.buttonRegisterStep2VerifyPhoneNumber.isEnabled = false
+                fragmentRegisterStep2Binding.buttonRegisterStep2VerifyCode.isEnabled = false
+
+
+            } else {
+                Toast.makeText(requireContext(), "인증 실패: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                fragmentRegisterStep2Binding.textFieldRegisterStep2VerifyNumber.error = "인증번호가 일치하지 않습니다"
+            }
         }
     }
 
@@ -120,22 +241,6 @@ class RegisterStep2Fragment : Fragment() {
             }
         }
     }
-
-    // 인증번호 보내기 메서드
-    fun sendingVerifyCodeButton(){
-        fragmentRegisterStep2Binding.apply {
-            buttonRegisterStep2VerifyPhoneNumber.setOnClickListener {
-                // 유효성 검사 (번호 입력이 안됐을때) + 나중에 더 추가할 예정
-                if (textFieldRegisterStep2PhoneNumber.editText?.text?.isBlank() == true) {
-                    textFieldRegisterStep2PhoneNumber.error = "전화번호를 입력해주세요"
-                } else {
-                    // 인증번호가 왔을 때
-                    textFieldRegisterStep2PhoneNumber.helperText = "인증번호 전송 성공!"
-                }
-            }
-        }
-    }
-
 
     // 다음 단계로 이동하는 메서드
     fun registerButtonListener(){
