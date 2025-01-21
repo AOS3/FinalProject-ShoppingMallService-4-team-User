@@ -56,8 +56,13 @@ class ShoppingCartViewModel @Inject constructor(private val shoppingCartReposito
         }
     }
 
+    // 로그인 안하고 들어왔을 떄 처리용
+    fun dismissProgressDialog() {
+        _isLoadShoppingCartList.value = true
+    }
+
     // 책 데이터 가져오기
-    fun gettingShoppingCartBookData(userToken:String) {
+    fun gettingShoppingCartBookData(userToken: String) {
         viewModelScope.launch {
             val (shoppingCartTableList, bookDataList) = withContext(Dispatchers.IO) {
                 shoppingCartRepository.gettingBookDataFromFireBaseStore(userToken)

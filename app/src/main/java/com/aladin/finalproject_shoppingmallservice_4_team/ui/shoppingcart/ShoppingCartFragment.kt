@@ -22,6 +22,8 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.ShoppingCar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.UsedBookListAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
@@ -37,6 +39,7 @@ class ShoppingCartFragment : Fragment() {
     private lateinit var fragmentShoppingCartBinding: FragmentShoppingCartBinding
     private lateinit var shoppingCartAdapter: ShoppingCartAdapter
     private lateinit var bookApplication: BookApplication
+
     private val shoppingCartViewModel: ShoppingCartViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +51,8 @@ class ShoppingCartFragment : Fragment() {
         // bookApplication 초기화
         bookApplication = requireActivity().application as BookApplication
 
-        // 쇼핑카트 데이터 가져오기
-        shoppingCartViewModel.gettingShoppingCartBookData(bookApplication.loginUserModel.userToken)
+        // 로그인 체크 메서드 세팅
+        checkLoginProcess()
 
         // 툴바 세팅
         settingToolbar()
@@ -72,13 +75,33 @@ class ShoppingCartFragment : Fragment() {
         // 전체 삭제 클릭 이벤트
         onClickDeleteAllButton()
 
-        Log.e("asd","로그인 ${bookApplication.loginUserModel.userToken}")
-        Log.e("asd","로그인 ${bookApplication.loginUserModel.userId}")
-        Log.e("asd","로그인 ${bookApplication.loginUserModel.userDocumentId}")
-
         return fragmentShoppingCartBinding.root
     }
 
+    // Check Login
+    private fun checkLoginProcess() {
+        try {
+            if (::bookApplication.isInitialized && bookApplication.loginUserModel != null) {
+                shoppingCartViewModel.gettingShoppingCartBookData(bookApplication.loginUserModel.userToken)
+            } else {
+                shoppingCartViewModel.gettingShoppingCartBookData(bookApplication.loginUserModel.userToken)
+            }
+        } catch (e: Exception) {
+            shoppingCartViewModel.dismissProgressDialog()
+            val loginDialog = CustomDialog(
+                requireContext(),
+                // 리스트 삭제 진행
+                onPositiveClick = {
+                    removeFragment()
+                },
+                contentText = "로그인을 먼저 진행해주세요.",
+                icon = R.drawable.error_24px
+            )
+            loginDialog.showCustomDialog()
+        }
+    }
+
+    // delete All ShoppingCartData
     private fun onClickDeleteAllButton() {
         fragmentShoppingCartBinding.apply {
             buttonShoppingCartDeleteList.setOnClickListener {
