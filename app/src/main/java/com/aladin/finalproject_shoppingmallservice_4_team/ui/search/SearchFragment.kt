@@ -27,7 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SearchOnClickListener {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private val adapter: SearchAdapter by lazy { SearchAdapter(this) }
 
     private val viewModel: SearchViewModel by viewModels()
@@ -39,7 +40,7 @@ class SearchFragment : Fragment(), SearchOnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -49,6 +50,11 @@ class SearchFragment : Fragment(), SearchOnClickListener {
         combineButtonMethod()
         settingRecyclerView()
         settingEmptyResult()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     /*
