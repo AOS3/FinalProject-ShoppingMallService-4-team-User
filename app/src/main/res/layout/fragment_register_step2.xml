@@ -266,6 +266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="인증번호*"
+                    android:visibility="gone"
                     app:boxStrokeColor="@color/main_color"
                     app:cursorColor="@color/main_color"
                     app:endIconMode="clear_text"
