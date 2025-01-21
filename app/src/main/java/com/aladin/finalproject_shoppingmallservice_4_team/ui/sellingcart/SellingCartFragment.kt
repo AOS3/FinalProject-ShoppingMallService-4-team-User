@@ -8,8 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,7 +36,35 @@ class SellingCartFragment : Fragment() {
     )
 
     // 현재는 데이터가 비어있음
-    val tempData1 = emptyList<Book>()
+     val tempData1 = emptyList<Book>()
+//
+//
+//     val tempData1 = listOf(
+//        Book(
+//            title = "깡샘의 안드로이드 앱 프로그래밍",
+//            author = "강성윤",
+//            price = 40000,
+//            estimatedPrice = 0,
+//            selectedQuality = null,
+//            imageResId = R.drawable.test_book_icon
+//        ),
+//        Book(
+//            title = "무인도에서 살아남기",
+//            author = "김철수",
+//            price = 35000,
+//            estimatedPrice = 0,
+//            selectedQuality = null,
+//            imageResId = R.drawable.test_book_icon
+//        ),
+//        Book(
+//            title = "Why",
+//            author = "박철수",
+//            price = 30000,
+//            estimatedPrice = 0,
+//            selectedQuality = null,
+//            imageResId = R.drawable.test_book_icon
+//        )
+//     )
 
     private lateinit var fragmentSellingCartBinding: FragmentSellingCartBinding
 
@@ -120,6 +146,7 @@ class SellingCartFragment : Fragment() {
         }
     }
 
+    // RecyclerView를 구성하는 메서드
     private fun settingRecyclerView() {
         fragmentSellingCartBinding.apply {
             // 데이터가 비어 있는지 확인
@@ -229,5 +256,6 @@ class SellingCartFragment : Fragment() {
                 button.setTextColor(ContextCompat.getColor(button.context, R.color.black))
             }
         }
+
     }
 }
