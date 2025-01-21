@@ -20,6 +20,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.model.ShoppingCartMode
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.NewBookListAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.ShoppingCartAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.UsedBookListAdapter
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
@@ -75,7 +76,19 @@ class ShoppingCartFragment : Fragment() {
         // 전체 삭제 클릭 이벤트
         onClickDeleteAllButton()
 
+        // Footer 클릭 이벤트
+        onClickFooter()
+
         return fragmentShoppingCartBinding.root
+    }
+
+    // Footer Click
+    private fun onClickFooter() {
+        fragmentShoppingCartBinding.apply {
+            buttonShoppingCartAsk.setOnClickListener {
+                replaceSubFragment(AskFragment(),true)
+            }
+        }
     }
 
     // Check Login
