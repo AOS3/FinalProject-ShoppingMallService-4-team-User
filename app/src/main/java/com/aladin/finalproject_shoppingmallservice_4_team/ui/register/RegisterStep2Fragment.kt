@@ -2,6 +2,7 @@ package com.aladin.finalproject_shoppingmallservice_4_team.ui.register
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
@@ -41,6 +42,9 @@ class RegisterStep2Fragment : Fragment() {
     private var verificationId: String? = null
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
     private lateinit var auth: FirebaseAuth
+
+    // 타이머 변수 선언
+    var countdownTimer : CountDownTimer? = null
 
 
 
@@ -135,6 +139,8 @@ class RegisterStep2Fragment : Fragment() {
         dialogBuilder.setPositiveButton("확인") { dialog, _ ->
             // 아이디 입력 필드를 비활성화
             fragmentRegisterStep2Binding.textFieldRegisterStep2Id.editText?.isEnabled = false
+            fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.isEnabled = false
+            fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.backgroundTintList = ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray)
             // 다이얼로그 닫기
             dialog.dismiss()
         }
@@ -176,20 +182,44 @@ class RegisterStep2Fragment : Fragment() {
     }
 
     private fun settingPhoneVerification() {
+
         fragmentRegisterStep2Binding.apply {
             buttonRegisterStep2VerifyPhoneNumber.setOnClickListener {
                 val phoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString()
-                if (phoneNumber.isBlank()) {
-                    textFieldRegisterStep2PhoneNumber.error = "전화번호를 입력해주세요"
+
+                // 유효성 검사 : 010으로 시작, 11자리
+                if(!phoneNumber.startsWith("010") || phoneNumber.length != 11 || phoneNumber.isBlank()) {
+                    textFieldRegisterStep2PhoneNumber.error = "유효한 전화번호를 입력해주세요"
                     return@setOnClickListener
                 } else {
                     textFieldRegisterStep2PhoneNumber.helperText = " "
+                    textFieldRegisterStep2PhoneNumber.error = null
                 }
+
+                // 타이머 초기화 및 시작
+                countdownTimer?.cancel()
+                startCountdownTimer()
+
+                // 인증번호 입력 필드와 버튼 활성화
+                textFieldRegisterStep2VerifyNumber.isEnabled = true
+                buttonRegisterStep2VerifyCode.isEnabled = true
+
+                // 인증번호 받기 버튼 비활성화
+                buttonRegisterStep2VerifyPhoneNumber.isEnabled = false
+                buttonRegisterStep2VerifyPhoneNumber.backgroundTintList = ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray)
+
+                // 3초 후 버튼 활성화
+                buttonRegisterStep2VerifyPhoneNumber.postDelayed({
+                    buttonRegisterStep2VerifyPhoneNumber.isEnabled = true
+                    buttonRegisterStep2VerifyPhoneNumber.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.main_color)
+                }, 3000)
 
                 val formattedPhoneNumber = formatPhoneNumber(phoneNumber)
                 startPhoneVerification(formattedPhoneNumber)
             }
 
+
+            // 인증번호 입력 버튼
             buttonRegisterStep2VerifyCode.setOnClickListener {
                 val code = textFieldRegisterStep2VerifyNumber.editText?.text.toString()
                 if (code.isBlank()) {
@@ -203,6 +233,29 @@ class RegisterStep2Fragment : Fragment() {
             }
         }
     }
+
+    // 타이머 시작 메서드
+    private fun startCountdownTimer() {
+        fragmentRegisterStep2Binding.apply {
+            textViewRegisterStep2Timer.visibility = View.VISIBLE // 타이머 텍스트뷰 표시
+            countdownTimer = object : CountDownTimer(5 * 60 * 1000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val minutes = millisUntilFinished / 1000 / 60
+                    val seconds = millisUntilFinished / 1000 % 60
+                    textViewRegisterStep2Timer.text = String.format("%02d:%02d", minutes, seconds)
+                }
+
+                override fun onFinish() {
+                    textViewRegisterStep2Timer.text = "시간 초과"
+                    textFieldRegisterStep2VerifyNumber.isEnabled = false // 입력 필드 비활성화
+                    buttonRegisterStep2VerifyCode.isEnabled = false // 인증번호 확인 버튼 비활성화
+                    buttonRegisterStep2VerifyCode.backgroundTintList = ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray)
+                }
+            }.start()
+        }
+    }
+
+
 
     private fun startPhoneVerification(phoneNumber:String) {
 
@@ -260,11 +313,12 @@ class RegisterStep2Fragment : Fragment() {
                 Toast.makeText(requireContext(), "인증 성공!", Toast.LENGTH_SHORT).show()
                 fragmentRegisterStep2Binding.buttonRegisterStep2Register.visibility = View.VISIBLE
                 fragmentRegisterStep2Binding.textFieldRegisterStep2VerifyNumber.helperText = " "
-                // 인증했으니까 휴대폰 입력, 인증번호입력, 인증버튼2개, 비활성화
+                // 인증했으니까 휴대폰 입력, 인증번호입력, 인증버튼2개, 비활성화, 타이머 visible 설정
                 fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.isEnabled = false
                 fragmentRegisterStep2Binding.textFieldRegisterStep2VerifyNumber.isEnabled = false
                 fragmentRegisterStep2Binding.buttonRegisterStep2VerifyPhoneNumber.isEnabled = false
                 fragmentRegisterStep2Binding.buttonRegisterStep2VerifyCode.isEnabled = false
+                fragmentRegisterStep2Binding.textViewRegisterStep2Timer.visibility = View.GONE
 
                 fragmentRegisterStep2Binding.buttonRegisterStep2VerifyPhoneNumber.setBackgroundColor(Color.GRAY)
                 fragmentRegisterStep2Binding.buttonRegisterStep2VerifyCode.setBackgroundColor(Color.GRAY)
@@ -334,6 +388,7 @@ class RegisterStep2Fragment : Fragment() {
         }
     }
 
+    // 유효성 검사 메서드
      private fun validateInputs(): Boolean {
          //
          var isValid = true
@@ -349,8 +404,8 @@ class RegisterStep2Fragment : Fragment() {
              if (userId.isBlank()) {
                  textFieldRegisterStep2Id.error = "아이디를 입력해주세요"
                  isValid = false
-             } else if (!registerViewModel.isIdAvailable.value!!) { // 중복 확인 실패
-                 textFieldRegisterStep2Id.error = "중복 확인을 통과하지 못했습니다"
+             } else if (textFieldRegisterStep2Id.isEnabled == true) { // 중복 확인 실패
+                 textFieldRegisterStep2Id.error = "중복 확인 해주세요"
                  isValid = false
              } else {
                  textFieldRegisterStep2Id.error = null
@@ -361,7 +416,11 @@ class RegisterStep2Fragment : Fragment() {
              if (password.isBlank()) {
                  textFieldRegisterStep2Password.error = "비밀번호를 입력해주세요"
                  isValid = false
-             } else if (password != passwordCheck) {
+             } else if(password.length < 6) {
+                 textFieldRegisterStep2Password.error = "6자리 이상 입력해주세요"
+                 isValid = false
+             }
+             else if (password != passwordCheck) {
                  textFieldRegisterStep2Password.error = "비밀번호가 일치하지 않습니다"
                  textFieldRegisterStep2PasswordCheck.error = "비밀번호가 일치하지 않습니다"
                  isValid = false

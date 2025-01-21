@@ -73,7 +73,10 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:inputType="text"
+                            android:maxLength="20" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -249,16 +252,34 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="phone" />
+                            android:inputType="phone"
+                            android:maxLength="11" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/button_registerStep2_verifyPhoneNumber"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:backgroundTint="@color/main_color"
-                        android:text="인증번호 받기" />
+                        android:orientation="vertical"
+                        android:paddingTop="20dp">
+
+                        <Button
+                            android:id="@+id/button_registerStep2_verifyPhoneNumber"
+                            android:layout_width="130dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:backgroundTint="@color/main_color"
+                            android:text="인증번호 받기" />
+
+                        <TextView
+                            android:id="@+id/textView_registerStep2_timer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:text="5:00"
+                            android:textColor="@color/main_color"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
