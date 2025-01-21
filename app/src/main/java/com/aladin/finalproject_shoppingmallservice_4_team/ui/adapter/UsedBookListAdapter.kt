@@ -1,6 +1,7 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -24,24 +25,23 @@ class UsedBookListAdapter(
             Glide.with(itemBookListItem.imageViewBookListBookIcon)
                 .load(data.cover)
                 .into(itemBookListItem.imageViewBookListBookIcon)
-            itemBookListItem.textViewLikeListBookQuality.text = when(data.usedBookQuality) {
+            itemBookListItem.textViewLikeListBookQuality.text = "품질 : " + when(data.usedBookQuality) {
                 0 -> "상"
                 1 -> "중"
                 else -> "하"
             }
-            itemBookListItem.textViewBookListBookTitle.text = data.usedBookTitle
-            itemBookListItem.textViewBookListBookAuthor.text = data.usedBookAuthor
+            itemBookListItem.textViewBookListBookTitle.text = "제목 : ${ data.usedBookTitle}"
+            itemBookListItem.textViewBookListBookAuthor.text = "저자: ${data.usedBookAuthor}"
             itemBookListItem.textViewBookListBookSellPrice.text = "판매가 : ${formatNumberWithCommas(data.usedBookSellingPrice)}원"
 
-            // 공지사항 클릭 시
+            // 아이템 클릭 시
             itemView.setOnClickListener {
                 val dataBundle = Bundle()
                 // ISBN
                 dataBundle.putString("bookIsbn", data.usedBookISBN)
-
                 bookListFragment.replaceMainFragment(
                     BookDetailFragment(),
-                    false,
+                    true,
                     dataBundle = dataBundle
                 )
             }
