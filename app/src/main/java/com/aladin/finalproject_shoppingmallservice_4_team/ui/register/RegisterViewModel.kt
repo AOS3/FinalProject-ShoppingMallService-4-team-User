@@ -13,12 +13,16 @@ class RegisterViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    val isIdAvailable = MutableLiveData<Boolean>()
+    val isIdAvailable = MutableLiveData<Boolean?>()
     val idCheckErrorMessage = MutableLiveData<String>()
 
     fun checkUserIdAvailability(userId: String) {
         viewModelScope.launch {
             try {
+                // 상태 초기화
+                isIdAvailable.value = null
+                idCheckErrorMessage.value = ""
+
                 if (userId.isBlank()) {
                     idCheckErrorMessage.value = "아이디를 입력해주세요."
                     isIdAvailable.value = false
