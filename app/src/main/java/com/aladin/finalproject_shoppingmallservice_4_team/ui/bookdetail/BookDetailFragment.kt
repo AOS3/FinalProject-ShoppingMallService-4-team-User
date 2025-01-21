@@ -27,7 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class BookDetailFragment : Fragment() {
 
-    private lateinit var binding: FragmentBookDetailBinding
+    private var _binding: FragmentBookDetailBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: BookDetailViewModel by viewModels()
 
@@ -36,7 +37,7 @@ class BookDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentBookDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentBookDetailBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -47,6 +48,11 @@ class BookDetailFragment : Fragment() {
         loadBookInfo()
         textViewSetting()
         combineButtonMethod()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 
