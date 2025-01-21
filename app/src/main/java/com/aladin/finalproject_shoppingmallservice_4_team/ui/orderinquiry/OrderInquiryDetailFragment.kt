@@ -12,14 +12,15 @@ import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 
 class OrderInquiryDetailFragment : Fragment() {
 
-    private lateinit var binding: FragmentOrderInquiryDetailBinding
+    private var _binding: FragmentOrderInquiryDetailBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentOrderInquiryDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentOrderInquiryDetailBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -27,6 +28,11 @@ class OrderInquiryDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbarButton()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     /*

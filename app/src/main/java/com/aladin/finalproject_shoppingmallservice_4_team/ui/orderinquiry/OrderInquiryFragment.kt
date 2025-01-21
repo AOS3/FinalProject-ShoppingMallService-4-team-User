@@ -20,7 +20,8 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
     private val list = MutableList(30) {
         "항목 $it"
     }
-    private lateinit var binding: FragmentOrderInquiryBinding
+    private var _binding: FragmentOrderInquiryBinding? = null
+    private val binding get() = _binding!!
     private val adapter: OrderInquiryAdapter by lazy { OrderInquiryAdapter(this) }
 
     override fun onCreateView(
@@ -28,7 +29,7 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentOrderInquiryBinding.inflate(inflater, container, false)
+        _binding = FragmentOrderInquiryBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -37,6 +38,11 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
         super.onViewCreated(view, savedInstanceState)
         combineButtonMethod()
         settingRecyclerView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     /*
