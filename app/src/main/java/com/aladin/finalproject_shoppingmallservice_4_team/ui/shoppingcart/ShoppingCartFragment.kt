@@ -1,6 +1,8 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart
 
+import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentShoppingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.BookListModel
@@ -33,9 +36,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class ShoppingCartFragment : Fragment() {
     private lateinit var fragmentShoppingCartBinding: FragmentShoppingCartBinding
     private lateinit var shoppingCartAdapter: ShoppingCartAdapter
+    private lateinit var bookApplication: BookApplication
     private val shoppingCartViewModel: ShoppingCartViewModel by viewModels()
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,8 +45,11 @@ class ShoppingCartFragment : Fragment() {
         fragmentShoppingCartBinding =
             FragmentShoppingCartBinding.inflate(layoutInflater, container, false)
 
+        // bookApplication 초기화
+        bookApplication = requireActivity().application as BookApplication
+
         // 쇼핑카트 데이터 가져오기
-        shoppingCartViewModel.gettingShoppingCartBookData()
+        shoppingCartViewModel.gettingShoppingCartBookData(bookApplication.loginUserModel.userToken)
 
         // 툴바 세팅
         settingToolbar()
@@ -66,6 +71,10 @@ class ShoppingCartFragment : Fragment() {
 
         // 전체 삭제 클릭 이벤트
         onClickDeleteAllButton()
+
+        Log.e("asd","로그인 ${bookApplication.loginUserModel.userToken}")
+        Log.e("asd","로그인 ${bookApplication.loginUserModel.userId}")
+        Log.e("asd","로그인 ${bookApplication.loginUserModel.userDocumentId}")
 
         return fragmentShoppingCartBinding.root
     }
@@ -127,7 +136,8 @@ class ShoppingCartFragment : Fragment() {
     private fun calculateTotals() {
         val selectedItems = shoppingCartAdapter.getSelectedItems()
         val totalSize = selectedItems.sumOf { it.shoppingCartBookQualityCount }
-        val totalPrice = selectedItems.sumOf { it.shoppingCartSellingPrice * it.shoppingCartBookQualityCount }
+        val totalPrice =
+            selectedItems.sumOf { it.shoppingCartSellingPrice * it.shoppingCartBookQualityCount }
 
         fragmentShoppingCartBinding.apply {
             recyclerViewShoppingCartTotalListSize.text = "총수량 : ${totalSize}개"

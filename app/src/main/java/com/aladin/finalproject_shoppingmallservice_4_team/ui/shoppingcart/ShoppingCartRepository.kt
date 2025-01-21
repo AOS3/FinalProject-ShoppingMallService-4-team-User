@@ -16,12 +16,13 @@ class ShoppingCartRepository @Inject constructor(
 ) {
 
     // FireBase Db에서 중고 재고 내역 가져오기
-    suspend fun gettingBookDataFromFireBaseStore(): Pair<List<ShoppingCartModel>, Triple<List<String>, List<String>, List<String>>> {
+    suspend fun gettingBookDataFromFireBaseStore(userToken: String): Pair<List<ShoppingCartModel>, Triple<List<String>, List<String>, List<String>>> {
         val collectionReference = firebaseFireStore.collection("ShoppingCartTable")
 
         // 장바구니에 있는 책들만 필터링
         val querySnapshot: QuerySnapshot = collectionReference
-            .whereEqualTo("shoppingCartState", 0)
+            .whereEqualTo("shoppingCartState", 0) // 구매장바구니에 존재하는 상태인 0인 상품만 들고온다.
+            .whereEqualTo("shoppingCartUserToken",userToken) // 사용자 토큰값과 비교하여 같은 정보들만 들고온다.
             .get()
             .await()
 

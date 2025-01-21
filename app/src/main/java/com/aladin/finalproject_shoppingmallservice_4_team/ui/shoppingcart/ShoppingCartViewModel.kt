@@ -57,26 +57,30 @@ class ShoppingCartViewModel @Inject constructor(private val shoppingCartReposito
     }
 
     // 책 데이터 가져오기
-    fun gettingShoppingCartBookData() {
+    fun gettingShoppingCartBookData(userToken:String) {
         viewModelScope.launch {
             val (shoppingCartTableList, bookDataList) = withContext(Dispatchers.IO) {
-                shoppingCartRepository.gettingBookDataFromFireBaseStore()
+                shoppingCartRepository.gettingBookDataFromFireBaseStore(userToken)
             }
 
-            // 가져온 리스트들 Model에 업데이트
-            for (i in shoppingCartTableList.indices) {
-                // getOrNull로 가져온 값이 null일 경우 안전하게 처리
-                shoppingCartTableList[i].shoppingCartBookCoverImage =
-                    bookDataList.first.getOrNull(i) ?: "" // 기본값을 설정
-                shoppingCartTableList[i].shoppingCartBookTitle =
-                    bookDataList.second.getOrNull(i) ?: "Unknown Title" // 기본값 설정
-                shoppingCartTableList[i].shoppingCartBookAuthor =
-                    bookDataList.third.getOrNull(i) ?: "Unknown Author" // 기본값 설정
+            withContext(Dispatchers.IO) {
+                // 가져온 리스트들 Model에 업데이트
+                for (i in shoppingCartTableList.indices) {
+                    // getOrNull로 가져온 값이 null일 경우 안전하게 처리
+                    shoppingCartTableList[i].shoppingCartBookCoverImage =
+                        bookDataList.first.getOrNull(i) ?: "" // 기본값을 설정
+                    shoppingCartTableList[i].shoppingCartBookTitle =
+                        bookDataList.second.getOrNull(i) ?: "Unknown Title" // 기본값 설정
+                    shoppingCartTableList[i].shoppingCartBookAuthor =
+                        bookDataList.third.getOrNull(i) ?: "Unknown Author" // 기본값 설정
+                }
             }
 
-            // 업데이트된 리스트 전달
-            _shoppingCartBookList.postValue(shoppingCartTableList)
-            Log.e("asd", shoppingCartTableList.toString())
+            withContext(Dispatchers.IO) {
+                // 업데이트된 리스트 전달
+                _shoppingCartBookList.postValue(shoppingCartTableList)
+                Log.e("asd", shoppingCartTableList.toString())
+            }
 
             // 가져온 리스트가 비어있지 않다면
             if (shoppingCartTableList.isNotEmpty()) {
