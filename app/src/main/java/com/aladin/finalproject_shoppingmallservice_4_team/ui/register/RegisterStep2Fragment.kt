@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep1Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep2Binding
+import com.aladin.finalproject_shoppingmallservice_4_team.model.UserModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
@@ -29,6 +30,7 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -413,6 +415,7 @@ class RegisterStep2Fragment : Fragment() {
         dialogBuilder.setMessage("이 정보로 가입하시겠습니까?")
         dialogBuilder.setPositiveButton("확인") { dialog, _ ->
             // 다음 단계로 이동
+            saveUserData()
             replaceMainFragment(RegisterStep3Fragment(), false)
             dialog.dismiss()
         }
@@ -420,6 +423,51 @@ class RegisterStep2Fragment : Fragment() {
             dialog.dismiss()
         }
         dialogBuilder.create().show()
+    }
+
+    // 사용자 데이터를 저장하는 메서드
+    private fun saveUserData(){
+        fragmentRegisterStep2Binding.apply {
+            val userId = textFieldRegisterStep2Id.editText?.text.toString()
+            val userPw = textFieldRegisterStep2Password.editText?.text.toString()
+            val userName = textFieldRegisterStep2UserName.editText?.text.toString()
+            val userPhoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString()
+            val postCode = textFieldRegisterStep2PostCode.editText?.text.toString()
+            val roadAddress = textFieldRegisterStep2Address1.editText?.text.toString()
+            val detailAddress = textFieldRegisterStep2Address2.editText?.text.toString()
+            val userAddress = "$postCode/$roadAddress/$detailAddress"
+            // 간단하게 고유 토큰을 위해 UUID를 사용
+            val userToken = UUID.randomUUID().toString().replace("-","")
+            val userAutoLoginToken = ""
+            val userJoinTime = System.currentTimeMillis()
+            val userState = 0
+
+            val user = UserModel().apply {
+                this.userId = userId
+                this.userPw = userPw
+                this.userName = userName
+                this.userAddress = userAddress
+                this.userPhoneNumber = userPhoneNumber
+                this.userToken = userToken
+                this.userAutoLoginToken = userAutoLoginToken
+                this.userJoinTime = userJoinTime
+                this.userState = userState
+            }
+
+
+            registerViewModel.saveUser(user)
+
+            // ViewModel의 저장 결과를 관찰
+            registerViewModel.saveUserSuccess.observe(viewLifecycleOwner) { success ->
+                if (success) {
+                    Toast.makeText(requireContext(), "회원가입 성공!", Toast.LENGTH_SHORT).show()
+                    replaceMainFragment(RegisterStep3Fragment(), false)
+                } else {
+                    Toast.makeText(requireContext(), "회원가입 실패. 다시 시도해주세요.", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
     }
 
 }
