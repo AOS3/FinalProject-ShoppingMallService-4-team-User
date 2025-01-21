@@ -8,28 +8,39 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.apiTestApplication.dto.RecommendBookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSearchBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.HomeAdapter
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.SearchAdapter
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.SearchOnClickListener
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
+class SearchFragment : Fragment(), SearchOnClickListener {
 
-class SearchFragment : Fragment(),HomeOnClickListener {
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+    private val adapter: SearchAdapter by lazy { SearchAdapter(this) }
 
-    private lateinit var binding: FragmentSearchBinding
-    private val adapter: HomeAdapter by lazy { HomeAdapter(this) }
+    private val viewModel: SearchViewModel by viewModels()
+
+    private var query = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -39,6 +50,11 @@ class SearchFragment : Fragment(),HomeOnClickListener {
         combineButtonMethod()
         settingRecyclerView()
         settingEmptyResult()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     /*
@@ -59,20 +75,33 @@ class SearchFragment : Fragment(),HomeOnClickListener {
         settingMoreButton()
         settingAskButton()
         settingDropMenu()
+        settingBackButton()
         // 툴바 버튼
         toolbarBackButton()
         toolbarBarcodeButton()
     }
 
+    private fun settingBackButton() = binding.buttonSearchBack.setOnClickListener { removeFragment() }
+
     private fun settingSearchButton() {
-        binding.buttonSearchSearchIcon.setOnClickListener {
-            // 검색한다.
+        binding.apply {
+            buttonSearchSearchIcon.setOnClickListener {
+                // 검색한다.
+                query = editTextSearchSearch.text.toString()
+                viewModel.searchBook(query = query, 10, "Accuracy")
+                loadingDialog()
+                editTextSearchSearch.text.clear()
+                buttonSearchMore.isVisible = true
+            }
         }
     }
 
     private fun settingMoreButton() {
         binding.buttonSearchMore.setOnClickListener {
             // api의 책 데이터를 더 불러온다.
+            viewModel.searchBook(query, 20, "Accuracy")
+            loadingDialog()
+            binding.buttonSearchMore.isVisible = false
         }
     }
 
@@ -141,19 +170,52 @@ class SearchFragment : Fragment(),HomeOnClickListener {
      */
 
     private fun settingEmptyResult() {
-        // 검색 결과가 없을 경우
         binding.apply {
-            includeSearchEmpty.emptyLayout.isVisible = false
-            scrollSearch.isVisible = true
+            viewModel.books.observe(viewLifecycleOwner) {
+                if (viewModel.books.value?.size == 0) {
+                    // 검색 결과가 없을 경우
+                    includeSearchEmpty.emptyLayout.isVisible = true
+                    scrollSearch.isVisible = false
+                } else {
+                    includeSearchEmpty.emptyLayout.isVisible = false
+                    scrollSearch.isVisible = true
+                }
+            }
+        }
+    }
+
+    private fun updateRecyclerView() {
+        viewModel.books.observe(viewLifecycleOwner) {
+            adapter.updateList(it.toMutableList())
         }
     }
 
     private fun settingRecyclerView() {
         binding.recyclerViewSearch.adapter = adapter
+        updateRecyclerView()
     }
 
-    override fun itemClickListener(item: RecommendBookItem) {
+    override fun itemClickListener(item: BookItem) {
         // 상세 화면으로 변경한다.
-        replaceMainFragment(BookDetailFragment(), true)
+        val dataBundle = Bundle()
+        dataBundle.putString("bookIsbn", item.isbn13)
+        replaceMainFragment(BookDetailFragment(), true, dataBundle = dataBundle)
     }
+
+    /*
+    다이얼로그
+     */
+
+    private fun loadingDialog() {
+        // 로딩을 위한 Dialog
+        val progressBarDialog = CustomDialogProgressbar(requireContext())
+        progressBarDialog.show()
+
+        viewModel.isLoadSearchList.observe(viewLifecycleOwner) {
+            if (it) {
+                progressBarDialog.dismiss()
+            }
+        }
+    }
+
 }
