@@ -13,6 +13,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.HomeAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.HomeBannerAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
@@ -63,6 +64,7 @@ class HomeFragment : Fragment(), HomeOnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadBookData()
+        observeProgressDialog()
         settingRecyclerView()
         settingBanner()
         combineButtonMethod()
@@ -71,6 +73,23 @@ class HomeFragment : Fragment(), HomeOnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    /*
+    화면 구성
+     */
+
+    // Dialog
+    private fun observeProgressDialog() {
+        // 화면 입장 시 공지사항 로딩을 위한 Dialog
+        val progressBarDialog = CustomDialogProgressbar(requireContext())
+        progressBarDialog.show()
+
+        viewModel.isLoadBookList.observe(viewLifecycleOwner) {
+            if (it) {
+                progressBarDialog.dismiss()
+            }
+        }
     }
 
     /*
@@ -95,7 +114,7 @@ class HomeFragment : Fragment(), HomeOnClickListener {
 
     override fun itemClickListener(item: RecommendBookItem) {
         val dataBundle = Bundle()
-        dataBundle.putString("bookName", item.title)
+        dataBundle.putString("bookIsbn", item.isbn)
         // 상세 화면으로 이동한다
         replaceMainFragment(BookDetailFragment(), true, dataBundle = dataBundle)
     }
@@ -212,7 +231,6 @@ class HomeFragment : Fragment(), HomeOnClickListener {
                     }
                 }
             }
-
         })
     }
 }
