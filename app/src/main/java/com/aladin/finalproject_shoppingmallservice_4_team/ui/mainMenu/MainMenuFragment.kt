@@ -27,13 +27,18 @@ import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragmen
 
 class MainMenuFragment : Fragment() {
 
+    // ItemNewAll : 신간 전체 리스트
+    // Bestseller : 베스트셀러
+    // BlogBest : 블로거 베스트셀러
+    // Used : 중고
+    // 넘겨줄때 key: bookQuery
+
     val menuItems = listOf(
         "내가 판매하는 중고 도서",
         "중고 도서",
         "신간 도서",
         "베스트 셀러",
-        "국내 도서",
-        "해외 도서"
+        "블로거 추천",
     )
 
     private lateinit var fragmentMainMenuBinding: FragmentMainMenuBinding
@@ -170,23 +175,27 @@ class MainMenuFragment : Fragment() {
                 }
                 1 -> {
                     // 중고 도서로 이동
-                    replaceSubFragment(BookListFragment(),true)
+                    val dataBundle = Bundle()
+                    dataBundle.putString("bookQuery", "Used")
+                    replaceSubFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 2 -> {
                     // 신간 도서로 이동
-                    replaceSubFragment(BookListFragment(),true)
+                    val dataBundle = Bundle()
+                    dataBundle.putString("bookQuery", "ItemNewAll")
+                    replaceSubFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 3 -> {
                     // 베스트 셀러로 이동
-                    replaceSubFragment(BookListFragment(),true)
+                    val dataBundle = Bundle()
+                    dataBundle.putString("bookQuery", "Bestseller")
+                    replaceSubFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 4 -> {
-                    // 국내 도서로 이동
-                    replaceSubFragment(BookListFragment(),true)
-                }
-                5 -> {
-                    // 해외 도서로 이동
-                    replaceSubFragment(BookListFragment(),true)
+                    // 블로거 추천으로 이동
+                    val dataBundle = Bundle()
+                    dataBundle.putString("bookQuery", "BlogBest")
+                    replaceSubFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 else -> null
             }
