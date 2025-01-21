@@ -162,7 +162,11 @@ class SearchFragment : Fragment(), SearchOnClickListener {
     // 1 -> 최저가
     // 드롭다운 선택에 따라 recyclerView가 갱신
     private fun renewalRecyclerViewFromDropDown(value: Int) {
-        Log.e("asdasd", "$value")
+        when (value) {
+            1 -> adapter.sortByName()
+            2 -> adapter.sortByHighestPrice()
+            else -> adapter.sortByLowestPrice()
+        }
     }
 
     /*
