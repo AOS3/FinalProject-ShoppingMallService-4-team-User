@@ -69,18 +69,22 @@ class BookListFragment : Fragment() {
                     // 중고 도서
                     "Used" -> {
                         textViewBookListSubject.text = "중고 도서 목록"
+                        materialToolbarBookList.title = "중고 도서"
                     }
                     // 신간 전체
                     "ItemNewAll" -> {
                         textViewBookListSubject.text = "신간 도서 목록"
+                        materialToolbarBookList.title = "신간 도서"
                     }
                     // 베스트셀러
                     "Bestseller" -> {
-                        textViewBookListSubject.text = "배스트 셀러 목록"
+                        textViewBookListSubject.text = "베스트 셀러 목록"
+                        materialToolbarBookList.title = "베스트 셀러"
                     }
                     // 블로그 베스트 셀러
                     "BlogBest" -> {
                         textViewBookListSubject.text = "블로그 베스트 셀러 목록"
+                        materialToolbarBookList.title = "블로그 베스트 셀러"
                     }
                 }
             }
