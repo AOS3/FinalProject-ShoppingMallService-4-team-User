@@ -9,6 +9,5 @@ data class BookListModel(
     val usedBookTime: Long = 0L,
     val usedBookTitle: String = "",
     var cover: String? = null,
-    val isbn13: String,
-
+    val isbn13: String? = null,
 )

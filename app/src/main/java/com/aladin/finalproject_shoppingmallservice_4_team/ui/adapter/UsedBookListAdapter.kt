@@ -8,7 +8,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemBookLi
 import com.aladin.finalproject_shoppingmallservice_4_team.model.BookListModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.bumptech.glide.Glide
 
 class UsedBookListAdapter(
@@ -39,7 +39,7 @@ class UsedBookListAdapter(
                 // ISBN
                 dataBundle.putString("bookIsbn", data.usedBookISBN)
 
-                bookListFragment.replaceSubFragment(
+                bookListFragment.replaceMainFragment(
                     BookDetailFragment(),
                     false,
                     dataBundle = dataBundle
