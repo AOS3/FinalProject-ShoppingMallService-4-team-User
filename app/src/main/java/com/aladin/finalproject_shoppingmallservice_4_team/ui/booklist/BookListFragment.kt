@@ -13,7 +13,9 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBo
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.NewBookListAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.UsedBookListAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,7 +55,36 @@ class BookListFragment : Fragment() {
         // Progress Dialog
         observeProgressDialog()
 
+        // 주제 Text 변경
+        changeBookListSubject()
+
         return fragmentBookListBinding.root
+    }
+
+
+    private fun changeBookListSubject() {
+        fragmentBookListBinding.apply {
+            arguments?.getString("bookQuery")?.let { value ->
+                when (value) {
+                    // 중고 도서
+                    "Used" -> {
+                        textViewBookListSubject.text = "중고 도서 목록"
+                    }
+                    // 신간 전체
+                    "ItemNewAll" -> {
+                        textViewBookListSubject.text = "신간 도서 목록"
+                    }
+                    // 베스트셀러
+                    "Bestseller" -> {
+                        textViewBookListSubject.text = "배스트 셀러 목록"
+                    }
+                    // 블로그 베스트 셀러
+                    "BlogBest" -> {
+                        textViewBookListSubject.text = "블로그 베스트 셀러 목록"
+                    }
+                }
+            }
+        }
     }
 
     // Dialog
@@ -74,6 +105,17 @@ class BookListFragment : Fragment() {
         fragmentBookListBinding.apply {
             materialToolbarBookList.setNavigationOnClickListener {
                 removeFragment()
+            }
+            materialToolbarBookList.setOnMenuItemClickListener {
+                when(it.itemId) {
+                    R.id.item_bookList_notification -> {
+                        replaceSubFragment(MainMenuFragment(),true)
+                    }
+                    R.id.item_bookList_menu -> {
+                        replaceSubFragment(MainMenuFragment(),true)
+                    }
+                }
+                true
             }
         }
     }

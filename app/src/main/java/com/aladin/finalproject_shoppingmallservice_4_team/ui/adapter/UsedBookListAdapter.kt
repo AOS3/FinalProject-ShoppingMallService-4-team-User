@@ -1,15 +1,14 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter
 
-import android.util.Log
+import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.aladin.apiTestApplication.dto.RecommendBookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemBookListBinding
-import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemNoticeBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.BookListModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.bumptech.glide.Glide
 
 class UsedBookListAdapter(
@@ -33,6 +32,19 @@ class UsedBookListAdapter(
             itemBookListItem.textViewBookListBookTitle.text = data.usedBookTitle
             itemBookListItem.textViewBookListBookAuthor.text = data.usedBookAuthor
             itemBookListItem.textViewBookListBookSellPrice.text = "판매가 : ${formatNumberWithCommas(data.usedBookSellingPrice)}원"
+
+            // 공지사항 클릭 시
+            itemView.setOnClickListener {
+                val dataBundle = Bundle()
+                // ISBN
+                dataBundle.putString("bookIsbn", data.usedBookISBN)
+
+                bookListFragment.replaceSubFragment(
+                    BookDetailFragment(),
+                    false,
+                    dataBundle = dataBundle
+                )
+            }
         }
     }
 

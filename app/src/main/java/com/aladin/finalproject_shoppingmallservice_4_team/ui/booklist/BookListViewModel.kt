@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aladin.apiTestApplication.dto.RecommendBookItem
-import com.aladin.apiTestApplication.dto.RecommendBookResponse
 import com.aladin.finalproject_shoppingmallservice_4_team.model.BookListModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,10 +19,6 @@ class BookListViewModel @Inject constructor(private val bookListRepository: Book
     // 중고책 리스트
     private val _usedBookList = MutableLiveData<List<BookListModel>>()
     val usedBookList: LiveData<List<BookListModel>> get() = _usedBookList
-
-    // 중고책 커버사진 리스트
-    private val _usedBookCoverList = MutableLiveData<List<String>>()
-    val usedBookCoverList: LiveData<List<String>> get() = _usedBookCoverList
 
     // 신책 리스트
     private val _newBookList = MutableLiveData<List<RecommendBookItem>>()

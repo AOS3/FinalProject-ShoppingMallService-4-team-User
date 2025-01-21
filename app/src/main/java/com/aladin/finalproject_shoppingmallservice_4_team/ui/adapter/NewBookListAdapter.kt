@@ -1,13 +1,15 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aladin.apiTestApplication.dto.RecommendBookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemBookListBinding
-import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemNoticeBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.bumptech.glide.Glide
 
 class NewBookListAdapter(
@@ -26,6 +28,19 @@ class NewBookListAdapter(
             itemBookListItem.textViewBookListBookTitle.text = data.title
             itemBookListItem.textViewBookListBookAuthor.text = data.author
             itemBookListItem.textViewBookListBookSellPrice.text = "판매가 : ${formatNumberWithCommas(data.priceStandard)}원"
+
+            // 공지사항 클릭 시
+            itemView.setOnClickListener {
+                val dataBundle = Bundle()
+                // ISBN
+                dataBundle.putString("bookIsbn", data.isbn13)
+
+                bookListFragment.replaceSubFragment(
+                    BookDetailFragment(),
+                    false,
+                    dataBundle = dataBundle
+                )
+            }
         }
     }
 
