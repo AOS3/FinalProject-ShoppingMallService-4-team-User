@@ -29,6 +29,10 @@ data class BookItem(
     val cover:String,
     @SerialName("description")
     val description: String,
+    val link: String,
+    val isbn: String,
+    val categoryName: String,
+    val isbn13: String,
 )
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
