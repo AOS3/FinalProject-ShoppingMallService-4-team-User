@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep1Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep2Binding
@@ -26,11 +27,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class RegisterStep2Fragment : Fragment() {
 
     lateinit var fragmentRegisterStep2Binding: FragmentRegisterStep2Binding
+    private lateinit var registerViewModel: RegisterViewModel
     private var verificationId: String? = null
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
     private lateinit var auth: FirebaseAuth
@@ -40,6 +44,9 @@ class RegisterStep2Fragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        // ViewModel
+        registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
         auth = FirebaseAuth.getInstance()
 
@@ -55,9 +62,36 @@ class RegisterStep2Fragment : Fragment() {
         // 카카오 주소 api
         settingKakaoPostCode()
 
-        checkingIdValidation()
+        settingObservers()
+
+        settingIdCheckListener()
+
 
         return fragmentRegisterStep2Binding.root
+    }
+
+    private fun settingObservers(){
+        registerViewModel.isIdAvailable.observe(viewLifecycleOwner) { isAvailable ->
+            if (isAvailable) {
+                fragmentRegisterStep2Binding.textFieldRegisterStep2Id.helperText = "사용 가능한 아이디입니다."
+                fragmentRegisterStep2Binding.textFieldRegisterStep2Id.error = null
+            } else {
+                fragmentRegisterStep2Binding.textFieldRegisterStep2Id.error = "이미 존재하는 아이디입니다."
+            }
+        }
+
+        registerViewModel.idCheckErrorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage.isNotBlank()) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun settingIdCheckListener(){
+        fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.setOnClickListener{
+            val userId = fragmentRegisterStep2Binding.textFieldRegisterStep2Id.editText?.text.toString()
+            registerViewModel.checkUserIdAvailability(userId)
+        }
     }
 
     // 툴바를 설정하는 메서드
@@ -182,22 +216,6 @@ class RegisterStep2Fragment : Fragment() {
         }
     }
 
-
-    // 유효성 검사 메서드
-    fun checkingIdValidation(){
-        fragmentRegisterStep2Binding.apply {
-            // 중복검사 버튼
-            buttonRegisterStep2CheckId.setOnClickListener {
-                // 임시로
-                if(textFieldRegisterStep2Id.editText?.text?.isEmpty() == true) {
-                    textFieldRegisterStep2Id.error = "아이디를 입력해주세요"
-                }
-                else{
-                    textFieldRegisterStep2Id.helperText = "사용 가능한 아이디입니다"
-                }
-            }
-        }
-    }
 
     fun settingKakaoPostCode(){
         fragmentRegisterStep2Binding.apply {
