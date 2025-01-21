@@ -64,6 +64,7 @@ class BookDetailFragment : Fragment() {
     private fun combineButtonMethod() {
         // 개별 버튼
         settingAskButton()
+        settingLinkButton()
         settingBuyButton()
         settingFABButton()
         settingSearchButton()
@@ -82,7 +83,9 @@ class BookDetailFragment : Fragment() {
 
     private fun settingSellButton() {
         binding.buttonBookDetailSellBook.setOnClickListener {
-            replaceMainFragment(SellingCartFragment(), true)
+            val dataBundle = Bundle()
+            dataBundle.putString("bookIsbn", viewModel.books.value!!.first().isbn13)
+            replaceMainFragment(SellingCartFragment(), true, dataBundle = dataBundle)
         }
     }
 
@@ -110,8 +113,8 @@ class BookDetailFragment : Fragment() {
 
     private fun settingLinkButton() {
         binding.buttonBookDetailBuyNewBook.setOnClickListener {
-            // val intent = Intent(Intent.ACTION_VIEW, Uri.parse())
-            // startActivity(intent)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(viewModel.books.value!!.first().link))
+            startActivity(intent)
         }
     }
 
@@ -146,7 +149,7 @@ class BookDetailFragment : Fragment() {
      */
 
     private fun loadData() {
-        val query = arguments?.getString("bookName")!!
+        val query = arguments?.getString("bookIsbn")!!
         viewModel.searchBook(query)
     }
 
@@ -157,6 +160,7 @@ class BookDetailFragment : Fragment() {
                 textViewBookDetailBookWriter.text = it.first().author
                 textViewBookDetailBookPublisher.text = it.first().publisher
                 textViewBookDetailBookPublisherDate.text = it.first().pubDate
+                textViewBookDetailBookCategory.text = it.first().categoryName
                 textViewBookDetailBookIntroduction.text = it.first().description
                 imageViewBookDetail.loadImage(it.first().cover)
             }
