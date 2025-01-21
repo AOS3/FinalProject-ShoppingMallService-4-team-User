@@ -404,7 +404,7 @@ class RegisterStep2Fragment : Fragment() {
              if (userId.isBlank()) {
                  textFieldRegisterStep2Id.error = "아이디를 입력해주세요"
                  isValid = false
-             } else if (textFieldRegisterStep2Id.isEnabled == true) { // 중복 확인 실패
+             } else if (textFieldRegisterStep2Id.isEnabled == false) { // 중복 확인 실패
                  textFieldRegisterStep2Id.error = "중복 확인 해주세요"
                  isValid = false
              } else {
