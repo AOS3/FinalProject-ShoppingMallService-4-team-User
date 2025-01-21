@@ -16,6 +16,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.findid.FindIdFragme
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.findpw.FindPwFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.register.RegisterStep1Fragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.firebase.firestore.FirebaseFirestore
@@ -73,6 +74,9 @@ class LoginFragment : Fragment() {
         fragmentLoginBinding.apply {
             materialToolbarLogin.title = "로그인"
             materialToolbarLogin.setNavigationIcon(R.drawable.arrow_back_ios_24px)
+            materialToolbarLogin.setNavigationOnClickListener {
+                removeFragment()
+            }
         }
     }
 
