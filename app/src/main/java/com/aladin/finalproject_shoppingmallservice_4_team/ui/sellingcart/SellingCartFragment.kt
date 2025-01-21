@@ -38,35 +38,7 @@ class SellingCartFragment : Fragment() {
     )
 
     // 현재는 데이터가 비어있음
-     val tempData1 = emptyList<Book>()
-//
-//
-//     val tempData1 = listOf(
-//        Book(
-//            title = "깡샘의 안드로이드 앱 프로그래밍",
-//            author = "강성윤",
-//            price = 40000,
-//            estimatedPrice = 0,
-//            selectedQuality = null,
-//            imageResId = R.drawable.test_book_icon
-//        ),
-//        Book(
-//            title = "무인도에서 살아남기",
-//            author = "김철수",
-//            price = 35000,
-//            estimatedPrice = 0,
-//            selectedQuality = null,
-//            imageResId = R.drawable.test_book_icon
-//        ),
-//        Book(
-//            title = "Why",
-//            author = "박철수",
-//            price = 30000,
-//            estimatedPrice = 0,
-//            selectedQuality = null,
-//            imageResId = R.drawable.test_book_icon
-//        )
-//     )
+    val tempData1 = emptyList<Book>()
 
     private lateinit var fragmentSellingCartBinding: FragmentSellingCartBinding
 
@@ -75,6 +47,9 @@ class SellingCartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         fragmentSellingCartBinding = FragmentSellingCartBinding.inflate(layoutInflater, container, false)
+
+        // ISBN 번호를 가져와 Toast로 표시
+        handleReceivedISBN()
 
         // toolbar 설정 메서드 호출
         settingToolbar()
@@ -86,6 +61,14 @@ class SellingCartFragment : Fragment() {
         buttonSellingCartOnClick()
 
         return fragmentSellingCartBinding.root
+    }
+
+    // ISBN 번호 처리 메서드
+    private fun handleReceivedISBN() {
+        arguments?.getString("ISBN")?.let { isbn ->
+            Toast.makeText(requireContext(), "받은 ISBN: $isbn", Toast.LENGTH_LONG).show()
+            // API 호출
+        }
     }
 
     // Toolbar를 구성하는 메서드
@@ -125,7 +108,9 @@ class SellingCartFragment : Fragment() {
 
             buttonSellingCartBarcodeScanner.setOnClickListener {
                 // 바코드 찍는 화면으로 이동
-                replaceMainFragment(BarcodeScannerFragment(), true)
+                val dataBundle = Bundle()
+                dataBundle.putString("FragmentQuery", "SellingCart")
+                replaceSubFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
             }
 
             buttonSellingCartAddBookForSelling.setOnClickListener {
@@ -155,9 +140,6 @@ class SellingCartFragment : Fragment() {
             }
         }
     }
-
-
-
 
     // RecyclerView의 어댑터
     private inner class RecyclerSellingCartAdapter :
@@ -249,4 +231,3 @@ class SellingCartFragment : Fragment() {
         }
     }
 }
-
