@@ -25,8 +25,8 @@ class NewBookListAdapter(
             Glide.with(itemBookListItem.imageViewBookListBookIcon)
                 .load(data.cover)
                 .into(itemBookListItem.imageViewBookListBookIcon)
-            itemBookListItem.textViewBookListBookTitle.text = data.title
-            itemBookListItem.textViewBookListBookAuthor.text = data.author
+            itemBookListItem.textViewBookListBookTitle.text = "제목 : ${data.title}"
+            itemBookListItem.textViewBookListBookAuthor.text = "저자 : ${data.author}"
             itemBookListItem.textViewBookListBookSellPrice.text = "판매가 : ${formatNumberWithCommas(data.priceStandard)}원"
 
             // 공지사항 클릭 시
@@ -37,7 +37,7 @@ class NewBookListAdapter(
 
                 bookListFragment.replaceMainFragment(
                     BookDetailFragment(),
-                    false,
+                    true,
                     dataBundle = dataBundle
                 )
             }

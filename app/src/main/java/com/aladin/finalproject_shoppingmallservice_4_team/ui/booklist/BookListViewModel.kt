@@ -37,13 +37,17 @@ class BookListViewModel @Inject constructor(private val bookListRepository: Book
                     bookListRepository.gettingUsedBookInventory()
                 }
 
-                for (i in usedBookInventoryList.indices) {
-                    usedBookInventoryList[i].cover =
-                        coverList.getOrNull(i) // coverList에서 해당 index의 값을 가져옴
+                withContext(Dispatchers.IO) {
+                    for (i in usedBookInventoryList.indices) {
+                        usedBookInventoryList[i].cover =
+                            coverList.getOrNull(i) // coverList에서 해당 index의 값을 가져옴
+                    }
                 }
-                // 이후 업데이트된 목록을 _usedBookList에 전달
-                _usedBookList.postValue(usedBookInventoryList)
 
+                withContext(Dispatchers.IO) {
+                    // 이후 업데이트된 목록을 _usedBookList에 전달
+                    _usedBookList.postValue(usedBookInventoryList)
+                }
                 // 가져온 리스트가 비어있지 않다면
                 if (usedBookInventoryList.isNotEmpty()) {
                     _isLoadBookList.postValue(true)

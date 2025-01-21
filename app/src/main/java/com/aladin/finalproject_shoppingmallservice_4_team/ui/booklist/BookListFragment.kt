@@ -254,9 +254,9 @@ class BookListFragment : Fragment() {
                 if (value == "Used") {
                     // 중고인 경우
                     when (dropDownValue) {
-                        1 -> newBookListAdapter.sortByName()
-                        2 -> newBookListAdapter.sortByHighestPrice()
-                        else -> newBookListAdapter.sortByLowestPrice()
+                        1 -> usedBookListAdapter.sortByName()
+                        2 -> usedBookListAdapter.sortByHighestPrice()
+                        else -> usedBookListAdapter.sortByLowestPrice()
                     }
                 } else {
                     // 새거인 경우
