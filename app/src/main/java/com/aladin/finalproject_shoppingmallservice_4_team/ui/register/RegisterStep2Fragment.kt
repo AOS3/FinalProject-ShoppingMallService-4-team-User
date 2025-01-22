@@ -3,6 +3,8 @@ package com.aladin.finalproject_shoppingmallservice_4_team.ui.register
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
@@ -16,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep1Binding
@@ -62,6 +65,8 @@ class RegisterStep2Fragment : Fragment() {
         settingRegister2Toolbar()
 
         registerButtonListener()
+
+        settingPhoneNumberFormatting()
 
         settingPhoneVerification()
 
@@ -172,6 +177,49 @@ class RegisterStep2Fragment : Fragment() {
         }
     }
 
+    // 전화번호 입력 자동으로 - 입력되게 하기
+    private fun settingPhoneNumberFormatting(){
+        fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.editText?.addTextChangedListener(object : TextWatcher{
+            private var isFormatting = false
+            private var previousText = ""
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (isFormatting) return
+
+                val input = s.toString()
+                if (input == previousText) return
+
+                isFormatting = true
+
+                val formatted = formattingPhoneNumber(input)
+                fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.editText?.setText(formatted)
+                fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.editText?.setSelection(formatted.length)
+
+                previousText = formatted
+                isFormatting = false
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
+    }
+
+    // 자동으로 - 붙이기
+    private fun formattingPhoneNumber(input:String) : String{
+        val numbersOnly = input.replace("-","")
+        return when {
+            numbersOnly.length <= 3 -> numbersOnly
+            numbersOnly.length <= 7 -> "${numbersOnly.substring(0, 3)}-${numbersOnly.substring(3)}"
+            numbersOnly.length <= 11 -> "${numbersOnly.substring(0, 3)}-${numbersOnly.substring(3, 7)}-${numbersOnly.substring(7)}"
+            else -> numbersOnly
+        }
+    }
+
+    // +82를 자동으로 입력되게 하는 메서드
     private fun formatPhoneNumber(phoneNumber: String): String {
         val formattedNumber = if (phoneNumber.startsWith("0")) {
             "+82" + phoneNumber.substring(1)
@@ -189,7 +237,7 @@ class RegisterStep2Fragment : Fragment() {
                 val phoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString()
 
                 // 유효성 검사 : 010으로 시작, 11자리
-                if(!phoneNumber.startsWith("010") || phoneNumber.length != 11 || phoneNumber.isBlank()) {
+                if(!phoneNumber.startsWith("010") || phoneNumber.length != 13 || phoneNumber.isBlank()) {
                     textFieldRegisterStep2PhoneNumber.error = "유효한 전화번호를 입력해주세요"
                     return@setOnClickListener
                 } else {
@@ -491,7 +539,7 @@ class RegisterStep2Fragment : Fragment() {
             val userId = textFieldRegisterStep2Id.editText?.text.toString()
             val userPw = textFieldRegisterStep2Password.editText?.text.toString()
             val userName = textFieldRegisterStep2UserName.editText?.text.toString()
-            val userPhoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString()
+            val userPhoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString().replace("-", "") // '-' 제거
             val postCode = textFieldRegisterStep2PostCode.editText?.text.toString()
             val roadAddress = textFieldRegisterStep2Address1.editText?.text.toString()
             val detailAddress = textFieldRegisterStep2Address2.editText?.text.toString()
