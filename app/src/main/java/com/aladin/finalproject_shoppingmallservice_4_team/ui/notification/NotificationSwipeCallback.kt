@@ -4,11 +4,12 @@ package com.aladin.finalproject_shoppingmallservice_4_team.ui.notification
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.RecyclerView
+import com.aladin.finalproject_shoppingmallservice_4_team.model.NotificationModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.NotificationAdapter
 
 class NotificationSwipeCallback(
     private val adapter: NotificationAdapter,
-    private val list: MutableList<String>,
+    private val list: MutableList<NotificationModel>,
 ): ItemTouchHelper.Callback() {
     override fun getMovementFlags(
         recyclerView: RecyclerView,

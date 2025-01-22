@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemNotificationListBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.model.NotificationModel
 
 
 class NotificationAdapter(
     private val listener: NotificationOnClickListener,
 ): RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
-    private val items = mutableListOf<String>()
+    private val items = mutableListOf<NotificationModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationViewHolder {
         return NotificationViewHolder(
@@ -24,7 +25,7 @@ class NotificationAdapter(
         holder.bind(items[position])
     }
 
-    fun updateList(list: MutableList<String>) {
+    fun updateList(list: MutableList<NotificationModel>) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()
@@ -41,15 +42,15 @@ class NotificationAdapter(
             }
         }
 
-        fun bind(item: String) {
+        fun bind(item: NotificationModel) {
             binding.apply {
-                textViewNotificationListTitle.text = item
-                textViewNotificationListDate.text = item
+                textViewNotificationListTitle.text = item.notificationTitle
+                textViewNotificationListDate.text = item.notificationTime
             }
         }
     }
 }
 
 interface NotificationOnClickListener {
-    fun itemClickListener(item: String)
+    fun itemClickListener(item: NotificationModel)
 }
