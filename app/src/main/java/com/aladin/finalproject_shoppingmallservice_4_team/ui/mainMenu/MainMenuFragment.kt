@@ -70,7 +70,7 @@ class MainMenuFragment : Fragment() {
                 // 로그인 해 주세요 클릭
                 setOnClickListener {
                     // 로그인 화면으로 이동
-                    replaceMainFragment(LoginFragment(),true)
+                    replaceSubFragment(LoginFragment(),true)
                     visibility = View.GONE
                     toolbarMainMenu.title = "000 사용자님"
 
