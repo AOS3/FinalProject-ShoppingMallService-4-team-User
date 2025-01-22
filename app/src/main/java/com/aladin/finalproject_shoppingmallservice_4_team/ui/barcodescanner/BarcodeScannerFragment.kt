@@ -17,20 +17,30 @@ import androidx.fragment.app.Fragment
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBarcodeScannerBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanresult.BarcodeScanResultFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import android.widget.Button
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.app.AlertDialog
-import androidx.fragment.app.commit
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import androidx.annotation.OptIn
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
+import com.aladin.apiTestApplication.dto.BookItem
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.common.InputImage
+import kotlinx.coroutines.*
 
 class BarcodeScannerFragment : Fragment() {
 
     private lateinit var fragmentBarcodeScannerBinding: FragmentBarcodeScannerBinding
     private var camera: Camera? = null
+    private var isProcessing = false
+    private var lastProcessedTime = 0L
 
     // 권한 요청 런처
     private val permissionLauncher = registerForActivityResult(
@@ -104,6 +114,28 @@ class BarcodeScannerFragment : Fragment() {
             // 후면 카메라 선택
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .also {
+                    it.setAnalyzer(ContextCompat.getMainExecutor(requireContext())) { imageProxy ->
+                        val bookItem = BookItem(
+                            title = "Sample Title",
+                            author = "Sample Author",
+                            pubDate = "2023-01-01",
+                            publisher = "Sample Publisher",
+                            priceStandard = 10000,
+                            priceSales = 8000,
+                            cover = "",
+                            description = "Sample Description",
+                            link = "",
+                            isbn = "",
+                            categoryName = "Sample Category",
+                            isbn13 = ""
+                        )
+                        processBarcodeFromImage(imageProxy, bookItem)
+                    }
+                }
             try {
                 // 기존에 바인딩된 카메라가 있으면 해제
                 cameraProvider.unbindAll()
@@ -118,7 +150,73 @@ class BarcodeScannerFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    // 바코드 입력 버튼 클릭 메서드
+    @OptIn(ExperimentalGetImage::class)
+    private fun processBarcodeFromImage(imageProxy: ImageProxy, item: BookItem) {
+        if (isProcessing) {
+            imageProxy.close()
+            return
+        }
+
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastProcessedTime < 3000) {
+            imageProxy.close()
+            return
+        }
+
+        val mediaImage = imageProxy.image
+        if (mediaImage != null) {
+            val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+            val scanner: BarcodeScanner = BarcodeScanning.getClient()
+
+            scanner.process(image)
+                .addOnSuccessListener { barcodes ->
+                    for (barcode in barcodes) {
+                        if (barcode.valueType == Barcode.TYPE_ISBN) {
+                            val updatedItem = item.copy(isbn13 = barcode.displayValue ?: "")
+                            isProcessing = true
+                            lastProcessedTime = currentTime
+                            Toast.makeText(requireContext(), "ISBN: ${updatedItem.isbn13}", Toast.LENGTH_SHORT).show()
+
+                            GlobalScope.launch(Dispatchers.Main) {
+                                delay(1000)
+                                navigateBasedOnQuery(updatedItem)
+                                isProcessing = false
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    it.printStackTrace()
+                }
+                .addOnCompleteListener {
+                    imageProxy.close()
+                }
+        } else {
+            imageProxy.close()
+        }
+    }
+
+    private fun navigateBasedOnQuery(item: BookItem) {
+        val fragmentQuery = arguments?.getString("FragmentQuery")
+
+        val fragment = when (fragmentQuery) {
+            "SellingCart" -> SellingCartFragment().apply {
+                arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+            }
+            "SellingSearch" -> SellingCartFragment().apply {
+                arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+            }
+            "Search" -> SearchFragment().apply {
+                arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+            }
+            else -> BarcodeScanResultFragment().apply {
+                arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+            }
+        }
+
+        replaceSubFragment(fragment, true)
+    }
+
     private fun inISBNButtonOnCLick() {
         fragmentBarcodeScannerBinding.apply {
             buttonBarcodeScannerInISBN.setOnClickListener {
@@ -147,27 +245,27 @@ class BarcodeScannerFragment : Fragment() {
                     val isbnInput = editTextISBN.text.toString()
                     if (isbnInput.length == 13) {
                         Toast.makeText(requireContext(), "입력된 ISBN: $isbnInput", Toast.LENGTH_SHORT).show()
-
-                        // MainFragment 확인 및 전환
-                        val mainFragment = activity?.supportFragmentManager?.findFragmentById(R.id.fragmentContainerView) as? MainFragment
-                        if (mainFragment == null) {
-                            // MainFragment로 전환 후 SubFragment 설정
-                            activity?.supportFragmentManager?.commit {
-                                replace(R.id.fragmentContainerView, MainFragment())
-                                addToBackStack(null)
-                            }
-                            activity?.supportFragmentManager?.executePendingTransactions()
-                        }
-
-                        replaceSubFragment(BarcodeScanResultFragment(),true)
-
+                        val bookItem = BookItem(
+                            title = "Sample Title",
+                            author = "Sample Author",
+                            pubDate = "2023-01-01",
+                            publisher = "Sample Publisher",
+                            priceStandard = 10000,
+                            priceSales = 8000,
+                            cover = "",
+                            description = "Sample Description",
+                            link = "",
+                            isbn = isbnInput,
+                            categoryName = "Sample Category",
+                            isbn13 = isbnInput
+                        )
+                        navigateBasedOnQuery(bookItem)
                         dialog.dismiss()
                     } else {
                         Toast.makeText(requireContext(), "ISBN은 13자리여야 합니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
 
-                // 다이얼로그 표시
                 dialog.show()
             }
         }
