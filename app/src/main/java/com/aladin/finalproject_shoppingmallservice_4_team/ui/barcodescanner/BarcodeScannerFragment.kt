@@ -29,6 +29,7 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingsearch.SellingSearchFragment
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -200,7 +201,7 @@ class BarcodeScannerFragment : Fragment() {
             "SellingCart" -> SellingCartFragment().apply {
                 arguments = Bundle().apply { putString("ISBN", item.isbn13) }
             }
-            "SellingSearch" -> SellingCartFragment().apply {
+            "SellingSearch" -> SellingSearchFragment().apply {
                 arguments = Bundle().apply { putString("ISBN", item.isbn13) }
             }
             "Search" -> SearchFragment().apply {
