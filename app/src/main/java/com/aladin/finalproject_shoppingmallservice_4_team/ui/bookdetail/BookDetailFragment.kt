@@ -159,7 +159,7 @@ class BookDetailFragment : Fragment() {
             when(it.itemId) {
                 // 메뉴
                 R.id.home_menu_menuitem -> {
-                    replaceSubFragment(MainMenuFragment(), true)
+                    replaceMainFragment(MainMenuFragment(), true)
                 }
                 // 알림
                 R.id.home_menu_notification -> {
