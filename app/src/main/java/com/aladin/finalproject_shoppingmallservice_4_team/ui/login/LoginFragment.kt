@@ -96,7 +96,7 @@ class LoginFragment : Fragment() {
         loginViewModel.loginResult.observe(viewLifecycleOwner) { isSucces ->
             if (isSucces) {
                 Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
-                replaceSubFragment(HomeFragment(),false)
+                removeFragment()
             }
         }
     }
