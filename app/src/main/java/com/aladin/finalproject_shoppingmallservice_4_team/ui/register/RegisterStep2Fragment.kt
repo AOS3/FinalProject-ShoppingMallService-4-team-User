@@ -142,7 +142,7 @@ class RegisterStep2Fragment : Fragment() {
     private fun showIdConfirmationDialog(userId: String) {
         val dialog = CustomDialog(
             context = requireContext(),
-            contentText = "사용 가능한 아이디입니다. 사용하시겠습니까?",
+            contentText = "사용 가능한 닉네임입니다. 사용하시겠습니까?",
             icon = R.drawable.check_circle_24px, // 적절한 아이콘 리소스
             positiveText = "확인",
             onPositiveClick = {
