@@ -23,6 +23,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.showSoftInput
 import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
@@ -78,10 +79,11 @@ class BookOrderFragment1 : Fragment() {
     private fun settingKakaoPost() {
         fragmentBookOrder1Binding.apply {
             buttonBookOrderPostCode.setOnClickListener {
-                webViewBookOrderFindAddress.visibility = View.VISIBLE
                 webViewBookOrderFindAddress.bringToFront()
+                webViewBookOrderFindAddress.visibility = View.VISIBLE
                 webViewBookOrderFindAddress.settings.javaScriptEnabled = true // JavaScript 허용
-                webViewBookOrderFindAddress.settings.javaScriptCanOpenWindowsAutomatically = true // 새로운 창 자동 열기 허용
+                webViewBookOrderFindAddress.settings.javaScriptCanOpenWindowsAutomatically =
+                    true // 새로운 창 자동 열기 허용
                 webViewBookOrderFindAddress.settings.allowUniversalAccessFromFileURLs = true
 
                 // JavaScript와 안드로이드 앱 간의 인터페이스 설정
@@ -90,7 +92,11 @@ class BookOrderFragment1 : Fragment() {
                     // 지역 클릭 시 호출되는 함수
                     fun setAddress(zoneCode: String, fullRoadAddr: String) {
                         requireActivity().runOnUiThread {
-                            Toast.makeText(requireContext(), "우편번호: $zoneCode\n지번 주소: $fullRoadAddr", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "우편번호: $zoneCode\n지번 주소: $fullRoadAddr",
+                                Toast.LENGTH_LONG
+                            ).show()
 
                             // WebView 숨김 처리
                             webViewBookOrderFindAddress.visibility = View.GONE
@@ -195,7 +201,6 @@ class BookOrderFragment1 : Fragment() {
             bookOrderViewModel.dismissProgressDialog()
             val loginDialog = CustomDialog(
                 requireContext(),
-                // 리스트 삭제 진행
                 onPositiveClick = {
                     replaceSubFragment(HomeFragment(), false)
                 },
@@ -307,9 +312,11 @@ class BookOrderFragment1 : Fragment() {
                 }
 
                 // 사용자 주소 1/2/3로 정렬
-                val userAddress = "${textFieldBookOrderPostCode.editText?.text}/${textFieldBookOrderRoadNameAddress.editText?.text}/${textFieldBookOrderDetailAddress.editText?.text}"
+                val userAddress =
+                    "${textFieldBookOrderPostCode.editText?.text}/${textFieldBookOrderRoadNameAddress.editText?.text}/${textFieldBookOrderDetailAddress.editText?.text}"
                 // 사용자 전화번호 하이픈(-) 빠지게 설정
-                val phoneNumber = textFieldBookOrderPhoneNumber.editText?.text.toString().replace("-", "")
+                val phoneNumber =
+                    textFieldBookOrderPhoneNumber.editText?.text.toString().replace("-", "")
 
                 // 사용자 데이터 저장
                 bookOrderViewModel.getUserInfoData(
@@ -324,13 +331,26 @@ class BookOrderFragment1 : Fragment() {
                 val successProgressBarDialog = CustomDialogProgressbar(requireContext())
                 successProgressBarDialog.show()
 
-                bookOrderViewModel.isSuccessOrder.observe(viewLifecycleOwner) { (first,second) ->
+                bookOrderViewModel.isSuccessOrder.observe(viewLifecycleOwner) { (first, second) ->
                     if (first) {
-                        when(second) {
+                        when (second) {
                             // 성공할 경우
-                            1 -> {
+                            0 -> {
                                 successProgressBarDialog.dismiss()
+                                val dataBundle = Bundle()
+                                dataBundle.putLong(
+                                    "orderInquiryTime",
+                                    bookOrderViewModel.todayCurrentTime)
+                                dataBundle.putStringArrayList(
+                                    "userCoverList",
+                                    ArrayList(bookOrderViewModel.inquiryBookCoverList) // List를 ArrayList로 변환
+                                )
+                                dataBundle.putStringArrayList(
+                                    "userCountList",
+                                    ArrayList(bookOrderViewModel.inquiryBookCountList) // List를 ArrayList로 변환
+                                )
 
+                                replaceMainFragment(BookOrderFragment2(), false, dataBundle)
                             }
                             // 실패할 경우
                             else -> {
@@ -339,7 +359,7 @@ class BookOrderFragment1 : Fragment() {
                                     requireContext(),
                                     // 리스트 삭제 진행
                                     onPositiveClick = {
-                                        replaceSubFragment(HomeFragment(), false)
+                                        removeFragment()
                                     },
                                     contentText = "일시적인 오류로 인해 구매를 실패하였습니다. 다시 구매해주세요.",
                                     icon = R.drawable.error_24px

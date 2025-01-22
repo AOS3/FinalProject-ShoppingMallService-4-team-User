@@ -1,7 +1,6 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.bookOrder
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
+
 import com.aladin.apiTestApplication.network.AladdinApiService
 import com.aladin.finalproject_shoppingmallservice_4_team.BuildConfig
 import com.aladin.finalproject_shoppingmallservice_4_team.model.OrderInquiryModel
@@ -18,6 +17,29 @@ class BookOrderRepository @Inject constructor(
     private val firebaseFireStore: FirebaseFirestore
 ) {
 
+    // 주문 데이터 가져오기
+    suspend fun gettingOrderInquiryDataFromFirBaseStore(
+        userToken: String,
+        userBuyTime: Long
+    ): List<OrderInquiryModel> {
+        val collectionReference = firebaseFireStore.collection("OrderInquiryTable")
+
+        // 사용자 토큰값 및 구매 시간에 따라 데이터를 가져온다.
+        val querySnapshot: QuerySnapshot = collectionReference
+            .whereEqualTo("orderInquiryUserToken", userToken) // 사용자 토큰값과 비교하여 같은 정보들만 들고온다.
+            .whereEqualTo("orderInquiryTime", userBuyTime) // 같은 구매시간의 아이템정보들만 가져온다.
+            .get()
+            .await()
+
+        val userInquiryModel = querySnapshot.documents.mapNotNull { document ->
+            document.toObject(OrderInquiryModel::class.java)
+        }
+
+        return userInquiryModel
+    }
+
+
+    // 장바구니 데이터 가져오기
     suspend fun gettingOrderBookDataFromFireBaseStore(userToken: String): Pair<List<ShoppingCartModel>, Triple<List<String>, List<String>, List<String>>> {
         val collectionReference = firebaseFireStore.collection("ShoppingCartTable")
 
@@ -70,6 +92,7 @@ class BookOrderRepository @Inject constructor(
         return Triple(shoppingCartBookCovers, shoppingCartBookTitles, shoppingCartBookAuthors)
     }
 
+    // 책 구매 정보 저장
     suspend fun saveShoppingCartDataToOrderInquiryTable(
         userOrderBookList: List<OrderInquiryModel>
     ) {
