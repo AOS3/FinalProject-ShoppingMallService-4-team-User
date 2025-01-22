@@ -40,7 +40,7 @@ class MainFragment : Fragment() {
                 }
                 R.id.nav_barcode -> {
                     clearAllBackStack()
-                    replaceMainFragment(BarcodeScannerFragment(),true)
+                    replaceSubFragment(BarcodeScannerFragment(),true)
                 }
                 R.id.nav_info -> {
                     clearAllBackStack()

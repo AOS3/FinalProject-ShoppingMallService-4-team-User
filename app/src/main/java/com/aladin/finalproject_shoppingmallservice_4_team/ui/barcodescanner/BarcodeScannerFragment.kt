@@ -139,10 +139,7 @@ class BarcodeScannerFragment : Fragment() {
             try {
                 // 기존에 바인딩된 카메라가 있으면 해제
                 cameraProvider.unbindAll()
-
-                // 카메라와 미리보기 연결
-                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
-
+                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(requireContext(), "카메라를 시작할 수 없습니다.", Toast.LENGTH_LONG).show()
