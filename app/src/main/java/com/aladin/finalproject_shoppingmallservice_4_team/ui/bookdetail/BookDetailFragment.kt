@@ -82,7 +82,10 @@ class BookDetailFragment : Fragment() {
 
     private fun settingBuyButton() {
         binding.buttonBookDetailBuyUsedBook.setOnClickListener {
-            val bottomSheetFragment = BookDetailBottomSheetFragment()
+            val bottomSheetFragment = BookDetailBottomSheetFragment.newInstance(
+                viewModel.books.value!!.first().isbn13,
+                viewModel.books.value!!.first().priceStandard
+            )
             bottomSheetFragment.show(parentFragmentManager, "BottomSheetFragment")
         }
     }
@@ -162,11 +165,14 @@ class BookDetailFragment : Fragment() {
     private fun loadBookInfo() {
         viewModel.books.observe(viewLifecycleOwner) {
             with(binding) {
+                val price = it.first().priceStandard
                 textViewBookDetailBookName.text = it.first().title
                 textViewBookDetailBookWriter.text = it.first().author
                 textViewBookDetailBookPublisher.text = it.first().publisher
                 textViewBookDetailBookPublisherDate.text = it.first().pubDate
                 textViewBookDetailBookCategory.text = it.first().categoryName
+                textViewBookDetailBookPrice.text = "정가 : ${price}원"
+                textViewBookDetailUsedBookPrice.text = "판매가 : ${(price * 0.3).toInt()}원 ~ ${(price * 0.7).toInt()}원"
                 textViewBookDetailBookIntroduction.text = it.first().description
                 imageViewBookDetail.loadImage(it.first().cover)
             }
