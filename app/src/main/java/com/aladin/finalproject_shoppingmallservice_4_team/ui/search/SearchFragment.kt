@@ -240,6 +240,7 @@ class SearchFragment : Fragment(), SearchOnClickListener {
             loadingDialog()
             binding.editTextSearchSearch.text.append(query)
             binding.buttonSearchMore.isVisible = false
+            binding.footerSearch.isVisible = false
         }
     }
 
