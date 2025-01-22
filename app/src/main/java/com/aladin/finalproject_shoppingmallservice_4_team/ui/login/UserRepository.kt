@@ -21,16 +21,16 @@ class UserRepository @Inject constructor(private val firebaseFireStore: Firebase
             val data = document.data
             if (data != null) {
                 UserModel().apply {
-                    userDocumentId = document.id // Firestore 문서 ID
+                    // userDocumentId = document.id // Firestore 문서 ID
                     this.userId = data["userId"] as? String ?: "" // Firestore 필드 "userId" 매핑
                     userPw = data["userPw"] as? String ?: "" // Firestore 필드 "userPw" 매핑
                     userName = data["userName"] as? String ?: "" // Firestore 필드 "userName" 매핑
                     userAddress = data["userAddress"] as? String ?: ""
                     userPhoneNumber = data["userPhoneNumber"] as? String ?: ""
                     userToken = data["userToken"] as? String ?: ""
-                    userState = (data["userState"] as? Long)?.toString() ?: "0"
+                    userState = (data["userState"] as? Long)?.toInt() ?: 0
                     userAutoLoginToken = data["userAutoLoginToken"] as? String ?: ""
-                    userJoinTime = data["userJoinTime"] as? String ?: ""
+                    userJoinTime = data["userJoinTime"] as? Long ?: 0L
                 }
             } else {
                 null
@@ -42,5 +42,45 @@ class UserRepository @Inject constructor(private val firebaseFireStore: Firebase
         }}")
 
         return userList
+    }
+
+    // 유저 ID 중복 확인 메서드
+    suspend fun isUserIdAvailable(userId: String): Boolean {
+        val collectionReference = firebaseFireStore.collection("UserTable")
+        val result = collectionReference.whereEqualTo("userId", userId).get().await()
+        return result.isEmpty // Firestore에 해당 아이디가 없으면 true 반환
+    }
+
+    // Firebase에 사용자 정보 저장
+    suspend fun saveUser(user: UserModel):Boolean{
+        return try {
+            firebaseFireStore.collection("UserTable")
+                .add(user)
+                .await()
+            true
+        } catch (e:Exception){
+            false
+        }
+    }
+
+    // 이름과 번호를 통해 Id 찾기
+    suspend fun findUserIdByNameAndPhone(userName: String, phoneNumber: String): String? {
+        return try {
+            val collectionReference = firebaseFireStore.collection("UserTable")
+            val result = collectionReference
+                .whereEqualTo("userName", userName)
+                .whereEqualTo("userPhoneNumber", phoneNumber)
+                .get()
+                .await()
+
+            if (!result.isEmpty) {
+                result.documents.first().getString("userId") // userId 필드를 반환
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("FindUserError", "Error finding user by name and phone: ${e.message}", e)
+            null
+        }
     }
 }

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep1Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
 
 class RegisterStep1Fragment : Fragment() {
@@ -73,7 +73,7 @@ class RegisterStep1Fragment : Fragment() {
     fun gotoRegister2(){
         fragmentRegisterStep1Binding.apply {
             buttonRegister1Agree.setOnClickListener {
-                replaceMainFragment(RegisterStep2Fragment(),true)
+                replaceSubFragment(RegisterStep2Fragment(),true)
             }
         }
     }
