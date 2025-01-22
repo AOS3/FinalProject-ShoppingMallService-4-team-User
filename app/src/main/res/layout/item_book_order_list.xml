@@ -11,8 +11,8 @@
         android:id="@+id/textView_orderList_listCountNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:text="(1)"
+        android:layout_margin="5dp"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,9 +20,8 @@
         android:id="@+id/imageView_orderList_bookIcon"
         android:layout_width="70dp"
         android:layout_height="100dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/test_book_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +30,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="깡 샘의 안드로이드 앱 프로그래밍 with 코틀린"
+        android:ellipsize="end"
+        android:maxWidth="250dp"
+        android:singleLine="true"
+        android:text=""
         app:layout_constraintStart_toEndOf="@+id/imageView_orderList_bookIcon"
         app:layout_constraintTop_toTopOf="@+id/imageView_orderList_bookIcon" />
 
@@ -40,7 +42,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="강성윤"
+        android:text=""
+        android:ellipsize="end"
+        android:maxWidth="250dp"
+        android:singleLine="true"
         app:layout_constraintStart_toStartOf="@+id/textView_orderList_bookTitle"
         app:layout_constraintTop_toBottomOf="@+id/textView_orderList_bookTitle" />
 
@@ -49,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="판매가 : 40,000원"
+        android:text=""
         app:layout_constraintStart_toStartOf="@+id/textView_orderList_bookAuthor"
         app:layout_constraintTop_toBottomOf="@+id/textView_orderList_bookAuthor" />
 
@@ -58,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="품질 : 중"
+        android:text=""
         app:layout_constraintStart_toStartOf="@+id/textView_orderList_bookSellPrice"
         app:layout_constraintTop_toBottomOf="@+id/textView_orderList_bookSellPrice" />
 
@@ -67,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:text="수량 : 1개"
+        android:text=""
         app:layout_constraintStart_toEndOf="@+id/textView_likeList_bookQuality"
         app:layout_constraintTop_toTopOf="@+id/textView_likeList_bookQuality" />
 
