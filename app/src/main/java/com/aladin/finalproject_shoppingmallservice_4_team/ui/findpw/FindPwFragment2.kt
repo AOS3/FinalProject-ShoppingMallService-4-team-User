@@ -9,7 +9,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentFindPw2Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class FindPwFragment2 : Fragment() {
@@ -60,7 +60,7 @@ class FindPwFragment2 : Fragment() {
                 dialogBuilder.setMessage("비밀번호 재설정이 완료 되었습니다")
                 dialogBuilder.setPositiveButton("확인") { dialog, _ ->
                     // 뒤로감
-                    replaceMainFragment(LoginFragment(),false)
+                    replaceSubFragment(LoginFragment(),false)
                     dialog.dismiss()
                 }
                 dialogBuilder.create().show()

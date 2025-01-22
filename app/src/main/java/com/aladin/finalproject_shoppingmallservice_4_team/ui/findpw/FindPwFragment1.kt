@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentFindPw1Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
 class FindPwFragment1 : Fragment() {
 
@@ -40,7 +40,7 @@ class FindPwFragment1 : Fragment() {
     fun settingConfirmButton(){
         fragmentFindPw1Binding.apply {
             buttonFindPw1Confirm.setOnClickListener {
-                replaceMainFragment(FindPwFragment2(),true)
+                replaceSubFragment(FindPwFragment2(),true)
             }
         }
     }

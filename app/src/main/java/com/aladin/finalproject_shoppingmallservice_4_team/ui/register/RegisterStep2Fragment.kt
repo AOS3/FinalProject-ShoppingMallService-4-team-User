@@ -24,6 +24,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.model.UserModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -475,7 +476,7 @@ class RegisterStep2Fragment : Fragment() {
         dialogBuilder.setPositiveButton("확인") { dialog, _ ->
             // 다음 단계로 이동
             saveUserData()
-            replaceMainFragment(RegisterStep3Fragment(), false)
+            replaceSubFragment(RegisterStep3Fragment(), false)
             dialog.dismiss()
         }
         dialogBuilder.setNegativeButton("취소") { dialog, _ ->
