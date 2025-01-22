@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentHomeBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentNotificationBinding
@@ -20,6 +21,11 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
     private val binding get() = _binding!!
     private val adapter: NotificationAdapter by lazy { NotificationAdapter(this) }
 
+    // 임시 데이터
+    val list = List(10) {
+        "항목 $it"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +39,7 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         combineButtonMethod()
+        settingRecyclerView()
     }
 
     override fun onDestroy() {
@@ -71,6 +78,12 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
 
     private fun settingRecyclerView() {
         binding.recyclerViewNotification.adapter = adapter
+        adapter.updateList(list.toMutableList())
+        // 리사이클러뷰에 스와이프, 드래그 기능 달기
+        val swipeHelperCallback = NotificationSwipeCallback(adapter, list.toMutableList()).apply {
+
+        }
+        ItemTouchHelper(swipeHelperCallback).attachToRecyclerView(binding.recyclerViewNotification)
     }
 
 
