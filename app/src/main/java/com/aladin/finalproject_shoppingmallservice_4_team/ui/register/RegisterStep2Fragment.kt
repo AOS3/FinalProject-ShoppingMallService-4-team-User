@@ -2,6 +2,9 @@ package com.aladin.finalproject_shoppingmallservice_4_team.ui.register
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
@@ -15,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep1Binding
@@ -23,6 +27,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.model.UserModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -42,6 +47,9 @@ class RegisterStep2Fragment : Fragment() {
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
     private lateinit var auth: FirebaseAuth
 
+    // 타이머 변수 선언
+    var countdownTimer : CountDownTimer? = null
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,6 +65,8 @@ class RegisterStep2Fragment : Fragment() {
         settingRegister2Toolbar()
 
         registerButtonListener()
+
+        settingPhoneNumberFormatting()
 
         settingPhoneVerification()
 
@@ -135,6 +145,8 @@ class RegisterStep2Fragment : Fragment() {
         dialogBuilder.setPositiveButton("확인") { dialog, _ ->
             // 아이디 입력 필드를 비활성화
             fragmentRegisterStep2Binding.textFieldRegisterStep2Id.editText?.isEnabled = false
+            fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.isEnabled = false
+            fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.backgroundTintList = ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray)
             // 다이얼로그 닫기
             dialog.dismiss()
         }
@@ -165,6 +177,49 @@ class RegisterStep2Fragment : Fragment() {
         }
     }
 
+    // 전화번호 입력 자동으로 - 입력되게 하기
+    private fun settingPhoneNumberFormatting(){
+        fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.editText?.addTextChangedListener(object : TextWatcher{
+            private var isFormatting = false
+            private var previousText = ""
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (isFormatting) return
+
+                val input = s.toString()
+                if (input == previousText) return
+
+                isFormatting = true
+
+                val formatted = formattingPhoneNumber(input)
+                fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.editText?.setText(formatted)
+                fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.editText?.setSelection(formatted.length)
+
+                previousText = formatted
+                isFormatting = false
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
+    }
+
+    // 자동으로 - 붙이기
+    private fun formattingPhoneNumber(input:String) : String{
+        val numbersOnly = input.replace("-","")
+        return when {
+            numbersOnly.length <= 3 -> numbersOnly
+            numbersOnly.length <= 7 -> "${numbersOnly.substring(0, 3)}-${numbersOnly.substring(3)}"
+            numbersOnly.length <= 11 -> "${numbersOnly.substring(0, 3)}-${numbersOnly.substring(3, 7)}-${numbersOnly.substring(7)}"
+            else -> numbersOnly
+        }
+    }
+
+    // +82를 자동으로 입력되게 하는 메서드
     private fun formatPhoneNumber(phoneNumber: String): String {
         val formattedNumber = if (phoneNumber.startsWith("0")) {
             "+82" + phoneNumber.substring(1)
@@ -176,20 +231,44 @@ class RegisterStep2Fragment : Fragment() {
     }
 
     private fun settingPhoneVerification() {
+
         fragmentRegisterStep2Binding.apply {
             buttonRegisterStep2VerifyPhoneNumber.setOnClickListener {
                 val phoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString()
-                if (phoneNumber.isBlank()) {
-                    textFieldRegisterStep2PhoneNumber.error = "전화번호를 입력해주세요"
+
+                // 유효성 검사 : 010으로 시작, 11자리
+                if(!phoneNumber.startsWith("010") || phoneNumber.length != 13 || phoneNumber.isBlank()) {
+                    textFieldRegisterStep2PhoneNumber.error = "유효한 전화번호를 입력해주세요"
                     return@setOnClickListener
                 } else {
                     textFieldRegisterStep2PhoneNumber.helperText = " "
+                    textFieldRegisterStep2PhoneNumber.error = null
                 }
+
+                // 타이머 초기화 및 시작
+                countdownTimer?.cancel()
+                startCountdownTimer()
+
+                // 인증번호 입력 필드와 버튼 활성화
+                textFieldRegisterStep2VerifyNumber.isEnabled = true
+                buttonRegisterStep2VerifyCode.isEnabled = true
+
+                // 인증번호 받기 버튼 비활성화
+                buttonRegisterStep2VerifyPhoneNumber.isEnabled = false
+                buttonRegisterStep2VerifyPhoneNumber.backgroundTintList = ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray)
+
+                // 3초 후 버튼 활성화
+                buttonRegisterStep2VerifyPhoneNumber.postDelayed({
+                    buttonRegisterStep2VerifyPhoneNumber.isEnabled = true
+                    buttonRegisterStep2VerifyPhoneNumber.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.main_color)
+                }, 3000)
 
                 val formattedPhoneNumber = formatPhoneNumber(phoneNumber)
                 startPhoneVerification(formattedPhoneNumber)
             }
 
+
+            // 인증번호 입력 버튼
             buttonRegisterStep2VerifyCode.setOnClickListener {
                 val code = textFieldRegisterStep2VerifyNumber.editText?.text.toString()
                 if (code.isBlank()) {
@@ -203,6 +282,29 @@ class RegisterStep2Fragment : Fragment() {
             }
         }
     }
+
+    // 타이머 시작 메서드
+    private fun startCountdownTimer() {
+        fragmentRegisterStep2Binding.apply {
+            textViewRegisterStep2Timer.visibility = View.VISIBLE // 타이머 텍스트뷰 표시
+            countdownTimer = object : CountDownTimer(5 * 60 * 1000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val minutes = millisUntilFinished / 1000 / 60
+                    val seconds = millisUntilFinished / 1000 % 60
+                    textViewRegisterStep2Timer.text = String.format("%02d:%02d", minutes, seconds)
+                }
+
+                override fun onFinish() {
+                    textViewRegisterStep2Timer.text = "시간 초과"
+                    textFieldRegisterStep2VerifyNumber.isEnabled = false // 입력 필드 비활성화
+                    buttonRegisterStep2VerifyCode.isEnabled = false // 인증번호 확인 버튼 비활성화
+                    buttonRegisterStep2VerifyCode.backgroundTintList = ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray)
+                }
+            }.start()
+        }
+    }
+
+
 
     private fun startPhoneVerification(phoneNumber:String) {
 
@@ -260,11 +362,12 @@ class RegisterStep2Fragment : Fragment() {
                 Toast.makeText(requireContext(), "인증 성공!", Toast.LENGTH_SHORT).show()
                 fragmentRegisterStep2Binding.buttonRegisterStep2Register.visibility = View.VISIBLE
                 fragmentRegisterStep2Binding.textFieldRegisterStep2VerifyNumber.helperText = " "
-                // 인증했으니까 휴대폰 입력, 인증번호입력, 인증버튼2개, 비활성화
+                // 인증했으니까 휴대폰 입력, 인증번호입력, 인증버튼2개, 비활성화, 타이머 visible 설정
                 fragmentRegisterStep2Binding.textFieldRegisterStep2PhoneNumber.isEnabled = false
                 fragmentRegisterStep2Binding.textFieldRegisterStep2VerifyNumber.isEnabled = false
                 fragmentRegisterStep2Binding.buttonRegisterStep2VerifyPhoneNumber.isEnabled = false
                 fragmentRegisterStep2Binding.buttonRegisterStep2VerifyCode.isEnabled = false
+                fragmentRegisterStep2Binding.textViewRegisterStep2Timer.visibility = View.GONE
 
                 fragmentRegisterStep2Binding.buttonRegisterStep2VerifyPhoneNumber.setBackgroundColor(Color.GRAY)
                 fragmentRegisterStep2Binding.buttonRegisterStep2VerifyCode.setBackgroundColor(Color.GRAY)
@@ -334,78 +437,83 @@ class RegisterStep2Fragment : Fragment() {
         }
     }
 
-     private fun validateInputs(): Boolean {
-         //
-         var isValid = true
-         fragmentRegisterStep2Binding.apply {
-             val userId = textFieldRegisterStep2Id.editText?.text.toString()
-             val password = textFieldRegisterStep2Password.editText?.text.toString()
-             val passwordCheck = textFieldRegisterStep2PasswordCheck.editText?.text.toString()
-             val postCode = textFieldRegisterStep2PostCode.editText?.text.toString()
-             val addressDetail = textFieldRegisterStep2Address2.editText?.text.toString()
-             val userName = textFieldRegisterStep2UserName.editText?.text.toString()
+    // 유효성 검사 메서드
+    private fun validateInputs(): Boolean {
+        //
+        var isValid = true
+        fragmentRegisterStep2Binding.apply {
+            val userId = textFieldRegisterStep2Id.editText?.text.toString()
+            val password = textFieldRegisterStep2Password.editText?.text.toString()
+            val passwordCheck = textFieldRegisterStep2PasswordCheck.editText?.text.toString()
+            val postCode = textFieldRegisterStep2PostCode.editText?.text.toString()
+            val addressDetail = textFieldRegisterStep2Address2.editText?.text.toString()
+            val userName = textFieldRegisterStep2UserName.editText?.text.toString()
 
-             // 아이디 검사
-             if (userId.isBlank()) {
-                 textFieldRegisterStep2Id.error = "아이디를 입력해주세요"
-                 isValid = false
-             } else if (!registerViewModel.isIdAvailable.value!!) { // 중복 확인 실패
-                 textFieldRegisterStep2Id.error = "중복 확인을 통과하지 못했습니다"
-                 isValid = false
-             } else {
-                 textFieldRegisterStep2Id.error = null
-                 textFieldRegisterStep2Id.helperText = " "
-             }
+            // 아이디 검사
+            if (userId.isBlank()) {
+                textFieldRegisterStep2Id.error = "아이디를 입력해주세요"
+                isValid = false
+            } else if (textFieldRegisterStep2Id.isEnabled == false) { // 중복 확인 실패
+                textFieldRegisterStep2Id.error = "중복 확인 해주세요"
+                isValid = false
+            } else {
+                textFieldRegisterStep2Id.error = null
+                textFieldRegisterStep2Id.helperText = " "
+            }
 
-             // 비밀번호 검사
-             if (password.isBlank()) {
-                 textFieldRegisterStep2Password.error = "비밀번호를 입력해주세요"
-                 isValid = false
-             } else if (password != passwordCheck) {
-                 textFieldRegisterStep2Password.error = "비밀번호가 일치하지 않습니다"
-                 textFieldRegisterStep2PasswordCheck.error = "비밀번호가 일치하지 않습니다"
-                 isValid = false
-             } else {
-                 textFieldRegisterStep2Password.error = null
-                 textFieldRegisterStep2PasswordCheck.error = null
-                 textFieldRegisterStep2Password.helperText = " "
-                 textFieldRegisterStep2PasswordCheck.helperText = " "
-             }
+            // 비밀번호 검사
+            if (password.isBlank()) {
+                textFieldRegisterStep2Password.error = "비밀번호를 입력해주세요"
+                isValid = false
+            } else if(password.length < 6) {
+                textFieldRegisterStep2Password.error = "6자리 이상 입력해주세요"
+                isValid = false
+            }
+            else if (password != passwordCheck) {
+                textFieldRegisterStep2Password.error = "비밀번호가 일치하지 않습니다"
+                textFieldRegisterStep2PasswordCheck.error = "비밀번호가 일치하지 않습니다"
+                isValid = false
+            } else {
+                textFieldRegisterStep2Password.error = null
+                textFieldRegisterStep2PasswordCheck.error = null
+                textFieldRegisterStep2Password.helperText = " "
+                textFieldRegisterStep2PasswordCheck.helperText = " "
+            }
 
-             // 이름 검사
-             if (userName.isBlank()){
-                 textFieldRegisterStep2UserName.error = "이름을 입력해주세요"
-                 isValid = false
-             } else {
-                 textFieldRegisterStep2UserName.error = null
-                 textFieldRegisterStep2UserName.helperText = " "
-             }
-
-
-             // 우편번호 검사
-             if (postCode.isBlank()) {
-                 textFieldRegisterStep2PostCode.error = "주소를 입력해주세요"
-                 textFieldRegisterStep2Address1.error = "주소를 입력해주세요"
-                 isValid = false
-             } else {
-                 textFieldRegisterStep2Address1.error = null
-                 textFieldRegisterStep2PostCode.error = null
-                 textFieldRegisterStep2PostCode.helperText = " "
-                 textFieldRegisterStep2Address1.helperText = " "
-             }
-
-             // 주소 검사
-             if (addressDetail.isBlank()) {
-                 textFieldRegisterStep2Address2.error = "주소를 입력해주세요"
-                 isValid = false
-             } else {
-                 textFieldRegisterStep2Address2.error = null
-                 textFieldRegisterStep2Address2.helperText = " "
-             }
-         }
+            // 이름 검사
+            if (userName.isBlank()){
+                textFieldRegisterStep2UserName.error = "이름을 입력해주세요"
+                isValid = false
+            } else {
+                textFieldRegisterStep2UserName.error = null
+                textFieldRegisterStep2UserName.helperText = " "
+            }
 
 
-         return isValid
+            // 우편번호 검사
+            if (postCode.isBlank()) {
+                textFieldRegisterStep2PostCode.error = "주소를 입력해주세요"
+                textFieldRegisterStep2Address1.error = "주소를 입력해주세요"
+                isValid = false
+            } else {
+                textFieldRegisterStep2Address1.error = null
+                textFieldRegisterStep2PostCode.error = null
+                textFieldRegisterStep2PostCode.helperText = " "
+                textFieldRegisterStep2Address1.helperText = " "
+            }
+
+            // 주소 검사
+            if (addressDetail.isBlank()) {
+                textFieldRegisterStep2Address2.error = "주소를 입력해주세요"
+                isValid = false
+            } else {
+                textFieldRegisterStep2Address2.error = null
+                textFieldRegisterStep2Address2.helperText = " "
+            }
+        }
+
+
+        return isValid
     }
 
     // 다이얼로그 표시 메서드
@@ -416,7 +524,7 @@ class RegisterStep2Fragment : Fragment() {
         dialogBuilder.setPositiveButton("확인") { dialog, _ ->
             // 다음 단계로 이동
             saveUserData()
-            replaceMainFragment(RegisterStep3Fragment(), false)
+            replaceSubFragment(RegisterStep3Fragment(), false)
             dialog.dismiss()
         }
         dialogBuilder.setNegativeButton("취소") { dialog, _ ->
@@ -431,7 +539,7 @@ class RegisterStep2Fragment : Fragment() {
             val userId = textFieldRegisterStep2Id.editText?.text.toString()
             val userPw = textFieldRegisterStep2Password.editText?.text.toString()
             val userName = textFieldRegisterStep2UserName.editText?.text.toString()
-            val userPhoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString()
+            val userPhoneNumber = textFieldRegisterStep2PhoneNumber.editText?.text.toString().replace("-", "") // '-' 제거
             val postCode = textFieldRegisterStep2PostCode.editText?.text.toString()
             val roadAddress = textFieldRegisterStep2Address1.editText?.text.toString()
             val detailAddress = textFieldRegisterStep2Address2.editText?.text.toString()

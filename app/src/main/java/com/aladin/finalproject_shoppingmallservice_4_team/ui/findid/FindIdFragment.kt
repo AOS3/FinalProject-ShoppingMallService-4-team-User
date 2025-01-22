@@ -149,14 +149,6 @@ class FindIdFragment : Fragment() {
         }
     }
 
-    // 확인 누르면 나오는 메서드
-    fun buttonConfirmListener(){
-        fragmentFindIdBinding.apply {
-            buttonFindIdConfirm.setOnClickListener {
-                showFindIdDialog("홍길동", "abc123")
-            }
-        }
-    }
 
     // 인증번호 전송 버튼
     private fun settingSendVerifyCodeButton() {
