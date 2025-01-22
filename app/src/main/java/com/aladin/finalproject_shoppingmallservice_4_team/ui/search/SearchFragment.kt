@@ -50,6 +50,7 @@ class SearchFragment : Fragment(), SearchOnClickListener {
         super.onViewCreated(view, savedInstanceState)
         combineButtonMethod()
         settingRecyclerView()
+        settingBarcode()
         settingEmptyResult()
     }
 
@@ -66,7 +67,7 @@ class SearchFragment : Fragment(), SearchOnClickListener {
 
     private fun toolbarBarcodeButton() = binding.buttonSearchBarcode.setOnClickListener {
         val dataBundle = Bundle()
-        dataBundle.putString("fragmentQuery", "Search")
+        dataBundle.putString("FragmentQuery", "Search")
         replaceSubFragment(BarcodeScannerFragment(), true, dataBundle)
     }
 
@@ -224,6 +225,21 @@ class SearchFragment : Fragment(), SearchOnClickListener {
             if (it) {
                 progressBarDialog.dismiss()
             }
+        }
+    }
+
+    /*
+    바코드
+     */
+
+    private fun settingBarcode() {
+        if(arguments?.getString("ISBN") != null) {
+            // 검색한다.
+            query = arguments?.getString("ISBN")!!
+            viewModel.searchBook(query = query, 10, "Accuracy")
+            loadingDialog()
+            binding.editTextSearchSearch.text.append(query)
+            binding.buttonSearchMore.isVisible = false
         }
     }
 
