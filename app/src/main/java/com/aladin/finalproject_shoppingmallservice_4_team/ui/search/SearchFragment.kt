@@ -22,6 +22,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,7 +64,11 @@ class SearchFragment : Fragment(), SearchOnClickListener {
 
     private fun toolbarBackButton() = binding.buttonSearchBack.setOnClickListener { removeFragment() }
 
-    private fun toolbarBarcodeButton() = binding.buttonSearchBarcode.setOnClickListener { replaceMainFragment(BarcodeScannerFragment(), true) }
+    private fun toolbarBarcodeButton() = binding.buttonSearchBarcode.setOnClickListener {
+        val dataBundle = Bundle()
+        dataBundle.putString("fragmentQuery", "Search")
+        replaceSubFragment(BarcodeScannerFragment(), true, dataBundle)
+    }
 
     /*
     버튼
