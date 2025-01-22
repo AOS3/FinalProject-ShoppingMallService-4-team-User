@@ -24,9 +24,13 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentMainBinding = FragmentMainBinding.inflate(layoutInflater,container,false)
-        setBottomNavigationView()
-        replaceSubFragment(HomeFragment(), false)
+        if (::fragmentMainBinding.isInitialized == false) {
+            fragmentMainBinding = FragmentMainBinding.inflate(layoutInflater, container, false)
+            setBottomNavigationView()
+            // replaceSubFragment(HomeFragment(), false)
+            fragmentMainBinding.bottomAppBarMain.selectedItemId = R.id.nav_home
+        }
+
         return fragmentMainBinding.root
     }
 
