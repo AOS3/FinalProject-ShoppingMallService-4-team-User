@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentFindIdBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.findpw.FindPwFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
@@ -292,18 +293,22 @@ class FindIdFragment : Fragment() {
 
 
     // 다이얼로그를 표시하는 메서드
-     fun showFindIdDialog(userName: String, userId: String) {
-        val dialogBuilder = MaterialAlertDialogBuilder(requireContext())
-        dialogBuilder.setTitle("아이디 찾기")
-        dialogBuilder.setMessage("${userName}님의 아이디는 $userId 입니다.")
-        dialogBuilder.setPositiveButton("로그인 하기") { dialog, _ ->
-            // 로그인 화면으로 이동
-            replaceSubFragment(LoginFragment(),false)
-        }
-        dialogBuilder.setNegativeButton("비밀번호 찾기") { dialog, _ ->
-            // 비밀번호 찾기 화면으로 이동
-            replaceSubFragment(FindPwFragment1(),false)
-        }
-        dialogBuilder.create().show()
+    fun showFindIdDialog(userName: String, userId: String) {
+        val dialog = CustomDialog(
+            context = requireContext(),
+            contentText = "${userName}님의 아이디는 $userId 입니다.",
+            icon = R.drawable.check_circle_24px,
+            positiveText = "로그인 하기",
+            onPositiveClick = {
+                // 로그인 화면으로 이동
+                replaceSubFragment(LoginFragment(), false)
+            },
+            negativeText = "비밀번호 찾기",
+            onNegativeClick = {
+                // 비밀번호 찾기 화면으로 이동
+                replaceSubFragment(FindPwFragment1(), false)
+            }
+        )
+        dialog.showCustomDialog()
     }
 }
