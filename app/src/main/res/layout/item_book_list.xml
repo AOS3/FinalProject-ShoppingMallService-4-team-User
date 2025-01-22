@@ -9,6 +9,7 @@
         android:id="@+id/imageView_bookList_bookIcon"
         android:layout_width="50dp"
         android:layout_height="100dp"
+        android:scaleType="fitXY"
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
