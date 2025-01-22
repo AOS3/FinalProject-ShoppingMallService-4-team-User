@@ -16,8 +16,15 @@ import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingSearchBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.RowSellingSearchBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,17 +37,23 @@ class SellingSearchFragment : Fragment() {
     private var bookList: MutableList<BookItem> = mutableListOf()
     private var query: String = ""
 
+    // Firebase Firestore instance
+    private val firestore by lazy { FirebaseFirestore.getInstance() }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSellingSearchBinding.inflate(inflater, container, false)
 
+        // 전달된 ISBN 값을 가져옴
+        val scannedIsbn = arguments?.getString("ISBN")
+
         // Toolbar 설정 메서드 호출
         settingToolbar()
 
         // 검색 기능 설정 메서드 호출
-        setupSearchFeature()
+        setupSearchFeature(scannedIsbn)
 
         // RecyclerView 설정 메서드 호출
         setupRecyclerView()
@@ -70,11 +83,37 @@ class SellingSearchFragment : Fragment() {
 
 
     // 검색 기능 설정 메서드
-    private fun setupSearchFeature() {
+    private fun setupSearchFeature(scannedIsbn: String?) {
+        if (scannedIsbn != null) {
+            binding.editTextSellingSearchSearch.setText(scannedIsbn)
+
+            // 확인 버튼 클릭 동작 실행
+            binding.imageViewSellingSearchSearchIcon.setOnClickListener {
+                val query = binding.editTextSellingSearchSearch.text.toString().trim()
+                if (query.isNotEmpty()) {
+                    if (query.matches("\\d{13}".toRegex())) { // ISBN 검사
+                        viewModel.searchByIsbn(query) // ISBN 검색
+                    } else {
+                        viewModel.searchBooks(query, 10, "Accuracy") // 일반 텍스트 검색
+                    }
+                    binding.editTextSellingSearchSearch.text.clear()
+                } else {
+                    Toast.makeText(requireContext(), "검색어를 입력하세요.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // 프로그램적으로 "확인" 버튼 클릭
+            binding.imageViewSellingSearchSearchIcon.performClick()
+        }
+
         val performSearch = {
-            query = binding.editTextSellingSearchSearch.text.toString()
+            query = binding.editTextSellingSearchSearch.text.toString().trim()
             if (query.isNotEmpty()) {
-                viewModel.searchBooks(query, 10, "Accuracy")
+                if (query.matches("\\d{13}".toRegex())) { // ISBN 검사 (13자리 숫자)
+                    viewModel.searchByIsbn(query) // ISBN 검색 메서드 호출
+                } else {
+                    viewModel.searchBooks(query, 10, "Accuracy") // 일반 텍스트 검색
+                }
                 binding.editTextSellingSearchSearch.text.clear()
             } else {
                 Toast.makeText(requireContext(), "검색어를 입력하세요.", Toast.LENGTH_SHORT).show()
@@ -97,6 +136,7 @@ class SellingSearchFragment : Fragment() {
             performSearch()
         }
     }
+
 
 
     // RecyclerView 설정 메서드
@@ -131,8 +171,17 @@ class SellingSearchFragment : Fragment() {
     }
 
 
-    // "더보기" 버튼 설정 메서드
+    // 버튼 설정 메서드
     private fun setupMoreButton() {
+
+        // 바코드 찍기 버튼
+        binding.buttonSellingSearchBarcodeScanner.setOnClickListener {
+            val dataBundle = Bundle()
+            dataBundle.putString("FragmentQuery", "SellingSearch")
+            replaceSubFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
+        }
+
+        // 더보기 버튼
         binding.buttonSellingSearchAddBookForSelling.setOnClickListener {
             if (query.isNotEmpty()) {
                 viewModel.loadMoreBooks(query, "Accuracy")
@@ -143,28 +192,69 @@ class SellingSearchFragment : Fragment() {
     }
 
 
-    // ViewHolder
+    // ViewHolder 클래스
     private inner class SellingSearchViewHolder(private val binding: RowSellingSearchBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(book: BookItem) {
+        fun bind(item: BookItem) {
             binding.apply {
                 // 책 이미지를 업데이트
                 Glide.with(requireContext())
-                    .load(book.cover)
+                    .load(item.cover)
                     .into(imageViewSellingSearchBook)
-                textViewSellingSearchBookTitle.text = book.title
-                textViewSellingSearchBookAuthor.text = book.author
-                textViewSellingSearchBookPrice.text = "정가 : ${book.priceStandard}원"
+                textViewSellingSearchBookTitle.text = item.title
+                textViewSellingSearchBookAuthor.text = item.author
+                textViewSellingSearchBookPrice.text = "정가 : ${item.priceStandard}원"
 
+                // 항목 클릭 리스너 추가
+                itemView.setOnClickListener {
+                    val dataBundle = Bundle()
+                    dataBundle.putString("bookIsbn", item.isbn13)
+                    replaceSubFragment(BookDetailFragment(), true, dataBundle = dataBundle)
+                }
+
+                // 등록 버튼 클릭 리스너
                 buttonSellingSearchRegister.setOnClickListener {
-                    Toast.makeText(
-                        requireContext(),
-                        "${book.title} 도서가 팔기 등록되었습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val sellingCartItem = SellingCartModel(
+                        sellingCartSellingPrice = (item.priceStandard * 0.7).toInt(),
+                        sellingCartQuality = 0,
+                        sellingCartISBN = item.isbn13,
+                        sellingCartUserToken = "",
+                        sellingCartTime = System.currentTimeMillis(),
+                        sellingCartState = 0
+                    )
+
+                    addItemToFirestore(sellingCartItem)
+
+                    val customDialog = CustomDialog(
+                        context = itemView.context,
+                        contentText = "팔기 장바구니에 등록되었습니다.",
+                        icon = R.drawable.check_circle_24px,
+                        positiveText = "장바구니로 이동",
+                        onPositiveClick = {
+                            replaceSubFragment(SellingCartFragment(), true)
+                        },
+                        negativeText = "계속 담기",
+                        onNegativeClick = {
+                            Toast.makeText(context, "계속 담기", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                    customDialog.showCustomDialog()
                 }
             }
+        }
+
+        // Firestore에 데이터 추가
+        private fun addItemToFirestore(item: SellingCartModel) {
+            val collectionRef = firestore.collection("SellingCartTable")
+
+            collectionRef.add(item)
+                .addOnSuccessListener {
+//                    Toast.makeText(requireContext(), "장바구니에 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+//                    Toast.makeText(requireContext(), "장바구니 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 }

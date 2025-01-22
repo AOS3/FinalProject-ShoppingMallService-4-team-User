@@ -73,4 +73,9 @@ class SellingSearchViewModel @Inject constructor(
             }
         }
     }
+
+    fun searchByIsbn(isbn: String) {
+        // ISBN 검색 API 호출
+        searchBooks(isbn, 1, "ISBN")
+    }
 }
