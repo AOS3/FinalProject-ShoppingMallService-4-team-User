@@ -9,6 +9,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep3Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
 class RegisterStep3Fragment : Fragment() {
 
@@ -60,7 +61,7 @@ class RegisterStep3Fragment : Fragment() {
     fun settingButtonRegister3Login(){
         fragmentRegisterStep3Binding.apply {
             buttonRegisterStep3Login.setOnClickListener {
-                replaceMainFragment(LoginFragment(),false)
+                replaceSubFragment(LoginFragment(),false)
             }
         }
     }

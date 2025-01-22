@@ -106,17 +106,17 @@ class LoginFragment : Fragment() {
         fragmentLoginBinding.apply {
             // 아이디 찾기 화면으로 이동
             buttonLoginFindId.setOnClickListener {
-                replaceMainFragment(FindIdFragment(),true)
+                replaceSubFragment(FindIdFragment(),true)
             }
 
             // 비밀번호 찾기 화면으로 이동
             buttonLoginFindPw.setOnClickListener {
-                replaceMainFragment(FindPwFragment1(),true)
+                replaceSubFragment(FindPwFragment1(),true)
             }
 
             // 회원가입 화면으로 이동
             buttonLoginRegister.setOnClickListener {
-                replaceMainFragment(RegisterStep1Fragment(),true)
+                replaceSubFragment(RegisterStep1Fragment(),true)
             }
 
             // 로그인 처리 방법
