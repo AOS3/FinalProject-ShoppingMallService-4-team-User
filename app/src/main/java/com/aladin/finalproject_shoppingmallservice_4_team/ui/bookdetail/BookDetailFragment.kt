@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookDetailBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
@@ -64,6 +67,27 @@ class BookDetailFragment : Fragment() {
     }
 
     /*
+    다이얼로그
+     */
+
+    private fun sellingDialog() {
+        val customDialog = CustomDialog(
+            context = requireContext(),
+            contentText = "팔기 장바구니에 등록되었습니다.",
+            icon = R.drawable.check_circle_24px,
+            positiveText = "장바구니로 이동",
+            onPositiveClick = {
+                replaceMainFragment(SellingCartFragment(), true)
+            },
+            negativeText = "계속 담기",
+            onNegativeClick = {
+                Toast.makeText(context, "계속 담기", Toast.LENGTH_SHORT).show()
+            }
+        )
+        customDialog.showCustomDialog()
+    }
+
+    /*
     버튼
      */
 
@@ -92,9 +116,8 @@ class BookDetailFragment : Fragment() {
 
     private fun settingSellButton() {
         binding.buttonBookDetailSellBook.setOnClickListener {
-            val dataBundle = Bundle()
-            dataBundle.putString("bookIsbn", viewModel.books.value!!.first().isbn13)
-            replaceMainFragment(SellingCartFragment(), true, dataBundle = dataBundle)
+            viewModel.sellingAddData()
+            sellingDialog()
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aladin.apiTestApplication.dto.BookItem
+import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.repository.BookDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -35,6 +36,19 @@ class BookDetailViewModel @Inject constructor(
             Log.d("bookDetail", "error: $it")
         }
 
+    }
+
+    fun sellingAddData() {
+        val sellingCartItem = SellingCartModel(
+            sellingCartSellingPrice = (books.value!!.first().priceStandard * 0.7).toInt(),
+            sellingCartQuality = 0,
+            sellingCartISBN = books.value!!.first().isbn13,
+            sellingCartUserToken = "",
+            sellingCartTime = System.currentTimeMillis(),
+            sellingCartState = 0
+        )
+
+        bookDetailRepository.addItemToFirestore(sellingCartItem)
     }
 
 }
