@@ -81,13 +81,10 @@ class SearchFragment : Fragment(), SearchOnClickListener {
         settingMoreButton()
         settingAskButton()
         settingDropMenu()
-        settingBackButton()
         // 툴바 버튼
         toolbarBackButton()
         toolbarBarcodeButton()
     }
-
-    private fun settingBackButton() = binding.buttonSearchBack.setOnClickListener { removeFragment() }
 
     private fun settingSearchButton() {
         binding.apply {
