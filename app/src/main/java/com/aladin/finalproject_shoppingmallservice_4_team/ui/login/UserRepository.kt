@@ -62,4 +62,25 @@ class UserRepository @Inject constructor(private val firebaseFireStore: Firebase
             false
         }
     }
+
+    // 이름과 번호를 통해 Id 찾기
+    suspend fun findUserIdByNameAndPhone(userName: String, phoneNumber: String): String? {
+        return try {
+            val collectionReference = firebaseFireStore.collection("UserTable")
+            val result = collectionReference
+                .whereEqualTo("userName", userName)
+                .whereEqualTo("userPhoneNumber", phoneNumber)
+                .get()
+                .await()
+
+            if (!result.isEmpty) {
+                result.documents.first().getString("userId") // userId 필드를 반환
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("FindUserError", "Error finding user by name and phone: ${e.message}", e)
+            null
+        }
+    }
 }

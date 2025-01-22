@@ -251,7 +251,7 @@
                         app:endIconMode="clear_text"
                         app:helperText="- 없이 입력해주세요"
                         app:hintTextColor="@color/main_color"
-                        app:placeholderText="01012345678">
+                        app:placeholderText="010-0000-0000">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
