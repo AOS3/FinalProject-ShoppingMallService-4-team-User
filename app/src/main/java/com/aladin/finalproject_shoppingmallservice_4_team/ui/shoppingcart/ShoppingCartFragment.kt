@@ -1,8 +1,6 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart
 
-import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,21 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentShoppingCartBinding
-import com.aladin.finalproject_shoppingmallservice_4_team.model.BookListModel
-import com.aladin.finalproject_shoppingmallservice_4_team.model.ShoppingCartModel
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.NewBookListAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.ShoppingCartAdapter
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.UsedBookListAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookOrder.BookOrderFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
@@ -32,7 +24,6 @@ import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -79,14 +70,37 @@ class ShoppingCartFragment : Fragment() {
         // Footer 클릭 이벤트
         onClickFooter()
 
+        // 구매하기 버튼 클릭
+        onClickBuyShoppingCartButton()
+
         return fragmentShoppingCartBinding.root
+    }
+
+    // onClick buyShoppingCartList
+    private fun onClickBuyShoppingCartButton() {
+        fragmentShoppingCartBinding.apply {
+            buttonShoppingCartBuyBook.setOnClickListener {
+                val buyDataList = shoppingCartAdapter.getCheckedItemsWithUserTokenAndIsbn()
+                if (buyDataList.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "현재 체크된 리스트가 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    shoppingCartViewModel.updateShoppingCartState(buyDataList) {
+                        replaceMainFragment(BookOrderFragment1(), false)
+                    }
+                }
+            }
+        }
     }
 
     // Footer Click
     private fun onClickFooter() {
         fragmentShoppingCartBinding.apply {
             buttonShoppingCartAsk.setOnClickListener {
-                replaceSubFragment(AskFragment(),true)
+                replaceSubFragment(AskFragment(), true)
             }
         }
     }

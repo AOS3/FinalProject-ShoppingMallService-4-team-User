@@ -15,33 +15,54 @@ class ShoppingCartRepository @Inject constructor(
     private val firebaseFireStore: FirebaseFirestore
 ) {
 
-    // FireBase Db에서 중고 재고 내역 가져오기
+    suspend fun changeShoppingCartStateToOne(buyList: List<Pair<String, String>>) {
+        val collectionReference = firebaseFireStore.collection("ShoppingCartTable")
+
+        for (item in buyList) {
+            val userToken = item.first
+            val isbn = item.second
+
+            // Firestore에서 해당 문서 가져오기
+            val documents = collectionReference
+                .whereEqualTo("shoppingCartUserToken", userToken)
+                .whereEqualTo("shoppingCartISBN", isbn)
+                .get()
+                .await()
+
+            for (document in documents) {
+                // ShoppingCartState 값을 1로 업데이트
+                document.reference.update("shoppingCartState", 1).await()
+            }
+        }
+    }
+
     suspend fun gettingBookDataFromFireBaseStore(userToken: String): Pair<List<ShoppingCartModel>, Triple<List<String>, List<String>, List<String>>> {
         val collectionReference = firebaseFireStore.collection("ShoppingCartTable")
 
         // 장바구니에 있는 책들만 필터링
         val querySnapshot: QuerySnapshot = collectionReference
-            .whereEqualTo("shoppingCartState", 0) // 구매장바구니에 존재하는 상태인 0인 상품만 들고온다.
-            .whereEqualTo("shoppingCartUserToken",userToken) // 사용자 토큰값과 비교하여 같은 정보들만 들고온다.
+            .whereEqualTo("shoppingCartUserToken", userToken) // 사용자 토큰값과 비교하여 같은 정보들만 들고온다.
             .get()
             .await()
-
-        // 쿼리 결과에서 ISBN 리스트 추출
-        val shoppingCartBookISBNList = querySnapshot.documents.mapNotNull { document ->
-            document.toObject(ShoppingCartModel::class.java)?.shoppingCartISBN
-        }
-
-        // ISBN 리스트를 사용해 API 호출하여 책 표지 이미지, 책 제목, 저자 추출
-        val coverList = gettingShoppingCartBookTripleData(shoppingCartBookISBNList)
 
         // 쿼리 결과에서 ShoppingCartModel을 추출
         val bookList = querySnapshot.documents.mapNotNull { document ->
             document.toObject(ShoppingCartModel::class.java)
         }
 
+        // 가져온 문서들의 shoppingCartState 값을 0으로 업데이트
+        querySnapshot.documents.forEach { document ->
+            document.reference.update("shoppingCartState", 0)
+        }
+
+        // 쿼리 결과에서 ISBN 리스트 추출
+        val shoppingCartBookISBNList = bookList.mapNotNull { it.shoppingCartISBN }
+
+        // ISBN 리스트를 사용해 API 호출하여 책 표지 이미지, 책 제목, 저자 추출
+        val coverList = gettingShoppingCartBookTripleData(shoppingCartBookISBNList)
+
         // Pair로 shoppingCartList와 Triple 책 데이터 반환
         return Pair(bookList, coverList)
-
     }
 
     // 책 검색 API 호출 함수
@@ -87,29 +108,5 @@ class ShoppingCartRepository @Inject constructor(
             }
         }
         return true
-    }
-
-    suspend fun createShoppingCartBookData(createList: List<ShoppingCartModel>): Boolean {
-        val collectionReference = firebaseFireStore.collection("ShoppingCartTable")
-
-        try {
-            for (item in createList) {
-                // Firestore에 데이터 추가
-                val data = mapOf(
-                    "shoppingCartBookQualityCount" to item.shoppingCartBookQualityCount,
-                    "shoppingCartISBN" to item.shoppingCartISBN,
-                    "shoppingCartQuality" to item.shoppingCartQuality,
-                    "shoppingCartSellingPrice" to item.shoppingCartSellingPrice,
-                    "shoppingCartState" to item.shoppingCartState,
-                    "shoppingCartTime" to item.shoppingCartTime,
-                    "shoppingCartUserToken" to item.shoppingCartUserToken
-                )
-                collectionReference.add(data).await()
-            }
-            return true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return false
-        }
     }
 }

@@ -24,37 +24,6 @@ class ShoppingCartViewModel @Inject constructor(private val shoppingCartReposito
     private val _isLoadShoppingCartList = MutableLiveData<Boolean>(false)
     val isLoadShoppingCartList: LiveData<Boolean> get() = _isLoadShoppingCartList
 
-    fun testasd() {
-        val shoppingCartItems = listOf(
-            ShoppingCartModel(
-                shoppingCartBookQualityCount = 2,
-                shoppingCartISBN = "9791197613005",
-                shoppingCartQuality = 0,
-                shoppingCartSellingPrice = 30000,
-                shoppingCartState = 0,
-                shoppingCartTime = 1231233213L,
-                shoppingCartUserToken = "test"
-            ),
-            ShoppingCartModel(
-                shoppingCartBookQualityCount = 1,
-                shoppingCartISBN = "9788962626421",
-                shoppingCartQuality = 1,
-                shoppingCartSellingPrice = 20000,
-                shoppingCartState = 1,
-                shoppingCartTime = 1631233213L,
-                shoppingCartUserToken = "exampleUser"
-            )
-        )
-        // Firestore에 데이터 추가
-        viewModelScope.launch {
-            val result = shoppingCartRepository.createShoppingCartBookData(shoppingCartItems)
-            if (result) {
-                println("데이터가 성공적으로 생성되었습니다!")
-            } else {
-                println("데이터 생성에 실패했습니다.")
-            }
-        }
-    }
     // 로그인 안하고 들어왔을 떄 처리용
     fun dismissProgressDialog() {
         _isLoadShoppingCartList.value = true
@@ -112,6 +81,17 @@ class ShoppingCartViewModel @Inject constructor(private val shoppingCartReposito
             }
             // LiveData에 갱신된 리스트 반영
             _shoppingCartBookList.value = updatedList
+        }
+    }
+
+    // 구매하는 책 상태 변경 함수
+    fun updateShoppingCartState(buyList: List<Pair<String, String>>, onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+
+            withContext(Dispatchers.IO) {
+                shoppingCartRepository.changeShoppingCartStateToOne(buyList)
+            }
+            onComplete(true)
         }
     }
 }
