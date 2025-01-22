@@ -89,7 +89,7 @@ class ShoppingCartFragment : Fragment() {
                     ).show()
                 } else {
                     shoppingCartViewModel.updateShoppingCartState(buyDataList) {
-                        replaceMainFragment(BookOrderFragment1(), false)
+                        replaceMainFragment(BookOrderFragment1(), true)
                     }
                 }
             }
