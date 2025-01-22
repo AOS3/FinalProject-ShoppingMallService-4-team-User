@@ -24,6 +24,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep1Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentRegisterStep2Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.UserModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
@@ -137,24 +138,26 @@ class RegisterStep2Fragment : Fragment() {
         }
     }
 
-    // 사용 가능한 ID일 때 다이얼로그 표시
+    // 사용 가능한 ID일 때 커스텀 다이얼로그 표시
     private fun showIdConfirmationDialog(userId: String) {
-        val dialogBuilder = MaterialAlertDialogBuilder(requireContext())
-        dialogBuilder.setTitle("중복확인")
-        dialogBuilder.setMessage("사용 가능한 닉네임입니다. 사용하시겠습니까?")
-        dialogBuilder.setPositiveButton("확인") { dialog, _ ->
-            // 아이디 입력 필드를 비활성화
-            fragmentRegisterStep2Binding.textFieldRegisterStep2Id.editText?.isEnabled = false
-            fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.isEnabled = false
-            fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.backgroundTintList = ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray)
-            // 다이얼로그 닫기
-            dialog.dismiss()
-        }
-        dialogBuilder.setNegativeButton("취소") { dialog, _ ->
-            // 다이얼로그 닫기
-            dialog.dismiss()
-        }
-        dialogBuilder.create().show()
+        val dialog = CustomDialog(
+            context = requireContext(),
+            contentText = "사용 가능한 닉네임입니다. 사용하시겠습니까?",
+            icon = R.drawable.check_circle_24px, // 적절한 아이콘 리소스
+            positiveText = "확인",
+            onPositiveClick = {
+                // 확인 버튼 클릭 시 동작
+                fragmentRegisterStep2Binding.textFieldRegisterStep2Id.editText?.isEnabled = false
+                fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.isEnabled = false
+                fragmentRegisterStep2Binding.buttonRegisterStep2CheckId.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), android.R.color.darker_gray)
+            },
+            negativeText = "취소",
+            onNegativeClick = {
+                // 취소 버튼 클릭 시 동작 (특별히 필요 없으면 빈 블록으로 처리)
+            }
+        )
+        dialog.showCustomDialog()
     }
 
 
@@ -518,19 +521,22 @@ class RegisterStep2Fragment : Fragment() {
 
     // 다이얼로그 표시 메서드
     private fun showConfirmationDialog() {
-        val dialogBuilder = MaterialAlertDialogBuilder(requireContext())
-        dialogBuilder.setTitle("회원가입")
-        dialogBuilder.setMessage("이 정보로 가입하시겠습니까?")
-        dialogBuilder.setPositiveButton("확인") { dialog, _ ->
-            // 다음 단계로 이동
-            saveUserData()
-            replaceSubFragment(RegisterStep3Fragment(), false)
-            dialog.dismiss()
-        }
-        dialogBuilder.setNegativeButton("취소") { dialog, _ ->
-            dialog.dismiss()
-        }
-        dialogBuilder.create().show()
+        val dialog = CustomDialog(
+            context = requireContext(),
+            contentText = "이 정보로 가입하시겠습니까?",
+            icon = R.drawable.check_circle_24px, // 아이콘 리소스
+            positiveText = "확인",
+            onPositiveClick = {
+                // 확인 버튼 클릭 시 동작
+                saveUserData()
+                replaceSubFragment(RegisterStep3Fragment(), false)
+            },
+            negativeText = "취소",
+            onNegativeClick = {
+                // 취소 버튼 클릭 시 동작
+            }
+        )
+        dialog.showCustomDialog()
     }
 
     // 사용자 데이터를 저장하는 메서드
