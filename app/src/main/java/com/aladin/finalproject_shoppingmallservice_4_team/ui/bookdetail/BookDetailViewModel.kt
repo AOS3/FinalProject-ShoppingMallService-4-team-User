@@ -31,7 +31,7 @@ class BookDetailViewModel @Inject constructor(
             bookDetailRepository.searchBooks(query)
         }.onSuccess {
             _books.value = it
-            _isLoadBookDetailList.postValue(true)
+            _isLoadBookDetailList.value = true
         }.onFailure {
             Log.d("bookDetail", "error: $it")
         }
