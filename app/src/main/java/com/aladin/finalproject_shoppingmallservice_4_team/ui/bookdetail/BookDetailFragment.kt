@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookDetailBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
@@ -125,6 +126,7 @@ class BookDetailFragment : Fragment() {
     private fun settingAskButton() {
         binding.buttonBookDetailAsk.setOnClickListener {
             // 문의 화면으로 변경한다.
+            replaceMainFragment(AskFragment(), true)
         }
     }
 
