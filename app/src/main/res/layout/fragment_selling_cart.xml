@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.sellingcart.SellingCartFragment">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/materialToolbar_sellingCart"
         android:layout_width="match_parent"
@@ -19,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- NestedScrollView -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView_sellingCart1"
         android:layout_width="match_parent"
@@ -32,7 +30,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Buttons Section -->
             <LinearLayout
                 android:id="@+id/LinearLayout_sellingCart_"
                 android:layout_width="match_parent"
@@ -73,9 +70,8 @@
                     tools:layout_marginBottom="5dp" />
             </LinearLayout>
 
-            <!-- CheckBox & Delete Button -->
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/checkBox_sellingCart_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -95,18 +91,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/LinearLayout_sellingCart_" />
 
-            <!-- RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_sellingCart_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/checkBox"
+                app:layout_constraintTop_toBottomOf="@id/checkBox_sellingCart_all"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/textView_sellingCart_totalPrice" />
 
-            <!-- Include Empty View -->
             <include
                 android:id="@+id/include_selling_cart_empty"
                 layout="@layout/selling_cart_empty"
@@ -114,12 +108,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/checkBox"
+                app:layout_constraintTop_toBottomOf="@id/checkBox_sellingCart_all"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/textView_sellingCart_totalPrice" />
 
-            <!-- Total Price -->
             <TextView
                 android:id="@+id/textView_sellingCart_totalPrice"
                 android:layout_width="wrap_content"
@@ -127,10 +120,10 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:text="총 판매 가격 : "
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recyclerView_sellingCart_info" />
 
-            <!-- Approval Button -->
             <Button
                 android:id="@+id/button_sellingCart_addBookForSelling"
                 android:layout_width="0dp"

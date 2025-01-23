@@ -42,7 +42,9 @@
                 android:text="도서명"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:maxLines="3"
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/textView_sellingCart_bookAuthor"
@@ -51,7 +53,9 @@
                 android:layout_weight="1"
                 android:text="저자"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/textView_sellingCart_bookPrice"
@@ -60,7 +64,9 @@
                 android:layout_weight="1"
                 android:text="정가 : "
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
         </LinearLayout>
 
     </LinearLayout>

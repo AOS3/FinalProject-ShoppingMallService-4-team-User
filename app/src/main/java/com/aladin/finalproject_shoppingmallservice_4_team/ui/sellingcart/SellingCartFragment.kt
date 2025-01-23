@@ -1,6 +1,7 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -9,253 +10,462 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.R
-import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainMenuBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.RowSellingCartBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booksellinginquiry.BookSellingInquiryFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellinglastpage.SellingLastPageFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingsearch.SellingSearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SellingCartFragment : Fragment() {
 
-    data class Book(
-        val title: String,
-        val author: String,
-        val price: Int,
-        var estimatedPrice: Int,
-        var selectedQuality: String?,
-        val imageResId: Int
-    )
-
-    // 현재는 데이터가 비어있음
-     val tempData1 = emptyList<Book>()
-//
-//
-//     val tempData1 = listOf(
-//        Book(
-//            title = "깡샘의 안드로이드 앱 프로그래밍",
-//            author = "강성윤",
-//            price = 40000,
-//            estimatedPrice = 0,
-//            selectedQuality = null,
-//            imageResId = R.drawable.test_book_icon
-//        ),
-//        Book(
-//            title = "무인도에서 살아남기",
-//            author = "김철수",
-//            price = 35000,
-//            estimatedPrice = 0,
-//            selectedQuality = null,
-//            imageResId = R.drawable.test_book_icon
-//        ),
-//        Book(
-//            title = "Why",
-//            author = "박철수",
-//            price = 30000,
-//            estimatedPrice = 0,
-//            selectedQuality = null,
-//            imageResId = R.drawable.test_book_icon
-//        )
-//     )
-
     private lateinit var fragmentSellingCartBinding: FragmentSellingCartBinding
+    private val viewModel: SellingCartViewModel by viewModels()
+    private lateinit var adapter: RecyclerSellingCartAdapter
+    private lateinit var progressBarDialog: CustomDialogProgressbar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         fragmentSellingCartBinding = FragmentSellingCartBinding.inflate(layoutInflater, container, false)
 
-        // ISBN 번호를 가져와 Toast로 표시
-        handleReceivedISBN()
+        // ProgressBar 다이얼로그 초기화
+        progressBarDialog = CustomDialogProgressbar(requireContext())
 
-        // toolbar 설정 메서드 호출
+        // Toolbar 설정
         settingToolbar()
 
-        // RecyclerView를 구성하는 메서드 호출
+        // RecyclerView 설정
         settingRecyclerView()
 
         // 버튼 클릭 메서드 호출
         buttonSellingCartOnClick()
 
-        return fragmentSellingCartBinding.root
-    }
+        // LiveData 관찰
+        observeViewModel()
 
-    // ISBN 번호 처리 메서드
-    private fun handleReceivedISBN() {
-        arguments?.getString("ISBN")?.let { isbn ->
-            Toast.makeText(requireContext(), "받은 ISBN: $isbn", Toast.LENGTH_LONG).show()
-            // API 호출
+        // 전달된 ISBN 값을 Firestore에 추가
+        val scannedIsbn = arguments?.getString("ISBN")
+        scannedIsbn?.let {
+            addItemToFirestore(it)
         }
+
+        // Firestore 데이터 및 API 데이터 로드
+        viewModel.fetchCartItemsWithApi()
+
+        return fragmentSellingCartBinding.root
     }
 
     // Toolbar를 구성하는 메서드
     private fun settingToolbar() {
         fragmentSellingCartBinding.apply {
             materialToolbarSellingCart.title = "중고 서적 팔기"
-            // 네비게이션 아이콘을 설정하고 누를 경우 NavigationView가 나타나도록 한다.
             materialToolbarSellingCart.setNavigationIcon(R.drawable.arrow_back_ios_24px)
             materialToolbarSellingCart.setNavigationOnClickListener {
-                // 전 화면으로 이동
+                requireActivity().onBackPressed()
             }
 
-            // 툴바에 메뉴 아이템 동적으로 추가
             materialToolbarSellingCart.menu.add(Menu.NONE, 1, Menu.NONE, "판매 조회")
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
 
             materialToolbarSellingCart.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    // toolbar_mainMenu_goSettings
-                    1 -> {
-                        // 판매 조회로 이동
-                        replaceSubFragment(BookSellingInquiryFragment(), true)
-                    }
+                    1 -> replaceMainFragment(BookSellingInquiryFragment(), true)
                 }
                 true
             }
         }
     }
 
-    // 버튼을 클릭했을 때 메서드
+
+    // 버튼 클릭 이벤트 설정
     private fun buttonSellingCartOnClick() {
         fragmentSellingCartBinding.apply {
             buttonSellingCartSearch.setOnClickListener {
-                // 도서 팔기 검색 화면으로 이동
-                replaceSubFragment(SellingSearchFragment(), true)
+                replaceMainFragment(SellingSearchFragment(), true)
             }
 
             buttonSellingCartBarcodeScanner.setOnClickListener {
-                // 바코드 찍는 화면으로 이동
                 val dataBundle = Bundle()
                 dataBundle.putString("FragmentQuery", "SellingCart")
-                replaceSubFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
+                replaceMainFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
             }
 
             buttonSellingCartAddBookForSelling.setOnClickListener {
-                // 중고 도서 팔기 마지막 화면으로 이동
-                replaceSubFragment(SellingLastPageFragment(), true)
+                replaceMainFragment(SellingLastPageFragment(), true)
             }
+
+            buttonSellingCartDelete.setOnClickListener {
+                val selectedDocumentIds = viewModel.selectedItems.value?.toList() ?: emptyList()
+
+                if (selectedDocumentIds.isNotEmpty()) {
+                    // 삭제 작업 실행
+                    viewModel.deleteCheckedSellingCartBooks(selectedDocumentIds)
+
+                    // UI를 명시적으로 갱신
+                    viewModel.cartItems.observe(viewLifecycleOwner) { updatedCartItems ->
+                        if (updatedCartItems.isEmpty()) {
+                            viewModel.calculateTotalEstimatedPrice() // 총 금액 0으로 갱신
+                        }
+                    }
+
+                    // 삭제 완료 메시지
+                    Toast.makeText(requireContext(), "선택한 도서가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    // 선택된 도서가 없을 경우
+                    Toast.makeText(requireContext(), "삭제할 항목을 선택하세요.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
+
         }
     }
 
-    // RecyclerView를 구성하는 메서드
+    // RecyclerView 설정
     private fun settingRecyclerView() {
-        fragmentSellingCartBinding.apply {
-            // 데이터가 비어 있는지 확인
-            val isDataEmpty = tempData1.isEmpty()
-
-            // Empty View와 RecyclerView의 가시성을 설정
-            includeSellingCartEmpty.root.visibility = if (isDataEmpty) View.VISIBLE else View.GONE
-            recyclerViewSellingCartInfo.visibility = if (isDataEmpty) View.GONE else View.VISIBLE
-
-            // RecyclerView 설정 (데이터가 있을 경우만 초기화)
-            if (!isDataEmpty) {
-                recyclerViewSellingCartInfo.apply {
-                    adapter = RecyclerSellingCartAdapter()
-                    layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                    val deco = MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-                    addItemDecoration(deco)
-                }
-            }
+        adapter = RecyclerSellingCartAdapter(emptyList())
+        fragmentSellingCartBinding.recyclerViewSellingCartInfo.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = this@SellingCartFragment.adapter
+            addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         }
     }
 
-    // RecyclerView의 어댑터
-    private inner class RecyclerSellingCartAdapter :
-        RecyclerView.Adapter<RecyclerSellingCartAdapter.ViewHolderSellingCartAdapter>() {
-        // ViewHolder
-        inner class ViewHolderSellingCartAdapter(val rowSellingCartBinding: RowSellingCartBinding) :
-            RecyclerView.ViewHolder(rowSellingCartBinding.root)
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSellingCartAdapter {
-            val rowSellingCartBinding = RowSellingCartBinding.inflate(layoutInflater, parent, false)
-            return ViewHolderSellingCartAdapter(rowSellingCartBinding)
-        }
-
-        override fun getItemCount(): Int {
-            return tempData1.size
-        }
-
-        override fun onBindViewHolder(holder: ViewHolderSellingCartAdapter, position: Int) {
-            val book = tempData1[position]
-
-            // 기본 UI 설정
-            holder.rowSellingCartBinding.imageViewSellingCartBook.setImageResource(book.imageResId)
-            holder.rowSellingCartBinding.textViewSellingCartBookTitle.text = book.title
-            holder.rowSellingCartBinding.textViewSellingCartBookAuthor.text = book.author
-            holder.rowSellingCartBinding.textViewSellingCartBookPrice.text = "정가: ${book.price}원"
-            holder.rowSellingCartBinding.textViewSellingCartEstimatedPrice.text =
-                "예상 판매가: ${(book.price * 0.9).toInt()}원"
-
-            // 버튼 클릭 리스너 설정
-            holder.rowSellingCartBinding.toggleGroupQuality.addOnButtonCheckedListener { _, checkedId, isChecked ->
-                if (isChecked) {
-                    book.selectedQuality = when (checkedId) {
-                        R.id.button_sellingCart_High -> "상"
-                        R.id.button_sellingCart_Medium -> "중"
-                        R.id.button_sellingCart_Low -> "하"
-                        else -> book.selectedQuality
-                    }
-
-                    // 품질에 따른 예상 판매가
-                    book.estimatedPrice = when (book.selectedQuality) {
-                        "상" -> (book.price * 0.9).toInt()
-                        "중" -> (book.price * 0.7).toInt()
-                        "하" -> (book.price * 0.5).toInt()
-                        else -> book.price
-                    }
-                    // 예상 판매가 업데이트
-                    holder.rowSellingCartBinding.textViewSellingCartEstimatedPrice.text =
-                        "예상 판매가: ${book.estimatedPrice}원"
-
-                    // 버튼 상태 업데이트
-                    when (checkedId) {
-                        R.id.button_sellingCart_High -> setButtonState(
-                            holder.rowSellingCartBinding.buttonSellingCartHigh,
-                            holder.rowSellingCartBinding.buttonSellingCartMedium,
-                            holder.rowSellingCartBinding.buttonSellingCartLow
-                        )
-                        R.id.button_sellingCart_Medium -> setButtonState(
-                            holder.rowSellingCartBinding.buttonSellingCartMedium,
-                            holder.rowSellingCartBinding.buttonSellingCartHigh,
-                            holder.rowSellingCartBinding.buttonSellingCartLow
-                        )
-                        R.id.button_sellingCart_Low -> setButtonState(
-                            holder.rowSellingCartBinding.buttonSellingCartLow,
-                            holder.rowSellingCartBinding.buttonSellingCartHigh,
-                            holder.rowSellingCartBinding.buttonSellingCartMedium
-                        )
-                    }
+    // LiveData 상태 확인
+    private fun observeViewModel() {
+        // 로딩 상태 관찰
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                if (!progressBarDialog.isShowing) {
+                    progressBarDialog.show()
+                }
+            } else {
+                if (progressBarDialog.isShowing) {
+                    progressBarDialog.dismiss()
+                }
+                // 데이터 로드가 완료되었을 때 총 예상 판매가 UI 업데이트
+                viewModel.totalEstimatedPrice.observe(viewLifecycleOwner) { totalPrice ->
+                    fragmentSellingCartBinding.textViewSellingCartTotalPrice.text =
+                        "총 예상 판매가: ${totalPrice}원"
                 }
             }
         }
 
-        private fun setButtonState(
-            selectedButton: MaterialButton, vararg unselectedButtons: MaterialButton
-        ) {
-            // 선택된 버튼 스타일
-            selectedButton.setBackgroundColor(
-                ContextCompat.getColor(
-                    selectedButton.context,
-                    R.color.main_color
+
+
+
+        // Firestore 데이터 관찰
+        viewModel.cartItems.observe(viewLifecycleOwner) { items ->
+            adapter.updateData(items) // 어댑터에 데이터 전달
+
+            val isDataEmpty = items.isEmpty()
+            fragmentSellingCartBinding.includeSellingCartEmpty.root.visibility =
+                if (isDataEmpty) View.VISIBLE else View.GONE
+            fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility =
+                if (isDataEmpty) View.GONE else View.VISIBLE
+
+            viewModel.setAllItems(items) // 선택 상태 업데이트
+        }
+
+        // API 데이터 관찰
+        viewModel.sellingCartBooks.observe(viewLifecycleOwner) { books ->
+            Log.d("SellingCartFragment", "API 데이터를 로드했습니다: $books")
+            // 필요에 따라 추가 작업을 여기에 추가
+        }
+
+        // 개별 선택 및 전체 선택 동기화
+        fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.selectAllItems(isChecked)
+        }
+
+        viewModel.selectedItems.observe(viewLifecycleOwner) { selectedItems ->
+            fragmentSellingCartBinding.recyclerViewSellingCartInfo.post {
+                adapter.updateSelection(selectedItems) // documentId 기반 선택 상태 갱신
+            }
+
+            // 전체 선택 체크박스 업데이트
+            val allSelected = selectedItems.size == viewModel.cartItems.value?.size
+            fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener(null)
+            fragmentSellingCartBinding.checkBoxSellingCartAll.isChecked = allSelected
+            fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.selectAllItems(isChecked) // documentId 기반 전체 선택/해제
+            }
+        }
+
+        // 총 예상 가격 관찰
+        viewModel.totalEstimatedPrice.observe(viewLifecycleOwner) { totalPrice ->
+            fragmentSellingCartBinding.textViewSellingCartTotalPrice.text =
+                "총 예상 판매가: ${totalPrice}원"
+        }
+
+
+        viewModel.cartItems.observe(viewLifecycleOwner) { updatedCartItems ->
+            adapter.updateData(updatedCartItems)
+            val isDataEmpty = updatedCartItems.isEmpty()
+            fragmentSellingCartBinding.includeSellingCartEmpty.root.visibility = if (isDataEmpty) View.VISIBLE else View.GONE
+            fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility = if (isDataEmpty) View.GONE else View.VISIBLE
+        }
+
+        viewModel.cartItems.observe(viewLifecycleOwner) { items ->
+            adapter.updateData(items) // 어댑터에 최신 데이터 전달 (정렬은 어댑터 내에서 처리)
+
+            val isDataEmpty = items.isEmpty()
+            fragmentSellingCartBinding.includeSellingCartEmpty.root.visibility = if (isDataEmpty) View.VISIBLE else View.GONE
+            fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility = if (isDataEmpty) View.GONE else View.VISIBLE
+
+            viewModel.setAllItems(items) // 선택 상태 업데이트
+        }
+
+    }
+
+    private fun addItemToFirestore(scannedIsbn: String) {
+        viewModel.searchByIsbn(scannedIsbn) { bookItem ->
+            if (bookItem != null) {
+                val sellingCartItem = SellingCartModel(
+                    sellingCartSellingPrice = (bookItem.priceStandard * 0.7).toInt(),
+                    sellingCartQuality = 0,
+                    sellingCartISBN = scannedIsbn,
+                    sellingCartUserToken = "", // 사용자 토큰 추가 필요
+                    sellingCartTime = System.currentTimeMillis(),
+                    sellingCartState = 0
                 )
-            )
-            selectedButton.setTextColor(ContextCompat.getColor(selectedButton.context, android.R.color.white))
 
-            // 선택되지 않은 버튼 스타일
-            unselectedButtons.forEach { button ->
-                button.setBackgroundColor(ContextCompat.getColor(button.context, android.R.color.white))
-                button.setTextColor(ContextCompat.getColor(button.context, R.color.black))
+                // Firestore 객체 초기화
+                val firestore: FirebaseFirestore by lazy {
+                    FirebaseFirestore.getInstance()
+                }
+
+                firestore.collection("SellingCartTable").add(sellingCartItem)
+                    .addOnSuccessListener {
+                        Toast.makeText(requireContext(), "장바구니에 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                        // ViewModel의 데이터 갱신
+                        viewModel.fetchCartItemsWithApi()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(requireContext(), "데이터 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(requireContext(), "ISBN에 해당하는 도서를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    private inner class RecyclerSellingCartAdapter(
+        private var items: List<SellingCartModel>
+    ) : RecyclerView.Adapter<RecyclerSellingCartAdapter.ViewHolder>() {
+
+        private val selectedItems = mutableSetOf<String>() // 선택된 아이템 ISBN 저장
+        private val bookCache = mutableMapOf<String, BookItem?>() // 도서 캐시 저장
+
+        fun updateSelection(selectedItems: Set<String>) {
+            this.selectedItems.clear()
+            this.selectedItems.addAll(selectedItems)
+            notifyDataSetChanged() // RecyclerView 갱신
+        }
+
+        inner class ViewHolder(val binding: RowSellingCartBinding) : RecyclerView.ViewHolder(binding.root) {
+            fun bind(item: SellingCartModel) {
+                // 체크박스 상태 설정
+                binding.checkBoxSelectRowSellingCart.isChecked =
+                    viewModel.selectedItems.value?.contains(item.documentId) == true
+
+                binding.checkBoxSelectRowSellingCart.setOnCheckedChangeListener(null)
+                binding.checkBoxSelectRowSellingCart.setOnCheckedChangeListener { _, isChecked ->
+                    viewModel.toggleItemSelection(item.documentId, isChecked) // documentId 기준 선택 상태 업데이트
+                    viewModel.calculateTotalEstimatedPrice() // 총 금액 계산
+                }
+
+                // 캐시된 데이터를 사용하거나 API 호출
+                if (bookCache.containsKey(item.sellingCartISBN)) {
+                    updateUI(item, bookCache[item.sellingCartISBN])
+                } else {
+                    viewModel.searchByIsbn(item.sellingCartISBN) { bookItem ->
+                        bookCache[item.sellingCartISBN] = bookItem
+                        updateUI(item, bookItem)
+                    }
+                }
+
+                // 품질 버튼 상태 설정
+                when (item.sellingCartQuality) {
+                    0 -> binding.toggleGroupQuality.check(R.id.button_sellingCart_High)
+                    1 -> binding.toggleGroupQuality.check(R.id.button_sellingCart_Medium)
+                    2 -> binding.toggleGroupQuality.check(R.id.button_sellingCart_Low)
+                    else -> binding.toggleGroupQuality.clearChecked()
+                }
+
+                // 버튼 색상 초기 설정
+                updateButtonColors(item.sellingCartQuality, binding)
+            }
+
+            private fun updateUI(item: SellingCartModel, bookItem: BookItem?) {
+                if (bookItem != null) {
+                    Glide.with(requireContext()).load(bookItem.cover)
+                        .into(binding.imageViewSellingCartBook)
+                    binding.textViewSellingCartBookTitle.text = bookItem.title
+                    binding.textViewSellingCartBookAuthor.text = bookItem.author
+                    binding.textViewSellingCartBookPrice.text = "${bookItem.priceStandard}원"
+                    binding.textViewSellingCartEstimatedPrice.text =
+                        when (item.sellingCartQuality) {
+                            0 -> "예상 판매가: ${(bookItem.priceStandard * 0.7).toInt()}원"
+                            1 -> "예상 판매가: ${(bookItem.priceStandard * 0.5).toInt()}원"
+                            2 -> "예상 판매가: ${(bookItem.priceStandard * 0.3).toInt()}원"
+                            else -> "예상 판매가: 정해지지 않음"
+                        }
+
+                    setupQualityToggleGroup(item, bookItem)
+
+                    // 총 금액 계산
+                    viewModel.calculateTotalEstimatedPrice()
+                }
+            }
+
+            private fun setupQualityToggleGroup(item: SellingCartModel, bookItem: BookItem) {
+                binding.toggleGroupQuality.addOnButtonCheckedListener { _, checkedId, isChecked ->
+                    if (isChecked) {
+                        // 품질 변경에 따라 값 설정
+                        item.sellingCartQuality = when (checkedId) {
+                            R.id.button_sellingCart_High -> 0
+                            R.id.button_sellingCart_Medium -> 1
+                            R.id.button_sellingCart_Low -> 2
+                            else -> item.sellingCartQuality
+                        }
+
+                        // 품질에 따른 예상 판매가 계산
+                        val estimatedPrice = when (item.sellingCartQuality) {
+                            0 -> (bookItem.priceStandard * 0.7).toInt()
+                            1 -> (bookItem.priceStandard * 0.5).toInt()
+                            2 -> (bookItem.priceStandard * 0.3).toInt()
+                            else -> bookItem.priceStandard
+                        }
+                        item.sellingCartSellingPrice = estimatedPrice // 예상 판매가를 도서 객체에 업데이트
+
+                        // Firestore 업데이트: 품질과 예상 판매가 업데이트
+                        viewModel.updateSellingCartQuality(item, bookItem.priceStandard) { success ->
+                            if (success) {
+                                Toast.makeText(requireContext(), "품질 및 예상 판매가가 성공적으로 업데이트되었습니다.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(requireContext(), "Firestore 업데이트 실패.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        // UI 업데이트
+                        binding.textViewSellingCartEstimatedPrice.text = "예상 판매가: ${estimatedPrice}원"
+
+                        // 버튼 색상 업데이트
+                        updateButtonColors(item.sellingCartQuality, binding)
+
+                        // 총 금액 재계산
+                        viewModel.calculateTotalEstimatedPrice()
+                    }
+                }
+            }
+
+            private fun updateButtonColors(selectedQuality: Int, binding: RowSellingCartBinding) {
+                when (selectedQuality) {
+                    0 -> setButtonState(
+                        binding.buttonSellingCartHigh,
+                        binding.buttonSellingCartMedium,
+                        binding.buttonSellingCartLow
+                    )
+
+                    1 -> setButtonState(
+                        binding.buttonSellingCartMedium,
+                        binding.buttonSellingCartHigh,
+                        binding.buttonSellingCartLow
+                    )
+
+                    2 -> setButtonState(
+                        binding.buttonSellingCartLow,
+                        binding.buttonSellingCartHigh,
+                        binding.buttonSellingCartMedium
+                    )
+
+                    else -> resetButtonState(
+                        binding.buttonSellingCartHigh,
+                        binding.buttonSellingCartMedium,
+                        binding.buttonSellingCartLow
+                    )
+                }
+            }
+
+            private fun setButtonState(selected: MaterialButton, vararg others: MaterialButton) {
+                selected.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.main_color
+                    )
+                )
+                selected.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+                others.forEach { button ->
+                    button.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                    button.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main_color
+                        )
+                    )
+                }
+            }
+
+            private fun resetButtonState(vararg buttons: MaterialButton) {
+                buttons.forEach { button ->
+                    button.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
+                    button.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main_color
+                        )
+                    )
+                }
             }
         }
 
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val binding = RowSellingCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return ViewHolder(binding)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(items[position])
+        }
+
+        override fun getItemCount(): Int = items.size
+
+        fun updateData(newItems: List<SellingCartModel>) {
+            items = newItems.sortedByDescending { it.sellingCartTime } // 최신순 정렬
+            notifyDataSetChanged() // RecyclerView 갱신
+        }
+
     }
+
+
 }
