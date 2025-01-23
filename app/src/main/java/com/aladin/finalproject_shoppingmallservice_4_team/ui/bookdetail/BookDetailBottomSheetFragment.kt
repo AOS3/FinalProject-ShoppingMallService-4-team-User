@@ -126,12 +126,15 @@ class BookDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 val successDialog = CustomDialog(
                     requireContext(),
                     onPositiveClick = {
+                        removeFragment()
                         replaceMainFragment(ShoppingCartFragment(), true)
                         dismiss()
                     },
+                    positiveText = "장바구니로 가기",
                     onNegativeClick = {
                         dismiss()
                     },
+                    negativeText = "계속 보기",
                     contentText = "장바구니에 추가되었습니다",
                     icon = R.drawable.check_circle_24px,
                 )

@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBookDetailBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
@@ -35,6 +36,8 @@ class BookDetailFragment : Fragment() {
     private var _binding: FragmentBookDetailBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var bookApplication: BookApplication
+
     private val viewModel: BookDetailViewModel by viewModels()
 
     override fun onCreateView(
@@ -43,9 +46,11 @@ class BookDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentBookDetailBinding.inflate(inflater, container, false)
+        bookApplication = requireActivity().application as BookApplication
 
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -97,6 +102,7 @@ class BookDetailFragment : Fragment() {
         // 개별 버튼
         settingAskButton()
         settingLinkButton()
+        settingLikeButton()
         settingBuyButton()
         settingFABButton()
         settingSearchButton()
@@ -143,7 +149,9 @@ class BookDetailFragment : Fragment() {
     }
 
     private fun settingLikeButton() {
-
+        binding.buttonBookDetailLikeList.setOnClickListener {
+            checkLoginProcess()
+        }
     }
 
     private fun settingLinkButton() {
@@ -182,6 +190,61 @@ class BookDetailFragment : Fragment() {
     /*
     데이터
      */
+
+    private fun addLikeList() {
+        viewModel.updateLikeList(bookApplication.loginUserModel.userToken)
+        viewModel.result.observe(viewLifecycleOwner) {
+            if(it) {
+                val successDialog = CustomDialog(
+                    requireContext(),
+                    onPositiveClick = {
+                        removeFragment()
+                        replaceMainFragment(ShoppingCartFragment(), true)
+                    },
+                    positiveText = "찜으로 가기",
+                    onNegativeClick = {
+
+                    },
+                    negativeText = "계속 보기",
+                    contentText = "찜목록에 추가되었습니다",
+                    icon = R.drawable.check_circle_24px,
+                )
+                successDialog.showCustomDialog()
+            }
+            else {
+                val failureDialog = CustomDialog(
+                    requireContext(),
+                    onPositiveClick = {
+
+                    },
+                    contentText = "이미 등록된 상품입니다",
+                    icon = R.drawable.check_circle_24px
+                )
+                failureDialog.showCustomDialog()
+            }
+        }
+
+    }
+
+    // Check Login
+    private fun checkLoginProcess() {
+        try {
+            if (::bookApplication.isInitialized && bookApplication.loginUserModel != null ) {
+                addLikeList()
+            }
+        } catch (e: Exception) {
+            val loginDialog = CustomDialog(
+                requireContext(),
+                // 리스트 삭제 진행
+                onPositiveClick = {
+                    removeFragment()
+                },
+                contentText = "로그인을 먼저 진행해주세요.",
+                icon = R.drawable.error_24px
+            )
+            loginDialog.showCustomDialog()
+        }
+    }
 
     private fun loadData() {
         val query = arguments?.getString("bookIsbn")!!

@@ -4,6 +4,7 @@ import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.apiTestApplication.network.AladdinApiService
 import com.aladin.finalproject_shoppingmallservice_4_team.BuildConfig
 import com.aladin.finalproject_shoppingmallservice_4_team.model.BookCountModel
+import com.aladin.finalproject_shoppingmallservice_4_team.model.LikeListModel
 import com.aladin.finalproject_shoppingmallservice_4_team.model.NoticeModel
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.model.ShoppingCartModel
@@ -48,6 +49,18 @@ class BookDetailRepository @Inject constructor(
             .addOnFailureListener { e ->
                 // Toast.makeText(requireContext(), "장바구니 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    suspend fun addLikeList(item: LikeListModel, isbn: String, userToken: String): Boolean {
+        val collectionRef = firestore.collection("LikeListTable")
+        val result = collectionRef.whereEqualTo("likeListISBN", isbn).whereEqualTo("likeListUserToken", userToken).get().await()
+        if(result.isEmpty) {
+            collectionRef.add(item)
+            return true
+        }
+        else {
+            return false
+        }
     }
 
     suspend fun loadUserBookCount(isbn: String): List<BookCountModel> {
