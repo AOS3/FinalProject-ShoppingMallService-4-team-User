@@ -183,7 +183,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
                 android:text="참고서/OOO > OOO > OOO"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookCategoryText"
                 app:layout_constraintTop_toBottomOf="@id/textView_bookDetail_bookCategoryText" />
 
@@ -199,8 +202,10 @@
 
             <TextView
                 android:id="@+id/textView_bookDetail_bookIntroduction"
-                android:layout_width="370dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="5dp"
                 android:text="이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다 이 책은 코틀린 실력을 향상시켜주는 책입니다"
                 app:layout_constraintStart_toStartOf="@id/textView_bookDetail_bookCategory"

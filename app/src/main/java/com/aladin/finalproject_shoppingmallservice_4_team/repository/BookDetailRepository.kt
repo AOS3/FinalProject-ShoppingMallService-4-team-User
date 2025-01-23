@@ -3,8 +3,12 @@ package com.aladin.finalproject_shoppingmallservice_4_team.repository
 import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.apiTestApplication.network.AladdinApiService
 import com.aladin.finalproject_shoppingmallservice_4_team.BuildConfig
+import com.aladin.finalproject_shoppingmallservice_4_team.model.BookCountModel
+import com.aladin.finalproject_shoppingmallservice_4_team.model.NoticeModel
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
+import com.aladin.finalproject_shoppingmallservice_4_team.model.ShoppingCartModel
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,5 +35,30 @@ class BookDetailRepository @Inject constructor(
             .addOnFailureListener { e ->
 //                    Toast.makeText(requireContext(), "장바구니 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    // Firestore에 데이터 추가
+    fun addShoppingCartItem(item: ShoppingCartModel) {
+        val collectionRef = firestore.collection("ShoppingCartTable")
+
+        collectionRef.add(item)
+            .addOnSuccessListener {
+                // Toast.makeText(requireContext(), "장바구니에 추가되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                // Toast.makeText(requireContext(), "장바구니 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    suspend fun loadUserBookCount(isbn: String): List<BookCountModel> {
+        val collectionReference = firestore.collection("BookCountTable")
+
+        val bookCount = collectionReference.whereEqualTo("bookCountISBN", isbn)
+                                           .get()
+                                           .await()
+
+        return bookCount.documents.mapNotNull { document ->
+            document.toObject(BookCountModel::class.java)
+        }
     }
 }

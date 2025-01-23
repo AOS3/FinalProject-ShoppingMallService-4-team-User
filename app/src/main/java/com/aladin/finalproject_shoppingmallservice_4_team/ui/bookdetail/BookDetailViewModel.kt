@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aladin.apiTestApplication.dto.BookItem
+import com.aladin.finalproject_shoppingmallservice_4_team.model.BookCountModel
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.repository.BookDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,7 @@ class BookDetailViewModel @Inject constructor(
     private val _books = MutableLiveData<List<BookItem>>()
     val books: LiveData<List<BookItem>> get() = _books
 
-    // 공지사항 목록을 가져왔는지
+    // 상세정보 목록을 가져왔는지
     private val _isLoadBookDetailList = MutableLiveData<Boolean>(false)
     val isLoadBookDetailList: LiveData<Boolean> get() = _isLoadBookDetailList
 
@@ -50,5 +51,7 @@ class BookDetailViewModel @Inject constructor(
 
         bookDetailRepository.addItemToFirestore(sellingCartItem)
     }
+
+
 
 }

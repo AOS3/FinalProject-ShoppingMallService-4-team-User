@@ -24,6 +24,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.util.loadImage
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
 import com.google.firebase.firestore.Query
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -108,7 +109,7 @@ class BookDetailFragment : Fragment() {
         binding.buttonBookDetailBuyUsedBook.setOnClickListener {
             val bottomSheetFragment = BookDetailBottomSheetFragment.newInstance(
                 viewModel.books.value!!.first().isbn13,
-                viewModel.books.value!!.first().priceStandard
+                viewModel.books.value!!.first().priceStandard,
             )
             bottomSheetFragment.show(parentFragmentManager, "BottomSheetFragment")
         }
@@ -194,8 +195,8 @@ class BookDetailFragment : Fragment() {
                 textViewBookDetailBookPublisher.text = book.publisher
                 textViewBookDetailBookPublisherDate.text = book.pubDate
                 textViewBookDetailBookCategory.text = book.categoryName
-                textViewBookDetailBookPrice.text = "정가 : ${book.priceStandard}원"
-                textViewBookDetailUsedBookPrice.text = "판매가 : ${(book.priceStandard * 0.3).toInt()}원 ~ ${(book.priceStandard * 0.7).toInt()}원"
+                textViewBookDetailBookPrice.text = "정가 : ${book.priceStandard.toCommaString()}원"
+                textViewBookDetailUsedBookPrice.text = "판매가 : ${(book.priceStandard * 0.3).toInt().toCommaString()}원 ~ ${(book.priceStandard * 0.7).toInt().toCommaString()}원"
                 textViewBookDetailBookIntroduction.text = book.description
                 imageViewBookDetail.loadImage(book.cover)
             }
