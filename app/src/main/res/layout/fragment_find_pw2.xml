@@ -37,6 +37,7 @@
             app:boxStrokeColor="@color/main_color"
             app:cursorColor="@color/main_color"
             app:endIconMode="password_toggle"
+            app:helperText=" "
             app:hintTextColor="@color/main_color"
             app:placeholderText="새 비밀번호를 입력해 주세요">
 
@@ -56,6 +57,7 @@
             app:boxStrokeColor="@color/main_color"
             app:cursorColor="@color/main_color"
             app:endIconMode="password_toggle"
+            app:helperText=" "
             app:hintTextColor="@color/main_color"
             app:placeholderText="비밀번호를 확인해 주세요">
 
