@@ -151,6 +151,38 @@ class BookDetailFragment : Fragment() {
     private fun settingLikeButton() {
         binding.buttonBookDetailLikeList.setOnClickListener {
             checkLoginProcess()
+
+        }
+
+        viewModel.result.observe(viewLifecycleOwner) {
+            if(it) {
+                val successDialog = CustomDialog(
+                    requireContext(),
+                    onPositiveClick = {
+                        removeFragment()
+                        replaceMainFragment(ShoppingCartFragment(), true)
+                    },
+                    positiveText = "찜으로 가기",
+                    onNegativeClick = {
+
+                    },
+                    negativeText = "계속 보기",
+                    contentText = "찜목록에 추가되었습니다",
+                    icon = R.drawable.check_circle_24px,
+                )
+                successDialog.showCustomDialog()
+            }
+            else {
+                val failureDialog = CustomDialog(
+                    requireContext(),
+                    onPositiveClick = {
+
+                    },
+                    contentText = "이미 등록된 상품입니다",
+                    icon = R.drawable.check_circle_24px
+                )
+                failureDialog.showCustomDialog()
+            }
         }
     }
 
@@ -193,37 +225,6 @@ class BookDetailFragment : Fragment() {
 
     private fun addLikeList() {
         viewModel.updateLikeList(bookApplication.loginUserModel.userToken)
-        viewModel.result.observe(viewLifecycleOwner) {
-            if(it) {
-                val successDialog = CustomDialog(
-                    requireContext(),
-                    onPositiveClick = {
-                        removeFragment()
-                        replaceMainFragment(ShoppingCartFragment(), true)
-                    },
-                    positiveText = "찜으로 가기",
-                    onNegativeClick = {
-
-                    },
-                    negativeText = "계속 보기",
-                    contentText = "찜목록에 추가되었습니다",
-                    icon = R.drawable.check_circle_24px,
-                )
-                successDialog.showCustomDialog()
-            }
-            else {
-                val failureDialog = CustomDialog(
-                    requireContext(),
-                    onPositiveClick = {
-
-                    },
-                    contentText = "이미 등록된 상품입니다",
-                    icon = R.drawable.check_circle_24px
-                )
-                failureDialog.showCustomDialog()
-            }
-        }
-
     }
 
     // Check Login

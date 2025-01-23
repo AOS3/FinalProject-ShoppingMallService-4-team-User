@@ -26,7 +26,7 @@ class BookDetailViewModel @Inject constructor(
     private val _isLoadBookDetailList = MutableLiveData<Boolean>(false)
     val isLoadBookDetailList: LiveData<Boolean> get() = _isLoadBookDetailList
 
-    private val _result = MutableLiveData<Boolean>(false)
+    private val _result = MutableLiveData<Boolean>()
     val result: LiveData<Boolean> get() = _result
 
     // 책 이름으로 검색
