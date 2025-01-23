@@ -83,4 +83,22 @@ class UserRepository @Inject constructor(private val firebaseFireStore: Firebase
             null
         }
     }
+
+    suspend fun updateUserPassword(userId: String, newPassword: String): Boolean {
+        return try {
+            val collectionReference = firebaseFireStore.collection("UserTable")
+            val querySnapshot = collectionReference.whereEqualTo("userId", userId).get().await()
+
+            if (!querySnapshot.isEmpty) {
+                val documentId = querySnapshot.documents.first().id
+                collectionReference.document(documentId).update("userPw", newPassword).await()
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            Log.e("UpdatePasswordError", "Error updating password: ${e.message}", e)
+            false
+        }
+    }
 }
