@@ -101,4 +101,71 @@ class UserRepository @Inject constructor(private val firebaseFireStore: Firebase
             false
         }
     }
+
+    // 자동 로그인 토큰 업데이트
+    suspend fun updateAutoLoginToken(userId: String, autoLoginToken: String): Boolean {
+        return try {
+            val collectionReference = firebaseFireStore.collection("UserTable")
+            val querySnapshot = collectionReference.whereEqualTo("userId", userId).get().await()
+
+            if (!querySnapshot.isEmpty) {
+                val documentId = querySnapshot.documents.first().id
+                collectionReference.document(documentId).update("userAutoLoginToken", autoLoginToken).await()
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            Log.e("UpdateAutoLoginTokenError", "Error updating auto login token: ${e.message}", e)
+            false
+        }
+    }
+
+    suspend fun validateAutoLoginToken(autoLoginToken: String): UserModel? {
+        return try {
+            val collectionReference = firebaseFireStore.collection("UserTable")
+            val result = collectionReference.whereEqualTo("userAutoLoginToken", autoLoginToken).get().await()
+
+            if (!result.isEmpty) {
+                // Firestore 문서 데이터를 직접 매핑
+                val document = result.documents.first()
+                val data = document.data ?: return null
+
+                UserModel().apply {
+                    userId = data["userId"] as? String ?: ""
+                    userPw = data["userPw"] as? String ?: ""
+                    userName = data["userName"] as? String ?: ""
+                    userAddress = data["userAddress"] as? String ?: ""
+                    userPhoneNumber = data["userPhoneNumber"] as? String ?: ""
+                    userToken = data["userToken"] as? String ?: ""
+                    userState = (data["userState"] as? Long)?.toInt() ?: 0
+                    userAutoLoginToken = data["userAutoLoginToken"] as? String ?: ""
+                    userJoinTime = data["userJoinTime"] as? Long ?: 0L
+                }
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("test100", "Error: ${e.message}", e)
+            null
+        }
+    }
+
+    suspend fun updateUserAutoLoginToken(userId: String, autoLoginToken: String): Boolean {
+        return try {
+            val collectionReference = firebaseFireStore.collection("UserTable")
+            val querySnapshot = collectionReference.whereEqualTo("userId", userId).get().await()
+
+            if (!querySnapshot.isEmpty) {
+                val documentId = querySnapshot.documents.first().id
+                collectionReference.document(documentId).update("userAutoLoginToken", autoLoginToken).await()
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            Log.e("UserRepository", "자동 로그인 토큰 업데이트 실패: ${e.message}")
+            false
+        }
+    }
 }

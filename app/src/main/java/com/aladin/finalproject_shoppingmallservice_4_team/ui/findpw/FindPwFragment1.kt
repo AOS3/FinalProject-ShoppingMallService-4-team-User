@@ -73,7 +73,7 @@ class FindPwFragment1 : Fragment() {
                 replaceSubFragment(fragment, true)
             } else if (result == false) {
                 // ID 전화번호 불일치 -> 에러 표시
-                fragmentFindPw1Binding.textFieldFindPw1UserId.error = "ID와 전화번호가 일치하지 않습니ㅅ다"
+                fragmentFindPw1Binding.textFieldFindPw1UserId.error = "ID와 전화번호가 일치하지 않습니다"
             } else {
                 // 오류 발생
                 Toast.makeText(requireContext(), "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
