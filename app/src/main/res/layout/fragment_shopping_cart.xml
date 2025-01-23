@@ -120,9 +120,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="총수량: 0개"
-                android:visibility="invisible"
                 android:textColor="@color/black"
                 android:textStyle="bold"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/button_shoppingCart_deleteList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/button_shoppingCart_deleteList" />
@@ -131,10 +131,10 @@
                 android:id="@+id/button_shoppingCart_deleteList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
                 android:text="삭제"
                 android:textColor="@color/black"
                 android:textStyle="bold"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recyclerView_shoppingCart_shoppingCartList" />
 
@@ -143,10 +143,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:visibility="invisible"
                 android:text="총 구매 가격 : 0원"
                 android:textColor="@color/black"
                 android:textStyle="bold"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="@+id/recyclerView_shoppingCart_totalListSize"
                 app:layout_constraintTop_toBottomOf="@+id/recyclerView_shoppingCart_totalListSize" />
 
@@ -156,117 +156,6 @@
                 android:layout_height="200dp"
                 app:layout_constraintTop_toBottomOf="@+id/recyclerView_shoppingCart_totalListPrice" />
 
-            <!--하단 바-->
-            <LinearLayout
-                android:id="@+id/linearLayout_shoppingCart_bottomInfoBar"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/gray_color"
-                android:backgroundTint="#F3F3F5"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/space_shoppingCart">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="쇼핑몰 프로젝트 - 4조"
-                    android:textColor="#000000"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:text="전화번호: 010-1234-5678"
-                    android:textColor="#c9c9ca" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:text="LikeLion AOS3"
-                    android:textColor="#c9c9ca" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:text="이메일 : likeLion@naver.com"
-                    android:textColor="#c9c9ca" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:text="©책방마켓 Communication. All Rights Reserved."
-                    android:textColor="#dcdcdd" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@color/gray_color" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:text="일반문의(발신자 부담) 1544-2544"
-                    android:textColor="#c9c9ca" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2">
-
-                    <Button
-                        android:id="@+id/button_shoppingCart_ask"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:text="1:1 문의"
-                        android:textColor="#000000"
-                        app:cornerRadius="0dp"
-                        app:strokeColor="@color/white" />
-
-                    <Button
-                        android:id="@+id/button_shoppingCart_FAQ"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:text="FAQ"
-                        android:textColor="#000000"
-                        app:cornerRadius="0dp"
-                        app:strokeColor="@color/white" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout_shoppingCart_bottomInfoBar" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

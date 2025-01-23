@@ -13,7 +13,6 @@ import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentShoppingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.ShoppingCartAdapter
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookOrder.BookOrderFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
@@ -22,7 +21,6 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragme
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -67,9 +65,6 @@ class ShoppingCartFragment : Fragment() {
         // 전체 삭제 클릭 이벤트
         onClickDeleteAllButton()
 
-        // Footer 클릭 이벤트
-        onClickFooter()
-
         // 구매하기 버튼 클릭
         onClickBuyShoppingCartButton()
 
@@ -92,15 +87,6 @@ class ShoppingCartFragment : Fragment() {
                         replaceMainFragment(BookOrderFragment1(), true)
                     }
                 }
-            }
-        }
-    }
-
-    // Footer Click
-    private fun onClickFooter() {
-        fragmentShoppingCartBinding.apply {
-            buttonShoppingCartAsk.setOnClickListener {
-                replaceSubFragment(AskFragment(), true)
             }
         }
     }
