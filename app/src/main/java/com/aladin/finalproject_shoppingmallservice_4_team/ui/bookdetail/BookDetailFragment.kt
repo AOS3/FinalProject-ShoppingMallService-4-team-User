@@ -230,8 +230,20 @@ class BookDetailFragment : Fragment() {
     // Check Login
     private fun checkLoginProcess() {
         try {
-            if (::bookApplication.isInitialized && bookApplication.loginUserModel != null ) {
+            if (::bookApplication.isInitialized && bookApplication.loginUserModel.userToken != "" ) {
                 addLikeList()
+            }
+            else {
+                val loginDialog = CustomDialog(
+                    requireContext(),
+                    // 리스트 삭제 진행
+                    onPositiveClick = {
+                        removeFragment()
+                    },
+                    contentText = "로그인을 먼저 진행해주세요.",
+                    icon = R.drawable.error_24px
+                )
+                loginDialog.showCustomDialog()
             }
         } catch (e: Exception) {
             val loginDialog = CustomDialog(
