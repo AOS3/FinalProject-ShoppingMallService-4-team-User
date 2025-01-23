@@ -11,6 +11,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.model.UserModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -102,6 +103,23 @@ class LoginViewModel @Inject constructor(
                 loginErrorMessage.value = "로그인 중 오류가 발생했습니다."
                 Log.e("test100", "로그인 요청 중 오류: ${e.message}", e)
             }
+        }
+    }
+
+    fun generateAutoLoginToken(): String {
+        return UUID.randomUUID().toString()
+    }
+
+    fun saveAutoLoginToken(userId: String, autoLoginToken: String): Boolean {
+        return try {
+            viewModelScope.launch {
+                val isSuccess = userRepository.updateUserAutoLoginToken(userId, autoLoginToken)
+                Log.d("test100", "토큰 저장 성공 여부: $isSuccess")
+            }
+            true
+        } catch (e: Exception) {
+            Log.e("test100", "토큰 저장 실패: ${e.message}")
+            false
         }
     }
 }
