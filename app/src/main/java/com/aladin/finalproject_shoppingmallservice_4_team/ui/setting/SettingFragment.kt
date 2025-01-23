@@ -15,7 +15,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.changePw.ChangePwFr
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.guide.GuideFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 
 
 class SettingFragment : Fragment() {
@@ -47,15 +47,15 @@ class SettingFragment : Fragment() {
         fragmentSettingBinding.apply {
             // 공지사항
             viewSettingNotice.setOnClickListener {
-                replaceSubFragment(NoticeFragment(), true)
+                replaceMainFragment(NoticeFragment(), true)
             }
             // 이용 약관
             viewSettingGuide.setOnClickListener {
-                replaceSubFragment(GuideFragment(), true)
+                replaceMainFragment(GuideFragment(), true)
             }
             // 비밀번호 변경
             viewSettingChangePw.setOnClickListener {
-                replaceSubFragment(ChangePwFragment(), true)
+                replaceMainFragment(ChangePwFragment(), true)
             }
             // 카메라 권한 설정
             viewSettingCameraPermission.setOnClickListener {
