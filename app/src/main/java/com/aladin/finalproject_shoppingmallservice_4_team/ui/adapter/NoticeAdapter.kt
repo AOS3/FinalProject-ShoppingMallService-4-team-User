@@ -1,7 +1,6 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +8,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemNotice
 import com.aladin.finalproject_shoppingmallservice_4_team.model.NoticeModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 
 class NoticeAdapter(
     private val noticeDataList: List<NoticeModel>,
@@ -37,7 +36,7 @@ class NoticeAdapter(
                 dataBundle.putString("noticeDate", data.noticeDate)
 
                 // 세부 공지사항으로 이동
-                noticeFragment.replaceSubFragment(
+                noticeFragment.replaceMainFragment(
                     NoticeDetailFragment(),
                     true,
                     dataBundle = dataBundle
