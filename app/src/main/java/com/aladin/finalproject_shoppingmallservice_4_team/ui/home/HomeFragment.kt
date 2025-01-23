@@ -114,7 +114,7 @@ class HomeFragment : Fragment(), HomeOnClickListener {
 
     override fun itemClickListener(item: RecommendBookItem) {
         val dataBundle = Bundle()
-        dataBundle.putString("bookIsbn", item.isbn)
+        dataBundle.putString("bookIsbn", item.isbn13)
         // 상세 화면으로 이동한다
         replaceMainFragment(BookDetailFragment(), true, dataBundle = dataBundle)
     }
