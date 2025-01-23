@@ -61,11 +61,19 @@ class BookListFragment : Fragment() {
         return fragmentBookListBinding.root
     }
 
-
     private fun changeBookListSubject() {
         fragmentBookListBinding.apply {
-            arguments?.getString("bookQuery")?.let { value ->
-                when (value) {
+            // 값이 안들어올시 0으로 설정
+            val moreValue = if (arguments != null && requireArguments().containsKey("moreValue")) {
+                arguments?.getInt("moreValue")
+            } else {
+                0
+            }
+            if (moreValue == 1) {
+                textViewBookListSubject.text = "오늘의 추천 도서"
+                materialToolbarBookList.title = "오늘의 추천 도서"
+            } else {
+                when (queryData) {
                     // 중고 도서
                     "Used" -> {
                         textViewBookListSubject.text = "중고 도서 목록"
@@ -85,6 +93,11 @@ class BookListFragment : Fragment() {
                     "BlogBest" -> {
                         textViewBookListSubject.text = "블로그 베스트 셀러 목록"
                         materialToolbarBookList.title = "블로그 베스트 셀러"
+                    }
+                    // 주목할 만한 신간 리스트
+                    "ItemNewSpecial" -> {
+                        textViewBookListSubject.text = "주목할 만한 신간 리스트"
+                        materialToolbarBookList.title = "주목할 만한 신간 리스트"
                     }
                 }
             }
@@ -111,12 +124,13 @@ class BookListFragment : Fragment() {
                 removeFragment()
             }
             materialToolbarBookList.setOnMenuItemClickListener {
-                when(it.itemId) {
+                when (it.itemId) {
                     R.id.item_bookList_notification -> {
-                        replaceSubFragment(MainMenuFragment(),true)
+                        replaceSubFragment(MainMenuFragment(), true)
                     }
+
                     R.id.item_bookList_menu -> {
-                        replaceSubFragment(MainMenuFragment(),true)
+                        replaceSubFragment(MainMenuFragment(), true)
                     }
                 }
                 true
@@ -127,8 +141,8 @@ class BookListFragment : Fragment() {
     // Setting
     private fun checkBookQuery() {
         if (arguments != null) {
-            val query = arguments?.getString("bookQuery")!!
-            queryData = query
+            val bookQuery = arguments?.getString("bookQuery")!!
+            queryData = bookQuery
             bookListViewModel.gettingBookList(queryData)
         }
     }
@@ -250,21 +264,19 @@ class BookListFragment : Fragment() {
     // 드롭다운 선택에 따라 recyclerView가 갱신
     private fun renewalRecyclerViewFromDropDown(dropDownValue: Int) {
         fragmentBookListBinding.apply {
-            arguments?.getString("bookQuery")?.let { value ->
-                if (value == "Used") {
-                    // 중고인 경우
-                    when (dropDownValue) {
-                        1 -> usedBookListAdapter.sortByName()
-                        2 -> usedBookListAdapter.sortByHighestPrice()
-                        else -> usedBookListAdapter.sortByLowestPrice()
-                    }
-                } else {
-                    // 새거인 경우
-                    when (dropDownValue) {
-                        1 -> newBookListAdapter.sortByName()
-                        2 -> newBookListAdapter.sortByHighestPrice()
-                        else -> newBookListAdapter.sortByLowestPrice()
-                    }
+            if (queryData == "Used") {
+                // 중고인 경우
+                when (dropDownValue) {
+                    1 -> usedBookListAdapter.sortByName()
+                    2 -> usedBookListAdapter.sortByHighestPrice()
+                    else -> usedBookListAdapter.sortByLowestPrice()
+                }
+            } else {
+                // 새거인 경우
+                when (dropDownValue) {
+                    1 -> newBookListAdapter.sortByName()
+                    2 -> newBookListAdapter.sortByHighestPrice()
+                    else -> newBookListAdapter.sortByLowestPrice()
                 }
             }
         }
