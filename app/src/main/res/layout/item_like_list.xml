@@ -10,7 +10,6 @@
         android:layout_width="50dp"
         android:layout_height="100dp"
         android:layout_marginStart="20dp"
-        android:src="@drawable/test_book_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -18,8 +17,9 @@
         android:id="@+id/textView_likeList_bookTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:layout_marginStart="10dp"
-        android:text="깡 샘의 안드로이드 앱 프로그래밍 with 코틀린"
+        android:singleLine="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintStart_toEndOf="@+id/imageView_likeList_bookIcon"
         app:layout_constraintTop_toTopOf="@+id/imageView_likeList_bookIcon" />
@@ -27,9 +27,10 @@
     <TextView
         android:id="@+id/textView_likeList_bookAuthor"
         android:layout_width="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="강성윤"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintStart_toStartOf="@+id/textView_likeList_bookTitle"
         app:layout_constraintTop_toBottomOf="@+id/textView_likeList_bookTitle" />
@@ -39,12 +40,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="판매가 : 40,000원"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintStart_toStartOf="@+id/textView_likeList_bookAuthor"
         app:layout_constraintTop_toBottomOf="@+id/textView_likeList_bookAuthor" />
 
     <LinearLayout
+        android:id="@+id/linearLayout_likeList_button"
         style="?android:attr/buttonBarStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -78,8 +79,15 @@
             android:layout_weight="3"
             android:text="장바구니에 담기"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/main_color" />
+            android:textColor="@color/main_color"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
     </LinearLayout>
 
-
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray_color"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_likeList_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
