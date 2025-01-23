@@ -128,16 +128,19 @@
 
         <Button
             android:id="@+id/button_login_register"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="50dp"
-            android:backgroundTint="@color/ripple_color"
+            android:backgroundTint="@color/white"
             android:text="회원가입"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/gray_color"
-            app:cornerRadius="10dp" />
+            android:textColor="@color/main_color"
+            app:cornerRadius="10dp"
+            app:rippleColor="@color/main_color"
+            app:strokeColor="@color/main_color" />
 
     </LinearLayout>
 
