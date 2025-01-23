@@ -2,24 +2,23 @@ package com.aladin.finalproject_shoppingmallservice_4_team.ui.changePw
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ChangePwRepository {
+@Singleton
+class ChangePwRepository @Inject constructor(private val firebaseFireStore: FirebaseFirestore) {
+    suspend fun changeUserPassword(userToken: String, password: String) {
+        val collectionReference = firebaseFireStore.collection("UserTable")
 
-    // 현재 비밀번호 가져오는 함수
-    fun isUserPasswordMatch(currentPassword: String): Boolean {
-        return true
-    }
+        // Firestore에서 해당 문서 가져오기
+        val document = collectionReference
+            .whereEqualTo("userToken", userToken)
+            .get()
+            .await()
+            .documents
+            .firstOrNull()
 
-    // 비밀번호 변경 함수
-    suspend fun changeUserPassword(userDocumentId: String, newPassword: String) {
-        val firestore = FirebaseFirestore.getInstance()
-        val collectionReference = firestore.collection("UserTable")
-        val documentReference = collectionReference.document(userDocumentId)
-
-        val updateMap = mapOf(
-            "userPw" to newPassword
-        )
-
-        documentReference.update(updateMap).await()
+        // 문서가 존재하면 업데이트
+        document?.reference?.update("userPw", password)?.await()
     }
 }

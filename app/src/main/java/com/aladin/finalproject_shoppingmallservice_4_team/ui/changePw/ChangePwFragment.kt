@@ -1,33 +1,26 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.changePw
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentChangePwBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.showSoftInput
-import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ChangePwFragment : Fragment() {
     private lateinit var fragmentChangePwBinding: FragmentChangePwBinding
-    private lateinit var changePwViewModel: ChangePwViewModel
-    private lateinit var changePwRepository: ChangePwRepository
-    // 화면 입장 시 비동기로 원래 비밀번호 받아와서 변수에 저장 후 실시간 비밀번호 비교
-    // 비밀번호 변경 버튼 클릭시에만 유효성 검사 진행 예정
-
+    private val changePwViewModel: ChangePwViewModel by viewModels()
+    private lateinit var bookApplication: BookApplication
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +28,11 @@ class ChangePwFragment : Fragment() {
     ): View? {
         fragmentChangePwBinding = FragmentChangePwBinding.inflate(layoutInflater, container, false)
 
-        // 초기화
-        initialize()
+        // bookApplication 초기화
+        bookApplication = requireActivity().application as BookApplication
+
+        // 로그인 검사
+        checkLoginProcess()
 
         // 화면들어왔을 때 Focus 설정
         fragmentChangePwBinding.textFieldChangePwCurrentPassword.editText?.showSoftInput() // 키보드 띄우기
@@ -50,13 +46,29 @@ class ChangePwFragment : Fragment() {
         // 값 변경 시 viewModel에 값을 담아준다.
         setTextFieldChangeListener()
 
+        // 옵저버
+        settingObserver()
+
         return fragmentChangePwBinding.root
     }
 
-    // initialize
-    private fun initialize() {
-        changePwRepository = ChangePwRepository()
-        changePwViewModel = ChangePwViewModel(changePwRepository)
+    // Check Login
+    private fun checkLoginProcess() {
+        try {
+            if (::bookApplication.isInitialized && bookApplication.loginUserModel != null) {
+
+            }
+        } catch (e: Exception) {
+            val loginDialog = CustomDialog(
+                requireContext(),
+                onPositiveClick = {
+                    removeFragment()
+                },
+                contentText = "로그인을 먼저 진행해주세요.",
+                icon = R.drawable.error_24px
+            )
+            loginDialog.showCustomDialog()
+        }
     }
 
     // Toolbar
@@ -95,7 +107,8 @@ class ChangePwFragment : Fragment() {
 
             fragmentChangePwBinding.apply {
                 // 현재 비밀번호 검사
-                if (!changePwViewModel.checkCurrentPassword(textFieldChangePwCurrentPassword.editText?.text.toString())) {
+                val currentPassword = bookApplication.loginUserModel.userPw.trim()
+                if (textFieldChangePwCurrentPassword.editText?.text.toString() != currentPassword) {
                     textFieldChangePwCurrentPassword.error = "잘못된 비밀번호 입니다."
                     textFieldChangePwCurrentPassword.editText?.showSoftInput() // 키보드 띄우기
                     return@setOnClickListener
@@ -117,15 +130,27 @@ class ChangePwFragment : Fragment() {
                     textFieldChangePwCheckNewPassword.editText?.showSoftInput() // 키보드 띄우기
                     return@setOnClickListener
                 }
+                changePwViewModel.changeUserPassword(bookApplication.loginUserModel.userToken)
+                    //removeFragment()
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    val work1 = async(Dispatchers.IO) {
-                        // 모든 조건 통과시 비밀번호 변경 메서드 실행
-                        changePwViewModel.changeUserPw("asd",changePwViewModel.newUserPassword.value.toString())
-                    }
-                    work1.join()
-                    removeFragment()
-                }
+            }
+        }
+    }
+
+    // Observer
+    private fun settingObserver() {
+        changePwViewModel.isSuccessChangePw.observe(viewLifecycleOwner) {
+            if (it) {
+                val twoButtonDialog = CustomDialog(
+                    requireContext(),
+                    onPositiveClick = {
+                        removeFragment()
+                    },
+                    positiveText = "확인",
+                    contentText = "비밀번호가 정상적으로 변경되었습니다.",
+                    icon = R.drawable.error_24px
+                )
+                twoButtonDialog.showCustomDialog()
             }
         }
     }
