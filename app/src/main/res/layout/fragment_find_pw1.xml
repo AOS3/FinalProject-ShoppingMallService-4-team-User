@@ -43,42 +43,69 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textField_findPw1_phoneNumber"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="전화번호*"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            app:boxStrokeColor="@color/main_color"
-            app:cursorColor="@color/main_color"
-            app:endIconMode="clear_text"
-            app:hintTextColor="@color/main_color"
-            app:placeholderText="01012345678">
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_findPw1_phoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:hint="전화번호*"
+                android:paddingTop="10dp"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:endIconMode="clear_text"
+                app:helperText=" "
+                app:hintTextColor="@color/main_color"
+                app:placeholderText="010-0000-0000">
 
-        <Button
-            android:id="@+id/button_findPw1_sendVerifyCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/main_color"
-            android:text="인증번호 보내기" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:maxLength="13" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
+                <Button
+                    android:id="@+id/button_findPw1_sendVerifyCode"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/main_color"
+                    android:text="인증번호 전송" />
+
+                <TextView
+                    android:id="@+id/textView_findPw1_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="5:00"
+                    android:textColor="@color/main_color"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textField_findPw1_verifyCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="인증번호*"
-            android:paddingTop="20dp"
             android:paddingBottom="10dp"
+            android:visibility="gone"
             app:boxStrokeColor="@color/main_color"
             app:cursorColor="@color/main_color"
             app:endIconMode="clear_text"
@@ -88,7 +115,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="6" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -98,6 +126,22 @@
             android:backgroundTint="@color/main_color"
             android:text="확인"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="gone"
+            app:cornerRadius="10dp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <Button
+            android:id="@+id/button_findPw1_changPw"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/main_color"
+            android:text="비밀번호 재설정 하기"
+            android:visibility="gone"
             app:cornerRadius="10dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
