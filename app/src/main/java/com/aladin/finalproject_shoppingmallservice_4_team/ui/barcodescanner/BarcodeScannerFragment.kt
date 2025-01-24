@@ -18,7 +18,6 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBarcodeScannerBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanresult.BarcodeScanResultFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import android.widget.Button
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -30,6 +29,8 @@ import androidx.camera.core.ImageProxy
 import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingsearch.SellingSearchFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -212,7 +213,8 @@ class BarcodeScannerFragment : Fragment() {
             }
         }
 
-        replaceSubFragment(fragment, true)
+        removeFragment()
+        replaceMainFragment(fragment, true)
     }
 
     private fun inISBNButtonOnCLick() {
