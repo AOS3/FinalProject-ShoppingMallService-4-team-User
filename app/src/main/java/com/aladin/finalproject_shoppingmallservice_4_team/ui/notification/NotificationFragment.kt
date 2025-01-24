@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
@@ -97,11 +98,20 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
     private fun updateList() {
         viewModel.notificationList.observe(viewLifecycleOwner) {
             adapter.updateList(it.toMutableList())
-            val size = it.filter { it.notificationSee == 0 }
-            binding.textViewNotificationSize.text = "미열람 알림 : ${size.size}개"
-            // 리사이클러뷰에 스와이프, 드래그 기능 달기
-            val swipeHelperCallback = NotificationSwipeCallback(adapter, it.toMutableList(), viewModel)
-            ItemTouchHelper(swipeHelperCallback).attachToRecyclerView(binding.recyclerViewNotification)
+            if(it.isNotEmpty()) {
+                binding.scrollViewNotification.isVisible = true
+                binding.nofiticationEmpty.root.isVisible = false
+                val size = it.filter { it.notificationSee == 0 }
+                binding.textViewNotificationSize.text = "미열람 알림 : ${size.size}개"
+                // 리사이클러뷰에 스와이프, 드래그 기능 달기
+                val swipeHelperCallback =
+                    NotificationSwipeCallback(adapter, it.toMutableList(), viewModel)
+                ItemTouchHelper(swipeHelperCallback).attachToRecyclerView(binding.recyclerViewNotification)
+            }
+            else {
+                binding.scrollViewNotification.isVisible = false
+                binding.nofiticationEmpty.root.isVisible = true
+            }
         }
     }
 
