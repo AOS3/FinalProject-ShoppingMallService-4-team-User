@@ -46,7 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="#f1f1f1"
-                android:backgroundTint="@null" />
+                android:backgroundTint="@null"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
