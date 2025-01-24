@@ -14,4 +14,5 @@ data class OrderInquiryModel (
     val orderInquiryName:String="",
     val orderInquiryPhoneNumber:String="",
     val orderInquiryAddress:String="",
+    val orderInquiryTotal:Int=0,
 )
