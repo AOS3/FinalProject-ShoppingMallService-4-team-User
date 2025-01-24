@@ -16,6 +16,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.notification.NotificationFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
@@ -128,7 +129,7 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
         dataBundle.putInt("bookDelivery", item.orderInquiryDeliveryResult)
         dataBundle.putInt("bookPrice", item.orderInquiryPrice)
         dataBundle.putString("bookNumber", item.orderInquiryNumber)
-        replaceSubFragment(OrderInquiryDetailFragment(), true, dataBundle = dataBundle)
+        replaceMainFragment(OrderInquiryDetailFragment(), true, dataBundle = dataBundle)
     }
 
     /*
@@ -160,11 +161,11 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
             when(it.itemId) {
                 // 메뉴
                 R.id.home_menu_menuitem -> {
-                    replaceSubFragment(MainMenuFragment(), true)
+                    replaceMainFragment(MainMenuFragment(), true)
                 }
                 // 알림
                 R.id.home_menu_notification -> {
-
+                    replaceMainFragment(NotificationFragment(), true)
                 }
                 // 장바구니
                 R.id.home_menu_shoppingcart -> {

@@ -17,6 +17,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ActivityMa
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.hideSoftInput
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - backPressedTime <= 3000) {
                     // 3초안에 또 누를시 앱 종료
+                    exitProcess(0)
                 } else {
                     backPressedTime = currentTime
                     Toast.makeText(this@MainActivity, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT)
