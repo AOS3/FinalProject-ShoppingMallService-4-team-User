@@ -45,7 +45,7 @@ class OrderInquiryAdapter(
 
         fun bind(item: OrderInquiryModel) {
             binding.apply {
-                textViewOrderInquiryListName.text = item.orderInquiryName
+                textViewOrderInquiryListName.text = item.orderInquiryTitle
                 textViewOrderInquiryListWriter.text = item.orderInquiryAuthor
                 textViewOrderInquiryListQuality.text = when(item.orderInquiryQuality) {
                     0 -> "품질 : 상"
