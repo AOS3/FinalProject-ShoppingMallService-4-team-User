@@ -11,9 +11,8 @@ import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,6 +36,9 @@ class SellingCartViewModel @Inject constructor(
     private val _totalEstimatedPrice = MutableLiveData<Int>(0)
     val totalEstimatedPrice: LiveData<Int> get() = _totalEstimatedPrice
 
+    private val _isDataLoaded = MutableLiveData<Boolean>() // UI 표시 여부 상태
+    val isDataLoaded: LiveData<Boolean> get() = _isDataLoaded
+
     private var allItems: List<SellingCartModel> = emptyList() // 초기화
 
     private var currentPage: Int = 1
@@ -44,74 +46,78 @@ class SellingCartViewModel @Inject constructor(
     private val fetchedBookIds = mutableSetOf<String>() // 중복 방지용 Set
     private var firestoreDataLoaded = false
     private var apiDataLoaded = false
-
+    private var uiRendered = false
 
     fun fetchCartItemsWithApi() {
         _isLoading.postValue(true) // 로딩 시작
         firestoreDataLoaded = false
         apiDataLoaded = false
+        uiRendered = false // 렌더링 상태 초기화
 
         viewModelScope.launch {
-            firestore.collection("SellingCartTable")
-                .get()
-                .addOnSuccessListener { result ->
-                    val items = result.documents.mapNotNull { doc ->
+            try {
+                // Firestore 데이터 로드
+                val items = firestore.collection("SellingCartTable")
+                    .get()
+                    .await()
+                    .documents
+                    .mapNotNull { doc ->
                         doc.toObject(SellingCartModel::class.java)?.apply {
-                            documentId = doc.id // 문서 ID 추가
+                            documentId = doc.id
                         }
                     }.sortedByDescending { it.sellingCartTime }
 
-                    _cartItems.postValue(items)
-                    firestoreDataLoaded = true
-                    fetchApiData(items.map { it.sellingCartISBN })
-                }
-                .addOnFailureListener { e ->
-                    Log.e("SellingCart", "Error fetching cart items", e)
-                    firestoreDataLoaded = true
-                    checkIfLoadingComplete()
-                }
+                _cartItems.postValue(items)
+                firestoreDataLoaded = true
+
+                // API 데이터 로드
+                val isbns = items.map { it.sellingCartISBN }
+                fetchApiData(isbns)
+            } catch (e: Exception) {
+                Log.e("SellingCart", "Error fetching data", e)
+            } finally {
+                checkIfLoadingComplete()
+            }
         }
     }
 
-    private fun fetchApiData(isbns: List<String>) {
-        viewModelScope.launch {
-            if (isbns.isEmpty()) {
-                apiDataLoaded = true
-                checkIfLoadingComplete()
-                return@launch
+    private suspend fun fetchApiData(isbns: List<String>) {
+        if (isbns.isEmpty()) {
+            apiDataLoaded = true
+            return
+        }
+
+        val books = mutableListOf<BookItem>()
+        val distinctIsbns = isbns.distinct()
+
+        distinctIsbns.forEach { isbn ->
+            val result = runCatching {
+                sellingCartRepository.searchBooks(isbn, maxResults = 1, sort = "Accuracy")
             }
 
-            val books = mutableListOf<BookItem>()
-            val totalCalls = isbns.size
-            var completedCalls = 0
-
-            for (isbn in isbns) {
-                runCatching {
-                    sellingCartRepository.searchBooks(isbn, maxResults = 1, sort = "Accuracy")
-                }.onSuccess { result ->
-                    books.addAll(result)
-                }.onFailure { error ->
-                    Log.e("SellingCart", "Error fetching API data for ISBN: $isbn", error)
-                }.also {
-                    completedCalls++
-
-                    if (completedCalls == totalCalls) {
-                        _sellingCartBooks.postValue(books)
-                        apiDataLoaded = true
-                        checkIfLoadingComplete()
-                    }
-                }
+            result.onSuccess { bookItems ->
+                books.addAll(bookItems)
+            }.onFailure { error ->
+                Log.e("fetchApiData", "Error fetching API data for ISBN: $isbn", error)
             }
         }
+
+        _sellingCartBooks.postValue(books)
+        apiDataLoaded = true
+        checkIfLoadingComplete()
     }
 
     private fun checkIfLoadingComplete() {
-        if (firestoreDataLoaded && apiDataLoaded) {
-            _isLoading.postValue(false)
-            calculateTotalEstimatedPrice() // 로딩 완료 후 총 금액 계산
+        if (firestoreDataLoaded && apiDataLoaded && uiRendered) {
+            _isDataLoaded.postValue(true) // 데이터와 UI 모두 로드 완료
+            _isLoading.postValue(false) // 로딩 다이얼로그 종료
         }
     }
 
+    fun setUiRendered() {
+        uiRendered = true
+        checkIfLoadingComplete()
+    }
 
     fun searchBooks(query: String, maxResults: Int, sort: String) {
         if (_isLoading.value == true) return
@@ -191,12 +197,19 @@ class SellingCartViewModel @Inject constructor(
 
     fun selectAllItems(selectAll: Boolean) {
         if (selectAll) {
-            _selectedItems.value = allItems.map { it.documentId }.toSet() // 모든 documentId 선택
+            // 모든 아이템 선택
+            _selectedItems.value = allItems.map { it.documentId }.toSet()
         } else {
-            _selectedItems.value = emptySet() // 선택 해제
+            // 선택 해제
+            _selectedItems.value = emptySet()
         }
-        calculateTotalEstimatedPrice() // 총 예상 금액 재계산
+
+        calculateTotalEstimatedPrice() // 총 금액 재계산
+
+        // 강제 UI 동기화를 위해 다시 업데이트
+        _selectedItems.postValue(_selectedItems.value)
     }
+
 
     // 개별 선택/해제 메서드
     fun toggleItemSelection(documentId: String, isSelected: Boolean) {
@@ -226,11 +239,6 @@ class SellingCartViewModel @Inject constructor(
         _totalEstimatedPrice.postValue(totalPrice) // 총 금액 업데이트
     }
 
-
-
-
-
-
     // Firestore에서 중복 데이터 제거 및 정렬 처리
     fun fetchDistinctCartItemsFromFirestore() {
         _isLoading.value = true // 로딩 시작
@@ -250,6 +258,7 @@ class SellingCartViewModel @Inject constructor(
         }
     }
 
+    // Firestore에서 데이터 삭제 및 리스트에서 삭제
     fun deleteCheckedSellingCartBooks(deleteDocumentIds: List<String>) {
         if (deleteDocumentIds.isEmpty()) {
             Log.e("SellingCart", "삭제할 Document ID가 없습니다.")
