@@ -159,6 +159,7 @@ class HomeFragment : Fragment(), HomeOnClickListener {
             // 추천 도서 목록으로 이동한다.
             val dataBundle = Bundle()
             dataBundle.putString("bookQuery", items)
+            dataBundle.putInt("moreValue", 1)
             replaceSubFragment(BookListFragment(), true, dataBundle = dataBundle)
         }
     }
