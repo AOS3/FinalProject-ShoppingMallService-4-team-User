@@ -34,7 +34,7 @@ class LikeListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentLikeListBinding = FragmentLikeListBinding.inflate(layoutInflater)
+        fragmentLikeListBinding = FragmentLikeListBinding.inflate(layoutInflater,container,false)
 
         // bookApplication 초기화
         bookApplication = requireActivity().application as BookApplication
