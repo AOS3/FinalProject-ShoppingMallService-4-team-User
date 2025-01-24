@@ -12,6 +12,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartViewModel
 import com.aladin.finalproject_shoppingmallservice_4_team.util.loadImage
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
 
@@ -92,7 +93,7 @@ class ShoppingCartAdapter(
                     // ISBN
                     dataBundle.putString("bookIsbn", data.shoppingCartISBN)
 
-                    shoppingCartFragment.replaceSubFragment(
+                    shoppingCartFragment.replaceMainFragment(
                         BookDetailFragment(),
                         true,
                         dataBundle = dataBundle

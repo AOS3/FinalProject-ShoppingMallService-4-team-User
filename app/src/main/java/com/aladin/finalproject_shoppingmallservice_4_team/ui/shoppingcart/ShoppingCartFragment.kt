@@ -16,9 +16,11 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.ShoppingCar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookOrder.BookOrderFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
@@ -84,7 +86,11 @@ class ShoppingCartFragment : Fragment() {
                     ).show()
                 } else {
                     shoppingCartViewModel.updateShoppingCartState(buyDataList) {
-                        replaceMainFragment(BookOrderFragment1(), true)
+                        replaceMainFragment(
+                            BookOrderFragment1(),
+                            true,
+                            backStackTag = "BookOrderFragment1"
+                        )
                     }
                 }
             }
@@ -105,7 +111,7 @@ class ShoppingCartFragment : Fragment() {
                 requireContext(),
                 // 리스트 삭제 진행
                 onPositiveClick = {
-                    removeFragment()
+                 removeFragment()
                 },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px

@@ -13,10 +13,13 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentLi
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.LikeListAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +34,7 @@ class LikeListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentLikeListBinding = FragmentLikeListBinding.inflate(layoutInflater)
+        fragmentLikeListBinding = FragmentLikeListBinding.inflate(layoutInflater,container,false)
 
         // bookApplication 초기화
         bookApplication = requireActivity().application as BookApplication
@@ -142,17 +145,17 @@ class LikeListFragment : Fragment() {
             materialToolbarLikeList.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.item_likeList_shoppingCart -> {
-                        replaceSubFragment(ShoppingCartFragment(), true)
+                        replaceMainFragment(ShoppingCartFragment(), true)
                         true
                     }
 
                     R.id.item_likeList_notification -> {
-                        replaceSubFragment(NoticeFragment(), true)
+                        replaceMainFragment(NoticeFragment(), true)
                         true
                     }
 
                     else -> {
-                        replaceSubFragment(MainMenuFragment(), true)
+                        replaceMainFragment(MainMenuFragment(), true)
                         true
                     }
                 }
