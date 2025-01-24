@@ -52,6 +52,30 @@ class SearchAdapter(
             }
         }
     }
+
+    // 이름순으로 정렬
+    fun sortByName() {
+        val itemsFilter = items.sortedBy { it.title }
+        items.clear()
+        items.addAll(itemsFilter)
+        notifyDataSetChanged()
+    }
+
+    // 최저가 순으로 정렬
+    fun sortByLowestPrice() {
+        val itemsFilter = items.sortedBy { it.priceStandard }
+        items.clear()
+        items.addAll(itemsFilter)
+        notifyDataSetChanged()
+    }
+
+    // 최고가 순으로 정렬
+    fun sortByHighestPrice() {
+        val itemsFilter = items.sortedByDescending { it.priceStandard }
+        items.clear()
+        items.addAll(itemsFilter)
+        notifyDataSetChanged()
+    }
 }
 
 interface SearchOnClickListener {

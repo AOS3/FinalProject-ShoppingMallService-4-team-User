@@ -2,11 +2,14 @@ package com.aladin.finalproject_shoppingmallservice_4_team.ui.search
 
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.aladin.apiTestApplication.dto.BookItem
@@ -20,8 +23,11 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.SearchAdapt
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.SearchOnClickListener
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
+import com.aladin.finalproject_shoppingmallservice_4_team.util.hideSoftInput
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.showSoftInput
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,11 +55,12 @@ class SearchFragment : Fragment(), SearchOnClickListener {
         super.onViewCreated(view, savedInstanceState)
         combineButtonMethod()
         settingRecyclerView()
+        settingBarcode()
         settingEmptyResult()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
@@ -63,7 +70,11 @@ class SearchFragment : Fragment(), SearchOnClickListener {
 
     private fun toolbarBackButton() = binding.buttonSearchBack.setOnClickListener { removeFragment() }
 
-    private fun toolbarBarcodeButton() = binding.buttonSearchBarcode.setOnClickListener { replaceMainFragment(BarcodeScannerFragment(), true) }
+    private fun toolbarBarcodeButton() = binding.buttonSearchBarcode.setOnClickListener {
+        val dataBundle = Bundle()
+        dataBundle.putString("FragmentQuery", "Search")
+        replaceSubFragment(BarcodeScannerFragment(), true, dataBundle)
+    }
 
     /*
     버튼
@@ -75,23 +86,48 @@ class SearchFragment : Fragment(), SearchOnClickListener {
         settingMoreButton()
         settingAskButton()
         settingDropMenu()
-        settingBackButton()
+        settingSearchEnter()
         // 툴바 버튼
         toolbarBackButton()
         toolbarBarcodeButton()
     }
 
-    private fun settingBackButton() = binding.buttonSearchBack.setOnClickListener { removeFragment() }
+    private fun settingSearchEnter() {
+        binding.editTextSearchSearch.setOnEditorActionListener { v, actionId, event ->
+            query = v.text.toString().trim()
+            if (query.isNotEmpty()) {
+                // 유효한 검색어가 입력된 경우 검색 실행
+                viewModel.searchBook(query = query, maxResults = 10, sort = "Accuracy")
+                loadingDialog() // 로딩 다이얼로그 표시
+                binding.editTextSearchSearch.text.clear() // 입력창 초기화
+                binding.editTextSearchSearch.hideSoftInput()
+                binding.buttonSearchMore.isVisible = true // 더보기 버튼 활성화
+                true
+            }
+            else {
+                // 검색어가 비어있는 경우 사용자에게 알림
+                Toast.makeText(requireContext(), "검색어를 입력하세요.", Toast.LENGTH_SHORT).show()
+                false
+            }
+        }
+    }
 
     private fun settingSearchButton() {
         binding.apply {
             buttonSearchSearchIcon.setOnClickListener {
                 // 검색한다.
-                query = editTextSearchSearch.text.toString()
-                viewModel.searchBook(query = query, 10, "Accuracy")
-                loadingDialog()
-                editTextSearchSearch.text.clear()
-                buttonSearchMore.isVisible = true
+                query = editTextSearchSearch.text.toString().trim()
+                if (query.isNotEmpty()) {
+                    viewModel.searchBook(query = query, 10, "Accuracy")
+                    loadingDialog()
+                    editTextSearchSearch.text.clear()
+                    editTextSearchSearch.hideSoftInput()
+                    buttonSearchMore.isVisible = true
+                }
+                else{
+                    // 검색어가 비어있는 경우 사용자에게 알림
+                    Toast.makeText(requireContext(), "검색어를 입력하세요.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -162,7 +198,11 @@ class SearchFragment : Fragment(), SearchOnClickListener {
     // 1 -> 최저가
     // 드롭다운 선택에 따라 recyclerView가 갱신
     private fun renewalRecyclerViewFromDropDown(value: Int) {
-        Log.e("asdasd", "$value")
+        when (value) {
+            1 -> adapter.sortByName()
+            2 -> adapter.sortByHighestPrice()
+            else -> adapter.sortByLowestPrice()
+        }
     }
 
     /*
@@ -215,6 +255,22 @@ class SearchFragment : Fragment(), SearchOnClickListener {
             if (it) {
                 progressBarDialog.dismiss()
             }
+        }
+    }
+
+    /*
+    바코드
+     */
+
+    private fun settingBarcode() {
+        if(arguments?.getString("ISBN") != null) {
+            // 검색한다.
+            query = arguments?.getString("ISBN")!!
+            viewModel.searchBook(query = query, 10, "Accuracy")
+            loadingDialog()
+            binding.editTextSearchSearch.text.append(query)
+            binding.buttonSearchMore.isVisible = false
+            binding.footerSearch.isVisible = false
         }
     }
 
