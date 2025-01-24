@@ -51,7 +51,7 @@ class NotificationDetailFragment : Fragment() {
         binding.apply {
             textViewNotificationDetailTitle.text = arguments?.getString("notifyTitle")
             textViewNotificationDetailContent.text = arguments?.getString("notifyContent")
-            textViewNotificationDetailDate.text = arguments?.getString("notifyTime")
+            textViewNotificationDetailDate.text = arguments?.getLong("notifyTime", 0L).toString()
         }
     }
 }

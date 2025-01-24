@@ -4,7 +4,7 @@ data class NotificationModel (
     val notificationContent: String = "",
     val notificationSee: Int = 0,
     val notificationState: Int = 0,
-    val notificationTime: String = "",
+    val notificationTime: Long = 0L,
     val notificationTitle: String = "",
     val notificationUserToken: String = "",
 )

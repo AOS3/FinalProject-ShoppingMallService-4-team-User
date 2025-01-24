@@ -84,7 +84,7 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
         val dataBundle = Bundle()
         dataBundle.putString("notifyTitle", item.notificationTitle)
         dataBundle.putString("notifyContent", item.notificationContent)
-        dataBundle.putString("notifyTime", item.notificationTime)
+        dataBundle.putLong("notifyTime", item.notificationTime)
         viewModel.seeData(item)
         replaceMainFragment(NotificationDetailFragment(), true, dataBundle = dataBundle)
     }
