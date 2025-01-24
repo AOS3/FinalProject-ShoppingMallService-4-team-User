@@ -12,6 +12,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +52,10 @@ class FindPwFragment2 : Fragment() {
                     contentText = "정말 뒤로 가시겠습니까?",
                     icon = R.drawable.cancel_24px,
                     positiveText = "확인",
-                    onPositiveClick = { removeFragment() },
+                    onPositiveClick = {
+                        removeFragment()
+                        removeFragment()
+                         },
                     negativeText = "취소"
                 ).showCustomDialog()
             }
@@ -99,7 +103,9 @@ class FindPwFragment2 : Fragment() {
                     icon = R.drawable.check_circle_24px,
                     positiveText = "확인",
                     onPositiveClick = {
-                        replaceSubFragment(LoginFragment(), false)
+                        removeFragment()
+                        removeFragment()
+                        // replaceMainFragment(LoginFragment(), false)
                     }
                 ).showCustomDialog()
             } else {

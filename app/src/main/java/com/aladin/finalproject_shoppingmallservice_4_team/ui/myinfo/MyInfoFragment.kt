@@ -23,15 +23,10 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.SharedPreferencesHelper
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.UserRepository
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MyInfoFragment : Fragment() {
@@ -277,7 +272,7 @@ class MyInfoFragment : Fragment() {
         }
 
         // 메인 화면으로 이동
-        replaceSubFragment(HomeFragment(), false)
+        clearAllBackStack()
 
         // 알림
         Toast.makeText(requireContext(), "로그아웃 되었습니다", Toast.LENGTH_SHORT).show()
@@ -325,7 +320,7 @@ class MyInfoFragment : Fragment() {
     fun settingButtonAccountDelete(){
         fragmentMyInfoBinding.apply {
             buttonMyInfoAccountDelete.setOnClickListener {
-                replaceSubFragment(AccountDeleteFragment(),true)
+                replaceMainFragment(AccountDeleteFragment(),true)
             }
         }
     }

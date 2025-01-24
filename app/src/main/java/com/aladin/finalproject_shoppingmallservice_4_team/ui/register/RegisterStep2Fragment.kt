@@ -529,7 +529,7 @@ class RegisterStep2Fragment : Fragment() {
             onPositiveClick = {
                 // 확인 버튼 클릭 시 동작
                 saveUserData()
-                replaceSubFragment(RegisterStep3Fragment(), false)
+                replaceMainFragment(RegisterStep3Fragment(), true)
             },
             negativeText = "취소",
             onNegativeClick = {

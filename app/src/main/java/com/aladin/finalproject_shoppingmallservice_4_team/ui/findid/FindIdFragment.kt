@@ -17,6 +17,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.findpw.FindPwFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.FirebaseException
@@ -301,12 +302,14 @@ class FindIdFragment : Fragment() {
             positiveText = "로그인 하기",
             onPositiveClick = {
                 // 로그인 화면으로 이동
-                replaceSubFragment(LoginFragment(), false)
+                removeFragment()
+                // replaceMainFragment(LoginFragment(), false)
             },
             negativeText = "비밀번호 찾기",
             onNegativeClick = {
                 // 비밀번호 찾기 화면으로 이동
-                replaceSubFragment(FindPwFragment1(), false)
+                removeFragment()
+                replaceMainFragment(FindPwFragment1(), true)
             }
         )
         dialog.showCustomDialog()

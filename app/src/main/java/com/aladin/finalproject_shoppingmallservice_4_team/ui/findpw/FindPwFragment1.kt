@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentFindPw1Binding
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -70,7 +71,7 @@ class FindPwFragment1 : Fragment() {
                     arguments = bundle
                 }
 
-                replaceSubFragment(fragment, true)
+                replaceMainFragment(fragment, true)
             } else if (result == false) {
                 // ID 전화번호 불일치 -> 에러 표시
                 fragmentFindPw1Binding.textFieldFindPw1UserId.error = "ID와 전화번호가 일치하지 않습니다"

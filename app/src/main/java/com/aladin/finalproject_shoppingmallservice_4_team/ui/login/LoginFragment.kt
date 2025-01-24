@@ -17,6 +17,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.findid.FindIdFragme
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.findpw.FindPwFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.register.RegisterStep1Fragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
@@ -119,11 +120,13 @@ class LoginFragment : Fragment() {
                             } else {
                                 Toast.makeText(requireContext(), "자동 로그인 저장 실패", Toast.LENGTH_SHORT).show()
                             }
-                            replaceSubFragment(HomeFragment(), false)
+                            removeFragment()
+                            // replaceSubFragment(HomeFragment(), false)
                         }
                     }
                 } else {
-                    replaceSubFragment(HomeFragment(), false)
+                    removeFragment()
+                    // replaceSubFragment(HomeFragment(), false)
                 }
             }
         }
@@ -134,17 +137,17 @@ class LoginFragment : Fragment() {
         fragmentLoginBinding.apply {
             // 아이디 찾기 화면으로 이동
             buttonLoginFindId.setOnClickListener {
-                replaceSubFragment(FindIdFragment(),true)
+                replaceMainFragment(FindIdFragment(),true)
             }
 
             // 비밀번호 찾기 화면으로 이동
             buttonLoginFindPw.setOnClickListener {
-                replaceSubFragment(FindPwFragment1(),true)
+                replaceMainFragment(FindPwFragment1(),true)
             }
 
             // 회원가입 화면으로 이동
             buttonLoginRegister.setOnClickListener {
-                replaceSubFragment(RegisterStep1Fragment(),true)
+                replaceMainFragment(RegisterStep1Fragment(),true)
             }
 
             // 로그인 처리 방법
