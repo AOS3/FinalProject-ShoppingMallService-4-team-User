@@ -56,6 +56,7 @@ class BookOrderFragment2 : Fragment() {
         fragmentBookOrder2Binding.apply {
             buttonBookOrderBuyBook.setOnClickListener {
                 clearAllBackStack()
+                replaceMainFragment(HomeFragment(),false)
             }
         }
     }
