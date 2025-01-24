@@ -1,5 +1,8 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.model
 
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
+
 data class SellingCartModel (
     // 테이블 이름 : SellingCartTable
     // 판매가
@@ -16,5 +19,6 @@ data class SellingCartModel (
     // 판매 장바구니 상태
     // 0 : 판매 장바구니에 있는 상태
     // 1 : 판매 장바구니에서 체크 되어서 넘어가면 변하는 상태
-    var sellingCartState:Int = 0
+    var sellingCartState:Int = 0,
+    @Exclude @DocumentId var documentId: String = "" // Firestore 문서 ID
 )

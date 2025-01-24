@@ -21,6 +21,8 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.Barc
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.hideSoftInput
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -76,7 +78,7 @@ class SellingSearchFragment : Fragment() {
             title = "판매할 도서 검색"
             setNavigationIcon(R.drawable.arrow_back_ios_24px)
             setNavigationOnClickListener {
-                Toast.makeText(requireContext(), "뒤로 이동합니다.", Toast.LENGTH_SHORT).show()
+                requireActivity().onBackPressed()
             }
         }
     }
@@ -97,6 +99,7 @@ class SellingSearchFragment : Fragment() {
                         viewModel.searchBooks(query, 10, "Accuracy") // 일반 텍스트 검색
                     }
                     binding.editTextSellingSearchSearch.text.clear()
+                    binding.editTextSellingSearchSearch.hideSoftInput() // 키보드 내리기
                 } else {
                     Toast.makeText(requireContext(), "검색어를 입력하세요.", Toast.LENGTH_SHORT).show()
                 }
@@ -115,6 +118,7 @@ class SellingSearchFragment : Fragment() {
                     viewModel.searchBooks(query, 10, "Accuracy") // 일반 텍스트 검색
                 }
                 binding.editTextSellingSearchSearch.text.clear()
+                binding.editTextSellingSearchSearch.hideSoftInput() // 키보드 내리기
             } else {
                 Toast.makeText(requireContext(), "검색어를 입력하세요.", Toast.LENGTH_SHORT).show()
             }
@@ -136,6 +140,7 @@ class SellingSearchFragment : Fragment() {
             performSearch()
         }
     }
+
 
 
 
@@ -178,7 +183,7 @@ class SellingSearchFragment : Fragment() {
         binding.buttonSellingSearchBarcodeScanner.setOnClickListener {
             val dataBundle = Bundle()
             dataBundle.putString("FragmentQuery", "SellingSearch")
-            replaceSubFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
+            replaceMainFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
         }
 
         // 더보기 버튼
@@ -210,7 +215,7 @@ class SellingSearchFragment : Fragment() {
                 itemView.setOnClickListener {
                     val dataBundle = Bundle()
                     dataBundle.putString("bookIsbn", item.isbn13)
-                    replaceSubFragment(BookDetailFragment(), true, dataBundle = dataBundle)
+                    replaceMainFragment(BookDetailFragment(), true, dataBundle = dataBundle)
                 }
 
                 // 등록 버튼 클릭 리스너
@@ -232,7 +237,7 @@ class SellingSearchFragment : Fragment() {
                         icon = R.drawable.check_circle_24px,
                         positiveText = "장바구니로 이동",
                         onPositiveClick = {
-                            replaceSubFragment(SellingCartFragment(), true)
+                            replaceMainFragment(SellingCartFragment(), true)
                         },
                         negativeText = "계속 담기",
                         onNegativeClick = {
