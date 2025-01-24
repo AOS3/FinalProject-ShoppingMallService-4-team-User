@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemNotificationListBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.NotificationModel
+import java.text.SimpleDateFormat
 
 
 class NotificationAdapter(
@@ -32,7 +33,6 @@ class NotificationAdapter(
         notifyDataSetChanged()
     }
 
-
     class NotificationViewHolder(
         private val binding: ItemNotificationListBinding,
         private val itemClickListener: (Int) -> Unit
@@ -47,12 +47,19 @@ class NotificationAdapter(
         fun bind(item: NotificationModel) {
             binding.apply {
                 textViewNotificationListTitle.text = item.notificationTitle
-                textViewNotificationListDate.text = item.notificationTime
+                textViewNotificationListDate.text = showDateData(item.notificationTime)
                 if (item.notificationSee == 1) {
                     textViewNotificationListTitle.setTextColor(Color.LTGRAY)
                     textViewNotificationListDate.setTextColor(Color.LTGRAY)
                 }
             }
+        }
+
+        // 날짜 보여주는 메서드
+        private fun showDateData(timeData: Long): String {
+            val dataFormat1 = SimpleDateFormat("yyyy-MM-dd. HH:mm:ss")
+            val date = dataFormat1.format(timeData)
+            return date
         }
     }
 }

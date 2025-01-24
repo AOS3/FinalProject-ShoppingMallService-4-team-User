@@ -5,10 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.aladin.finalproject_shoppingmallservice_4_team.R
-import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentNotificationBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentNotificationDetailBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import java.text.SimpleDateFormat
 
 
 class NotificationDetailFragment : Fragment() {
@@ -51,7 +50,14 @@ class NotificationDetailFragment : Fragment() {
         binding.apply {
             textViewNotificationDetailTitle.text = arguments?.getString("notifyTitle")
             textViewNotificationDetailContent.text = arguments?.getString("notifyContent")
-            textViewNotificationDetailDate.text = arguments?.getLong("notifyTime", 0L).toString()
+            textViewNotificationDetailDate.text = showDateData(arguments?.getLong("notifyTime", 0L)!!)
         }
+    }
+
+    // 날짜 보여주는 메서드
+    private fun showDateData(timeData: Long): String {
+        val dataFormat1 = SimpleDateFormat("yyyy-MM-dd. HH:mm:ss")
+        val date = dataFormat1.format(timeData)
+        return date
     }
 }
