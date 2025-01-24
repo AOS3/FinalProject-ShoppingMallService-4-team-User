@@ -352,7 +352,7 @@ class BookOrderFragment1 : Fragment() {
                                     ArrayList(bookOrderViewModel.inquiryBookCountList) // List를 ArrayList로 변환
                                 )
 
-                                replaceMainFragment(BookOrderFragment2(), false, dataBundle)
+                                replaceMainFragment(BookOrderFragment2(), true, dataBundle)
                             }
                             // 실패할 경우
                             else -> {

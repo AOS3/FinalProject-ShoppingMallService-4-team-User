@@ -56,7 +56,7 @@ class BookOrderFragment2 : Fragment() {
         fragmentBookOrder2Binding.apply {
             buttonBookOrderBuyBook.setOnClickListener {
                 clearAllBackStack()
-                replaceMainFragment(HomeFragment(),false)
+                replaceSubFragment(HomeFragment(),false)
             }
         }
     }
@@ -98,7 +98,6 @@ class BookOrderFragment2 : Fragment() {
                 requireContext(),
                 onPositiveClick = {
                     removeFragment()
-                    replaceMainFragment(LoginFragment(),false)
                 },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px
