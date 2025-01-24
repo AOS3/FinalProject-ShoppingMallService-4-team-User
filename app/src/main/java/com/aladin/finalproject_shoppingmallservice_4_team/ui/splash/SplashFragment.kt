@@ -80,7 +80,7 @@ class SplashFragment : Fragment() {
                     replaceMainFragment(MainFragment(), false)
                 } else {
                     Log.d("test100", "유효하지 않은 토큰 -> 비로그인 상태로 메인 화면 이동")
-                    Toast.makeText(requireContext(), "자동 로그인이 만료되었습니다.", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(requireContext(), "자동 로그인이 만료되었습니다.", Toast.LENGTH_SHORT).show()
                     replaceMainFragment(MainFragment(), false)
                 }
             }

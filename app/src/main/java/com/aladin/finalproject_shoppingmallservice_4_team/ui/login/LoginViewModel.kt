@@ -3,6 +3,7 @@ package com.aladin.finalproject_shoppingmallservice_4_team.ui.login
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,6 +33,9 @@ class LoginViewModel @Inject constructor(
     val loginResult = MutableLiveData<Boolean>()
     // 로그인 에러 메시지
     val loginErrorMessage = MutableLiveData("")
+
+    private val _autoLoginTokenResult = MutableLiveData<Boolean>()
+    val autoLoginTokenResult: LiveData<Boolean> get() = _autoLoginTokenResult
 
     // buttonUserLoginFindId - onClick
     fun buttonUserLoginFindId(){
@@ -110,15 +114,12 @@ class LoginViewModel @Inject constructor(
         return UUID.randomUUID().toString()
     }
 
-    fun saveAutoLoginToken(userId: String, autoLoginToken: String): Boolean {
+    // 자동 로그인 토큰 저장
+    suspend fun saveAutoLoginToken(userId: String, autoLoginToken: String): Boolean {
         return try {
-            viewModelScope.launch {
-                val isSuccess = userRepository.updateUserAutoLoginToken(userId, autoLoginToken)
-                Log.d("test100", "토큰 저장 성공 여부: $isSuccess")
-            }
-            true
+            userRepository.updateUserAutoLoginToken(userId, autoLoginToken)
         } catch (e: Exception) {
-            Log.e("test100", "토큰 저장 실패: ${e.message}")
+            Log.e("LoginViewModel", "자동 로그인 토큰 저장 오류: ${e.message}", e)
             false
         }
     }

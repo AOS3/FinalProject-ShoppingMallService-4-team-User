@@ -107,11 +107,10 @@ class LoginFragment : Fragment() {
                 // 자동 로그인 처리
                 if (fragmentLoginBinding.checkBoxLoginAutoLogin.isChecked) {
                     val userId = fragmentLoginBinding.textFieldLoginId.editText?.text.toString()
-                    val autoLoginToken = loginViewModel.generateAutoLoginToken() // 토큰 생성
+                    val autoLoginToken = loginViewModel.generateAutoLoginToken()
 
                     sharedPreferencesHelper.saveAutoLoginToken(autoLoginToken) // SharedPreferences에 저장
 
-                    // Firestore에 저장
                     CoroutineScope(Dispatchers.IO).launch {
                         val saveResult = loginViewModel.saveAutoLoginToken(userId, autoLoginToken)
                         withContext(Dispatchers.Main) {
@@ -121,12 +120,10 @@ class LoginFragment : Fragment() {
                                 Toast.makeText(requireContext(), "자동 로그인 저장 실패", Toast.LENGTH_SHORT).show()
                             }
                             removeFragment()
-                            // replaceSubFragment(HomeFragment(), false)
                         }
                     }
                 } else {
                     removeFragment()
-                    // replaceSubFragment(HomeFragment(), false)
                 }
             }
         }
