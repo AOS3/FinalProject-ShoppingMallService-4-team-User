@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.aladin.apiTestApplication.dto.RecommendBookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
@@ -101,7 +102,15 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
         binding.recyclerViewOrderInquiry.adapter = adapter
 
         viewModel.inquiryList.observe(viewLifecycleOwner) {
-            adapter.updateItemList(it)
+            if(it.isNotEmpty()) {
+                binding.scrollViewOrderInquiry.isVisible = true
+                binding.textViewOrderInquiryEmpty.isVisible = false
+                adapter.updateItemList(it)
+            }
+            else {
+                binding.scrollViewOrderInquiry.isVisible = false
+                binding.textViewOrderInquiryEmpty.isVisible = true
+            }
         }
     }
 
