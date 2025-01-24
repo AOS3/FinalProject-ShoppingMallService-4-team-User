@@ -10,6 +10,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.Notificatio
 class NotificationSwipeCallback(
     private val adapter: NotificationAdapter,
     private val list: MutableList<NotificationModel>,
+    private val viewModel: NotificationViewModel,
 ): ItemTouchHelper.Callback() {
     override fun getMovementFlags(
         recyclerView: RecyclerView,
@@ -28,10 +29,7 @@ class NotificationSwipeCallback(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
-        list.removeAt(position)
-
-        adapter.updateList(list)
-        adapter.notifyDataSetChanged()
+        viewModel.deleteSwipeData(list[position])
     }
 
 }

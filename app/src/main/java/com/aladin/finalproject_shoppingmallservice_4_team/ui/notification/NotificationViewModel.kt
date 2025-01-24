@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.aladin.apiTestApplication.dto.RecommendBookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.model.NotificationModel
@@ -27,7 +28,7 @@ class NotificationViewModel @Inject constructor(
     val isLoadNotificationList: LiveData<Boolean> get() = _isLoadNotificationList
 
 
-    // 책 목록에 따라 추천 검색
+    // 알림 불러오기
     fun loadNotificationData(userToken: String) = viewModelScope.launch {
         runCatching {
             notificationRepository.loadNotificationData(userToken)
@@ -36,6 +37,37 @@ class NotificationViewModel @Inject constructor(
             _isLoadNotificationList.postValue(true)
         }.onFailure {
             Log.d("NotificaitionViewModel", "error: $it")
+        }
+    }
+
+    // 전체 삭제
+    fun deleteAllNotificationData() = viewModelScope.launch {
+        runCatching {
+            notificationRepository.deleteNotificationData(notificationList.value!!)
+        }.onSuccess {
+            _notificationList.value = emptyList()
+        }.onFailure {
+            Log.d("NotificationViewModel", "error: $it")
+        }
+    }
+
+    fun deleteSwipeData(deleteData: NotificationModel) = viewModelScope.launch {
+        runCatching {
+            notificationRepository.deleteNotificationOneData(deleteData)
+        }.onSuccess {
+            _notificationList.value = _notificationList.value!!.filterNot { it.notificationTitle == deleteData.notificationTitle }
+        }.onFailure {
+            Log.d("notificationViewModel", "error: $it")
+        }
+    }
+
+    fun seeData(seeData: NotificationModel) = viewModelScope.launch {
+        runCatching {
+            notificationRepository.seeNotificationOneData(seeData)
+        }.onSuccess {
+            _notificationList.value = _notificationList.value!!.filterNot { it.notificationTitle == seeData.notificationTitle }
+        }.onFailure {
+            Log.d("notificationViewModel", "error: $it")
         }
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentNotificationBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentNotificationDetailBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 
 
 class NotificationDetailFragment : Fragment() {
@@ -27,10 +28,30 @@ class NotificationDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadData()
+        settingBackButton()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
+    }
+
+    /*
+    버튼
+     */
+
+    private fun settingBackButton() = binding.materialToolbarNotificationDetail.setNavigationOnClickListener { removeFragment() }
+
+    /*
+    데이터
+     */
+
+    private fun loadData() {
+        binding.apply {
+            textViewNotificationDetailTitle.text = arguments?.getString("notifyTitle")
+            textViewNotificationDetailContent.text = arguments?.getString("notifyContent")
+            textViewNotificationDetailDate.text = arguments?.getString("notifyTime")
+        }
     }
 }

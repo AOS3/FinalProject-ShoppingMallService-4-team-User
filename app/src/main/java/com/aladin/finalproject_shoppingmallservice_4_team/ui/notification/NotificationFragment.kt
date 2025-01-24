@@ -30,10 +30,6 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
 
     private val viewModel: NotificationViewModel by viewModels()
 
-    // 임시 데이터
-    val list = List(10) {
-        "항목 $it"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,11 +60,12 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
 
     private fun combineButtonMethod() {
         settingBackButton()
+        settingDeleteAllButton()
     }
 
     private fun settingDeleteAllButton() {
         binding.buttonNotificationDeleteAll.setOnClickListener {
-
+            viewModel.deleteAllNotificationData()
         }
     }
 
@@ -84,20 +81,26 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
 
     override fun itemClickListener(item: NotificationModel) {
         // 상세 화면으로 보낸다
-        replaceMainFragment(NotificationDetailFragment(), true)
+        val dataBundle = Bundle()
+        dataBundle.putString("notifyTitle", item.notificationTitle)
+        dataBundle.putString("notifyContent", item.notificationContent)
+        dataBundle.putString("notifyTime", item.notificationTime)
+        viewModel.seeData(item)
+        replaceMainFragment(NotificationDetailFragment(), true, dataBundle = dataBundle)
     }
 
     private fun settingRecyclerView() {
         binding.recyclerViewNotification.adapter = adapter
         updateList()
-
     }
 
     private fun updateList() {
         viewModel.notificationList.observe(viewLifecycleOwner) {
             adapter.updateList(it.toMutableList())
+            val size = it.filter { it.notificationSee == 0 }
+            binding.textViewNotificationSize.text = "미열람 알림 : ${size.size}개"
             // 리사이클러뷰에 스와이프, 드래그 기능 달기
-            val swipeHelperCallback = NotificationSwipeCallback(adapter, it.toMutableList())
+            val swipeHelperCallback = NotificationSwipeCallback(adapter, it.toMutableList(), viewModel)
             ItemTouchHelper(swipeHelperCallback).attachToRecyclerView(binding.recyclerViewNotification)
         }
     }

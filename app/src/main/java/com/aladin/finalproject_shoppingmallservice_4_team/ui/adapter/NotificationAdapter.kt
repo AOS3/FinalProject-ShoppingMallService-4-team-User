@@ -1,5 +1,6 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ class NotificationAdapter(
         notifyDataSetChanged()
     }
 
+
     class NotificationViewHolder(
         private val binding: ItemNotificationListBinding,
         private val itemClickListener: (Int) -> Unit
@@ -46,6 +48,10 @@ class NotificationAdapter(
             binding.apply {
                 textViewNotificationListTitle.text = item.notificationTitle
                 textViewNotificationListDate.text = item.notificationTime
+                if (item.notificationSee == 1) {
+                    textViewNotificationListTitle.setTextColor(Color.LTGRAY)
+                    textViewNotificationListDate.setTextColor(Color.LTGRAY)
+                }
             }
         }
     }
