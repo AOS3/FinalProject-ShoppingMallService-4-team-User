@@ -13,10 +13,13 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentLi
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.LikeListAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import dagger.hilt.android.AndroidEntryPoint
 

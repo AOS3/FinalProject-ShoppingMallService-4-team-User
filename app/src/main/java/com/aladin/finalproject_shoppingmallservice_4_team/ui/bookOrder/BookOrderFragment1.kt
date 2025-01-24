@@ -20,8 +20,10 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.BookOrderAd
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
@@ -202,7 +204,7 @@ class BookOrderFragment1 : Fragment() {
             val loginDialog = CustomDialog(
                 requireContext(),
                 onPositiveClick = {
-                    replaceSubFragment(HomeFragment(), false)
+                    removeFragment()
                 },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px
@@ -220,12 +222,12 @@ class BookOrderFragment1 : Fragment() {
             materialToolbarBookOrder.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.item_shoppingCart_notification -> {
-                        replaceSubFragment(NoticeFragment(), true)
+                        replaceMainFragment(NoticeFragment(), true)
                         true
                     }
 
                     else -> {
-                        replaceSubFragment(MainMenuFragment(), true)
+                        replaceMainFragment(MainMenuFragment(), true)
                         true
                     }
                 }

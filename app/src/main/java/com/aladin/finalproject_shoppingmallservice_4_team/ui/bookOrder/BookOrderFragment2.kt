@@ -13,7 +13,10 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentBo
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.BookOrderStatementAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,7 +55,7 @@ class BookOrderFragment2 : Fragment() {
     private fun onClickKeepShopping() {
         fragmentBookOrder2Binding.apply {
             buttonBookOrderBuyBook.setOnClickListener {
-                removeFragment()
+                clearAllBackStack()
             }
         }
     }
@@ -93,7 +96,8 @@ class BookOrderFragment2 : Fragment() {
             val loginDialog = CustomDialog(
                 requireContext(),
                 onPositiveClick = {
-                    replaceSubFragment(HomeFragment(), false)
+                    removeFragment()
+                    replaceMainFragment(LoginFragment(),false)
                 },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px
@@ -126,11 +130,12 @@ class BookOrderFragment2 : Fragment() {
                     val bookCoverList = arguments?.getStringArrayList("userCoverList")
 
                     // 데이터 가공 처리 진행
-                    val processedBooks = bookOrderViewModel.processBookDataFromArguments(bookCoverList)
+                    val processedBooks =
+                        bookOrderViewModel.processBookDataFromArguments(bookCoverList)
 
                     // 데이터를 받았을 때
                     bookOrderStatementAdapter =
-                        BookOrderStatementAdapter(orderBookList,processedBooks)
+                        BookOrderStatementAdapter(orderBookList, processedBooks)
                     recyclerViewBookOrder2BookList.adapter = bookOrderStatementAdapter
                     // 전체 수량 및 구매 가격 Text Set
                     textViewBookOrder2TotalSize.setText("총 수량: ${bookOrderViewModel.userInquiryBookTotalCount.sum()}개")

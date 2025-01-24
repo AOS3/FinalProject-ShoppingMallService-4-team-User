@@ -20,8 +20,7 @@ class LikeListRepository @Inject constructor(
 
         // 장바구니에 있는 책들만 필터링
         val querySnapshot: QuerySnapshot = collectionReference
-            .whereEqualTo("likeListUserToken", userToken) // 사용자 토큰값과 비교하여 같은 정보들만 들고온다.
-            .whereEqualTo("likeListState", 0) // 상태값 0(정상)인것들만 가져온다.
+            .whereEqualTo("likeListUserToken", userToken) // 사용자 토큰값과 비교하여 같은 정보들만 들고온다
             .get()
             .await()
 
@@ -67,21 +66,20 @@ class LikeListRepository @Inject constructor(
         return Quadruple(likeListBookCovers, likeListBookTitles, likeListBookAuthors, likeListBookSellPrice)
     }
 
-    // 찜목록 리스트 삭제 (State값만 1로 변경)
+    // 찜목록 리스트 삭제
     suspend fun deleteLikeListData(userToken: String, isbnNumber: String) {
         val collectionReference = firebaseFireStore.collection("LikeListTable")
 
         // 장바구니에 있는 책들만 필터링
         val querySnapshot: QuerySnapshot = collectionReference
             .whereEqualTo("likeListUserToken", userToken) // 사용자 토큰값과 비교하여 같은 정보들만 들고온다.
-            .whereEqualTo("likeListISBN", isbnNumber) // 책의 ISBN으로 데이터 하나만 가져온다.
-            .whereEqualTo("likeListState", 0) // 상태값 0(정상)인것들만 가져온다.
+            .whereEqualTo("likeListISBN", isbnNumber) // 책의 ISBN으로 데이터 하나만 가져온다
             .get()
             .await()
 
         // 해당 문서가 존재하면 삭제 (하나의 아이템만 있을 경우)
         querySnapshot.documents.firstOrNull()?.let { document ->
-            collectionReference.document(document.id).update("likeListState",1).await()
+            collectionReference.document(document.id).delete()
         }
     }
 }
