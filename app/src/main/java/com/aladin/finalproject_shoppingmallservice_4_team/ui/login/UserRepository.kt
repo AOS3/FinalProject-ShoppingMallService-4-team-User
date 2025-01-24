@@ -218,4 +218,59 @@ class UserRepository @Inject constructor(private val firebaseFireStore: Firebase
             null
         }
     }
+
+    suspend fun checkPassword(userId: String, password: String): Boolean {
+        // 서버 요청 또는 Firebase Firestore에서 비밀번호 확인
+        val userRef = FirebaseFirestore.getInstance().collection("users").document(userId)
+        val userSnapshot = userRef.get().await()
+        return userSnapshot.getString("userPw") == password
+    }
+
+    suspend fun updateUserState(userId: String, newState: Int): Boolean {
+        return try {
+            val collectionReference = firebaseFireStore.collection("UserTable")
+            val querySnapshot = collectionReference.whereEqualTo("userId", userId).get().await()
+
+            if (!querySnapshot.isEmpty) {
+                val documentId = querySnapshot.documents.first().id
+                collectionReference.document(documentId).update("userState", newState).await()
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            Log.e("UserRepository", "updateUserState 오류: ${e.message}", e)
+            false
+        }
+    }
+
+    suspend fun getUserData(userId: String): UserModel? {
+        return try {
+            val collectionReference = firebaseFireStore.collection("UserTable")
+            val querySnapshot = collectionReference.whereEqualTo("userId", userId).get().await()
+
+            if (!querySnapshot.isEmpty) {
+                val document = querySnapshot.documents.first()
+                val data = document.data
+                if (data != null) {
+                    UserModel().apply {
+                        this.userId = data["userId"] as? String ?: ""
+                        this.userPw = data["userPw"] as? String ?: ""
+                        this.userName = data["userName"] as? String ?: ""
+                        this.userAddress = data["userAddress"] as? String ?: ""
+                        this.userPhoneNumber = data["userPhoneNumber"] as? String ?: ""
+                        this.userToken = data["userToken"] as? String ?: ""
+                        this.userState = (data["userState"] as? Long)?.toInt() ?: 0
+                        this.userAutoLoginToken = data["userAutoLoginToken"] as? String ?: ""
+                        this.userJoinTime = data["userJoinTime"] as? Long ?: 0L
+                    }
+                } else null
+            } else null
+        } catch (e: Exception) {
+            Log.e("UserRepository", "getUserData 오류: ${e.message}", e)
+            null
+        }
+    }
+
+
 }

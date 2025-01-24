@@ -80,7 +80,7 @@ class MyInfoFragment : Fragment() {
             positiveText = "확인",
             onPositiveClick = {
                 removeFragment()
-                replaceMainFragment(MainFragment(), true)
+                replaceMainFragment(LoginFragment(), true)
             }
         )
         dialog.showCustomDialog()
@@ -208,9 +208,27 @@ class MyInfoFragment : Fragment() {
                 val bookApplication = requireActivity().application as BookApplication
                 bookApplication.loginUserModel = updatedUser // BookApplication 객체 업데이트
 
-                Toast.makeText(requireContext(), "정보가 성공적으로 업데이트되었습니다.", Toast.LENGTH_SHORT).show()
+                val successDialog = CustomDialog(
+                    context = requireContext(),
+                    contentText = "정보가 성공적으로 업데이트되었습니다.",
+                    icon = R.drawable.check_circle_24px, // 성공 아이콘 (사용 가능한 리소스로 변경)
+                    positiveText = "확인",
+                    onPositiveClick = {
+                        // 다이얼로그 닫힘 처리 (필요 시 추가 작업 가능)
+                    }
+                )
+                successDialog.showCustomDialog()
             } else {
-                Toast.makeText(requireContext(), "정보 업데이트에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                val failureDialog = CustomDialog(
+                    context = requireContext(),
+                    contentText = "정보 업데이트에 실패했습니다. 다시 시도해주세요.",
+                    icon = R.drawable.error_24px, // 실패 아이콘 (사용 가능한 리소스로 변경)
+                    positiveText = "확인",
+                    onPositiveClick = {
+                        // 다이얼로그 닫힘 처리 (필요 시 추가 작업 가능)
+                    }
+                )
+                failureDialog.showCustomDialog()
             }
         }
     }
