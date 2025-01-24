@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.aladin.apiTestApplication.dto.RecommendBookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentOrderInquiryBinding
@@ -14,7 +15,9 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.Shoppi
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OrderInquiryFragment : Fragment(),OrderOnClickListener {
 
     private val list = MutableList(30) {
@@ -23,6 +26,8 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
     private var _binding: FragmentOrderInquiryBinding? = null
     private val binding get() = _binding!!
     private val adapter: OrderInquiryAdapter by lazy { OrderInquiryAdapter(this) }
+
+    private val viewModel: OrderInquiryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +45,8 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
         settingRecyclerView()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

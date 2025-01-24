@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentOrderInquiryDetailBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class OrderInquiryDetailFragment : Fragment() {
 
     private var _binding: FragmentOrderInquiryDetailBinding? = null
