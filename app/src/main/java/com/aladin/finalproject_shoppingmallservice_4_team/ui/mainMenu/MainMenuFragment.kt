@@ -22,6 +22,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.myinfo.MyInfoFragme
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.orderinquiry.OrderInquiryFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.setting.SettingFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 
@@ -70,7 +71,8 @@ class MainMenuFragment : Fragment() {
                 // 로그인 해 주세요 클릭
                 setOnClickListener {
                     // 로그인 화면으로 이동
-                    replaceSubFragment(LoginFragment(),true)
+                    removeFragment()
+                    replaceMainFragment(LoginFragment(),true)
                     visibility = View.GONE
                     toolbarMainMenu.title = "000 사용자님"
 
@@ -106,7 +108,8 @@ class MainMenuFragment : Fragment() {
                     // toolbar_mainMenu_goSettings
                     1 -> {
                         // 환경 설정으로 이동
-                        replaceSubFragment(SettingFragment(),true)
+                        removeFragment()
+                        replaceMainFragment(SettingFragment(),true)
                     }
                 }
                 true
@@ -119,21 +122,24 @@ class MainMenuFragment : Fragment() {
         fragmentMainMenuBinding.apply {
             buttonMainMenuMyInfo.setOnClickListener {
                 // 내 정보로 이동
-                replaceSubFragment(MyInfoFragment(),true)
+                removeFragment()
+                replaceMainFragment(MyInfoFragment(),true)
             }
         }
 
         fragmentMainMenuBinding.apply {
             buttonMainMenuOrderHistory.setOnClickListener {
                 // 주문 조회로 이동
-                replaceSubFragment(OrderInquiryFragment(),true)
+                removeFragment()
+                replaceMainFragment(OrderInquiryFragment(),true)
             }
         }
 
         fragmentMainMenuBinding.apply {
             buttonMainMenuWishlist.setOnClickListener {
                 // 찜 목록으로 이동
-                replaceSubFragment(LikeListFragment(),true)
+                removeFragment()
+                replaceMainFragment(LikeListFragment(),true)
             }
         }
     }
@@ -171,31 +177,36 @@ class MainMenuFragment : Fragment() {
             val targetFragment = when (position) {
                 0 -> {
                     // 내가 판매하는 중고 도서로 이동
-                    replaceSubFragment(SellingCartFragment(),true)
+                    removeFragment()
+                    replaceMainFragment(SellingCartFragment(),true)
                 }
                 1 -> {
                     // 중고 도서로 이동
                     val dataBundle = Bundle()
                     dataBundle.putString("bookQuery", "Used")
-                    replaceSubFragment(BookListFragment(),true,dataBundle = dataBundle)
+                    removeFragment()
+                    replaceMainFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 2 -> {
                     // 신간 도서로 이동
                     val dataBundle = Bundle()
                     dataBundle.putString("bookQuery", "ItemNewAll")
-                    replaceSubFragment(BookListFragment(),true,dataBundle = dataBundle)
+                    removeFragment()
+                    replaceMainFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 3 -> {
                     // 베스트 셀러로 이동
                     val dataBundle = Bundle()
                     dataBundle.putString("bookQuery", "Bestseller")
-                    replaceSubFragment(BookListFragment(),true,dataBundle = dataBundle)
+                    removeFragment()
+                    replaceMainFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 4 -> {
                     // 블로거 추천으로 이동
                     val dataBundle = Bundle()
                     dataBundle.putString("bookQuery", "BlogBest")
-                    replaceSubFragment(BookListFragment(),true,dataBundle = dataBundle)
+                    removeFragment()
+                    replaceMainFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 else -> null
             }
