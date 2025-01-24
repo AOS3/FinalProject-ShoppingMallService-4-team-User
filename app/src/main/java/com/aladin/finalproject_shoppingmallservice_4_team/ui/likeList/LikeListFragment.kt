@@ -145,17 +145,17 @@ class LikeListFragment : Fragment() {
             materialToolbarLikeList.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.item_likeList_shoppingCart -> {
-                        replaceSubFragment(ShoppingCartFragment(), true)
+                        replaceMainFragment(ShoppingCartFragment(), true)
                         true
                     }
 
                     R.id.item_likeList_notification -> {
-                        replaceSubFragment(NoticeFragment(), true)
+                        replaceMainFragment(NoticeFragment(), true)
                         true
                     }
 
                     else -> {
-                        replaceSubFragment(MainMenuFragment(), true)
+                        replaceMainFragment(MainMenuFragment(), true)
                         true
                     }
                 }
