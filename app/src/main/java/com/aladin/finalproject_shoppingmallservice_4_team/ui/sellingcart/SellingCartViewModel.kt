@@ -39,6 +39,13 @@ class SellingCartViewModel @Inject constructor(
     private val _isDataLoaded = MutableLiveData<Boolean>() // UI 표시 여부 상태
     val isDataLoaded: LiveData<Boolean> get() = _isDataLoaded
 
+    private val _sellingCartBookTitle = MutableLiveData<String>()
+    val sellingCartBookTitle: LiveData<String> get() = _sellingCartBookTitle
+
+    private val _sellingCartBookAuthor = MutableLiveData<String>()
+    val sellingCartBookAuthor: LiveData<String> get() = _sellingCartBookAuthor
+
+
     private var allItems: List<SellingCartModel> = emptyList() // 초기화
 
     private var currentPage: Int = 1
@@ -88,21 +95,37 @@ class SellingCartViewModel @Inject constructor(
         }
 
         val books = mutableListOf<BookItem>()
-        val distinctIsbns = isbns.distinct()
 
-        distinctIsbns.forEach { isbn ->
+        isbns.forEach { isbn ->
+            // API 호출
             val result = runCatching {
                 sellingCartRepository.searchBooks(isbn, maxResults = 1, sort = "Accuracy")
             }
 
             result.onSuccess { bookItems ->
-                books.addAll(bookItems)
+                val bookItem = bookItems.firstOrNull()
+                if (bookItem != null) {
+                    books.add(bookItem)
+
+                    // Firestore 업데이트 (도서명과 저자 저장)
+                    updateBookDetailsInFirestore(
+                        isbn,
+                        bookItem.title,
+                        bookItem.author
+                    ) { success ->
+                        if (success) {
+                            Log.d("SellingCart", "Updated book details for ISBN: $isbn")
+                        } else {
+                            Log.e("SellingCart", "Failed to update book details for ISBN: $isbn")
+                        }
+                    }
+                }
             }.onFailure { error ->
-                Log.e("fetchApiData", "Error fetching API data for ISBN: $isbn", error)
+                Log.e("fetchAndUpdateApiData", "Error fetching API data for ISBN: $isbn", error)
             }
         }
 
-        _sellingCartBooks.postValue(books)
+        _sellingCartBooks.postValue(books) // API 데이터를 LiveData에 저장
         apiDataLoaded = true
         checkIfLoadingComplete()
     }
@@ -295,6 +318,81 @@ class SellingCartViewModel @Inject constructor(
         }
     }
 
+    fun updateSellingCartState(documentId: String, state: Int, onComplete: (Boolean) -> Unit) {
+        val updateData = mapOf("sellingCartState" to state)
+
+        firestore.collection("SellingCartTable")
+            .document(documentId)
+            .update(updateData)
+            .addOnSuccessListener {
+                Log.d("SellingCart", "Successfully updated sellingCartState for $documentId")
+                onComplete(true)
+            }
+            .addOnFailureListener { e ->
+                Log.e("SellingCart", "Failed to update sellingCartState for $documentId", e)
+                onComplete(false)
+            }
+    }
+
+    fun resetAllSellingCartStates(onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                firestore.collection("SellingCartTable")
+                    .get()
+                    .addOnSuccessListener { result ->
+                        val batch = firestore.batch()
+                        result.documents.forEach { document ->
+                            val docRef = document.reference
+                            batch.update(docRef, "sellingCartState", 0)
+                        }
+                        batch.commit()
+                            .addOnSuccessListener {
+                                Log.d("SellingCart", "Successfully reset all sellingCartState to 0")
+                                onComplete(true)
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("SellingCart", "Failed to reset all sellingCartState to 0", e)
+                                onComplete(false)
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("SellingCart", "Failed to fetch documents to reset sellingCartState", e)
+                        onComplete(false)
+                    }
+            } catch (e: Exception) {
+                Log.e("SellingCart", "Exception occurred while resetting sellingCartState", e)
+                onComplete(false)
+            }
+        }
+    }
+
+    fun updateBookDetailsInFirestore(isbn: String, title: String, author: String, onComplete: (Boolean) -> Unit) {
+        firestore.collection("SellingCartTable")
+            .whereEqualTo("sellingCartISBN", isbn) // ISBN으로 해당 문서 찾기
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val documentId = querySnapshot.documents[0].id // 첫 번째 문서의 ID 가져오기
+                    firestore.collection("SellingCartTable")
+                        .document(documentId)
+                        .update(mapOf("sellingCartBookTitle" to title, "sellingCartBookAuthor" to author))
+                        .addOnSuccessListener {
+                            onComplete(true) // 성공
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("FirestoreUpdate", "Failed to update book details for $isbn", e)
+                            onComplete(false) // 실패
+                        }
+                } else {
+                    Log.e("FirestoreUpdate", "No document found for ISBN: $isbn")
+                    onComplete(false) // 문서가 없는 경우
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirestoreQuery", "Failed to query Firestore for ISBN: $isbn", e)
+                onComplete(false) // 실패
+            }
+    }
 
 
 }

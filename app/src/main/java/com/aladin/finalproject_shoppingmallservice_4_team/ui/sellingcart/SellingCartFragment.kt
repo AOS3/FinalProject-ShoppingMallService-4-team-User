@@ -39,6 +39,9 @@ class SellingCartFragment : Fragment() {
     private val viewModel: SellingCartViewModel by viewModels()
     private lateinit var adapter: RecyclerSellingCartAdapter
     private lateinit var progressBarDialog: CustomDialogProgressbar
+    private var checkedItemCount: Int = 0 // 체크된 도서 수량
+    private var totalEstimatedPrice: Int = 0 // 총 예상 판매가
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +51,9 @@ class SellingCartFragment : Fragment() {
 
         // ProgressBar 다이얼로그 초기화
         progressBarDialog = CustomDialogProgressbar(requireContext())
+
+        // 팔기 장바구니 화면으로 넘어갈 올 때 sellingCartState 상태를 0으로 초기화하는 메서드 호출
+        resetSellingCartStates()
 
         // Toolbar 설정
         settingToolbar()
@@ -76,7 +82,7 @@ class SellingCartFragment : Fragment() {
     // Toolbar를 구성하는 메서드
     private fun settingToolbar() {
         fragmentSellingCartBinding.apply {
-            materialToolbarSellingCart.title = "중고 서적 팔기"
+            materialToolbarSellingCart.title = "팔기 장바구니"
             materialToolbarSellingCart.setNavigationIcon(R.drawable.arrow_back_ios_24px)
             materialToolbarSellingCart.setNavigationOnClickListener {
                 requireActivity().onBackPressed()
@@ -94,7 +100,6 @@ class SellingCartFragment : Fragment() {
         }
     }
 
-
     // 버튼 클릭 이벤트 설정
     private fun buttonSellingCartOnClick() {
         fragmentSellingCartBinding.apply {
@@ -109,7 +114,34 @@ class SellingCartFragment : Fragment() {
             }
 
             buttonSellingCartAddBookForSelling.setOnClickListener {
-                replaceMainFragment(SellingLastPageFragment(), true)
+                if (checkedItemCount == 0) {
+                    // Toast 메시지 표시
+                    Toast.makeText(requireContext(), "선택된 도서가 없습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    // checkedItemCount가 0이 아닌 경우 선택된 도서의 sellingCartState를 업데이트
+                    val selectedDocumentIds = viewModel.selectedItems.value?.toList() ?: emptyList()
+
+                    if (selectedDocumentIds.isNotEmpty()) {
+                        // Firestore에서 선택된 도서들의 sellingCartState 업데이트
+                        selectedDocumentIds.forEach { documentId ->
+                            viewModel.updateSellingCartState(documentId, 1) { success ->
+                                if (!success) {
+                                    Log.e("SellingCart", "Failed to update sellingCartState for $documentId")
+                                }
+                            }
+                        }
+                    }
+
+                    // 다음 화면으로 이동
+                    val bundle = Bundle().apply {
+                        putInt("CHECKED_ITEM_COUNT", checkedItemCount)
+                        putInt("TOTAL_ESTIMATED_PRICE", totalEstimatedPrice)
+                    }
+                    val sellingLastPageFragment = SellingLastPageFragment().apply {
+                        arguments = bundle // Bundle 전달
+                    }
+                    replaceMainFragment(sellingLastPageFragment, true)
+                }
             }
 
             buttonSellingCartDelete.setOnClickListener {
@@ -133,11 +165,40 @@ class SellingCartFragment : Fragment() {
                     Toast.makeText(requireContext(), "삭제할 항목을 선택하세요.", Toast.LENGTH_SHORT).show()
                 }
             }
-
-
-
         }
     }
+
+    // 팔기 장바구니 화면으로 넘어갈 올 때 sellingCartState 상태를 0으로 초기화하는 메서드
+    private fun resetSellingCartStates() {
+        viewModel.resetAllSellingCartStates { success ->
+            if (success) {
+                Log.d("SellingCart", "All sellingCartState reset to 0 successfully")
+            } else {
+                Log.e("SellingCart", "Failed to reset sellingCartState")
+            }
+        }
+    }
+
+    // 선택된 도서 수량 및 예상 판매가 계산 메서드
+    private fun calculateCheckedItems() {
+        val selectedItems = viewModel.selectedItems.value.orEmpty()
+        val items = viewModel.cartItems.value.orEmpty()
+
+        // 체크된 도서
+        val checkedItems = items.filter { selectedItems.contains(it.documentId) }
+
+        // 체크된 도서 수량 및 예상 판매가 계산
+        checkedItemCount = checkedItems.size
+        totalEstimatedPrice = checkedItems.sumOf { it.sellingCartSellingPrice }
+
+        // 로그로 확인
+        Log.d("SellingCartFragment", "Checked Item Count: $checkedItemCount")
+        Log.d("SellingCartFragment", "Total Estimated Price: $totalEstimatedPrice")
+
+        // UI 업데이트
+        fragmentSellingCartBinding.textViewSellingCartTotalPrice.text = "총 예상 판매가: ${totalEstimatedPrice}원"
+    }
+
 
     // RecyclerView 설정
     private fun settingRecyclerView() {
@@ -183,6 +244,11 @@ class SellingCartFragment : Fragment() {
                     adapter.notifyDataSetChanged() // RecyclerView 강제 렌더링
                 }
             }
+        }
+
+        // 선택된 도서 LiveData 관찰
+        viewModel.selectedItems.observe(viewLifecycleOwner) {
+            calculateCheckedItems() // 체크된 도서와 총 예상 판매가 계산
         }
 
         // Firestore 데이터 관찰
@@ -252,6 +318,14 @@ class SellingCartFragment : Fragment() {
             viewModel.setAllItems(items) // 선택 상태 업데이트
         }
 
+        viewModel.sellingCartBookTitle.observe(viewLifecycleOwner) { title ->
+            Log.d("SellingCartFragment", "Book title observed: $title")
+        }
+
+        viewModel.sellingCartBookAuthor.observe(viewLifecycleOwner) { author ->
+            Log.d("SellingCartFragment", "Book author observed: $author")
+        }
+
     }
 
     private fun addItemToFirestore(scannedIsbn: String) {
@@ -285,7 +359,6 @@ class SellingCartFragment : Fragment() {
             }
         }
     }
-
 
     private inner class RecyclerSellingCartAdapter(
         private var items: List<SellingCartModel>
@@ -393,7 +466,6 @@ class SellingCartFragment : Fragment() {
                     }
                 }
             }
-
 
             private fun calculateEstimatedPrice(price: Int, quality: Int): Int {
                 return when (quality) {
@@ -555,6 +627,4 @@ class SellingCartFragment : Fragment() {
         }
 
     }
-
-
 }
