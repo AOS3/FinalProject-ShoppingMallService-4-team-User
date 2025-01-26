@@ -57,9 +57,39 @@
                 android:id="@+id/recyclerView_bookSellingInquiry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/button_BookSellingInquiry_addBookForSelling"
                 app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiry_infoText"
                 tools:listitem="@layout/row_book_selling_inquiry" />
+
+            <include
+                android:id="@+id/include_bookSellingInquiry_empty"
+                layout="@layout/book_selling_inquiry_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/button_BookSellingInquiry_addBookForSelling"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiry_infoText" />
+
+            <Button
+                android:id="@+id/button_BookSellingInquiry_addBookForSelling"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/main_color"
+                android:text="알림 화면으로 가기"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/footer_bookSellingInquiry"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/footer_bookSellingInquiry"
@@ -207,22 +237,6 @@
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <Button
-                android:id="@+id/button_BookSellingInquiry_addBookForSelling"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="120dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/main_color"
-                android:text="알림 화면으로 가기"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/footer_bookSellingInquiry"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView_bookSellingInquiry" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
