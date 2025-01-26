@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aladin.apiTestApplication.dto.BookItem
+import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingSearchBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.RowSellingSearchBinding
@@ -39,8 +40,13 @@ class SellingSearchFragment : Fragment() {
     private var bookList: MutableList<BookItem> = mutableListOf()
     private var query: String = ""
 
-    // Firebase Firestore instance
     private val firestore by lazy { FirebaseFirestore.getInstance() }
+
+    // 로그인된 사용자 토큰
+    private val userToken: String? by lazy {
+        val app = requireActivity().application as BookApplication
+        app.loginUserModel?.userToken
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +88,6 @@ class SellingSearchFragment : Fragment() {
             }
         }
     }
-
 
     // 검색 기능 설정 메서드
     private fun setupSearchFeature(scannedIsbn: String?) {
@@ -140,9 +145,6 @@ class SellingSearchFragment : Fragment() {
             performSearch()
         }
     }
-
-
-
 
     // RecyclerView 설정 메서드
     private fun setupRecyclerView() {
@@ -224,7 +226,7 @@ class SellingSearchFragment : Fragment() {
                         sellingCartSellingPrice = (item.priceStandard * 0.7).toInt(),
                         sellingCartQuality = 0,
                         sellingCartISBN = item.isbn13,
-                        sellingCartUserToken = "",
+                        sellingCartUserToken = userToken!!,
                         sellingCartTime = System.currentTimeMillis(),
                         sellingCartState = 0
                     )
