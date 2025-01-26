@@ -15,15 +15,18 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aladin.apiTestApplication.dto.BookItem
+import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.RowSellingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booksellinginquiry.BookSellingInquiryFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellinglastpage.SellingLastPageFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingsearch.SellingSearchFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.bumptech.glide.Glide
@@ -38,10 +41,13 @@ class SellingCartFragment : Fragment() {
     private lateinit var fragmentSellingCartBinding: FragmentSellingCartBinding
     private lateinit var adapter: RecyclerSellingCartAdapter
     private lateinit var progressBarDialog: CustomDialogProgressbar
+    private lateinit var bookApplication: BookApplication
 
     private val sellingCartViewModel: SellingCartViewModel by viewModels()
+
     // 체크된 도서 수량
     private var checkedItemCount: Int = 0
+
     // 총 예상 판매가
     private var totalEstimatedPrice: Int = 0
 
@@ -50,37 +56,64 @@ class SellingCartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragmentSellingCartBinding = FragmentSellingCartBinding.inflate(layoutInflater, container, false)
+        fragmentSellingCartBinding =
+            FragmentSellingCartBinding.inflate(layoutInflater, container, false)
 
-        // ProgressBar 다이얼로그 초기화 및 표시
-        progressBarDialog = CustomDialogProgressbar(requireContext())
-        progressBarDialog.show()
+        // bookApplication 초기화
+        bookApplication = requireActivity().application as BookApplication
 
-        // 팔기 장바구니 화면으로 넘어갈 올 때 sellingCartState 상태를 0으로 초기화하는 메서드 호출
-        resetSellingCartStates()
+        // 로그인 여부 확인
+        if (checkLoginProcess()) {
 
+            // ProgressBar 다이얼로그 초기화 및 표시
+            progressBarDialog = CustomDialogProgressbar(requireContext())
+            progressBarDialog.show()
+
+            // 팔기 장바구니 화면으로 넘어갈 올 때 sellingCartState 상태를 0으로 초기화하는 메서드 호출
+            resetSellingCartStates()
+
+            // RecyclerView 설정
+            settingRecyclerView()
+
+            // 버튼 클릭 메서드 호출
+            buttonSellingCartOnClick()
+
+            // LiveData 관찰
+            observeViewModel()
+
+            // 전달된 ISBN 값을 Firestore에 추가
+            val scannedIsbn = arguments?.getString("ISBN")
+            scannedIsbn?.let {
+                addItemToFirestore(it)
+            }
+        }
         // Toolbar 설정
         settingToolbar()
 
-        // RecyclerView 설정
-        settingRecyclerView()
-
-        // 버튼 클릭 메서드 호출
-        buttonSellingCartOnClick()
-
-        // LiveData 관찰
-        observeViewModel()
-
-        // 전달된 ISBN 값을 Firestore에 추가
-        val scannedIsbn = arguments?.getString("ISBN")
-        scannedIsbn?.let {
-            addItemToFirestore(it)
-        }
-
-        // Firestore 데이터 및 API 데이터 로드
-        sellingCartViewModel.fetchCartItemsWithApi()
-
         return fragmentSellingCartBinding.root
+    }
+
+    private fun checkLoginProcess(): Boolean {
+        return try {
+            // 로그인 상태 확인
+            if (::bookApplication.isInitialized && bookApplication.loginUserModel != null) {
+                // 로그인된 경우 ViewModel에 데이터 요청
+                sellingCartViewModel.fetchCartItemsWithApi(bookApplication.loginUserModel.userToken)
+                true
+            } else {
+                throw Exception("로그인 정보가 없습니다.")
+            }
+        } catch (e: Exception) {
+            // 로그인되지 않은 경우 다이얼로그 표시 및 프래그먼트 종료
+            val loginDialog = CustomDialog(
+                requireContext(),
+                onPositiveClick = { removeFragment() },
+                contentText = "로그인을 먼저 진행해주세요.",
+                icon = R.drawable.error_24px
+            )
+            loginDialog.showCustomDialog()
+            false
+        }
     }
 
     // Toolbar를 구성하는 메서드
@@ -114,6 +147,7 @@ class SellingCartFragment : Fragment() {
             buttonSellingCartBarcodeScanner.setOnClickListener {
                 val dataBundle = Bundle()
                 dataBundle.putString("FragmentQuery", "SellingCart")
+                removeFragment()
                 replaceMainFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
             }
 
@@ -287,16 +321,24 @@ class SellingCartFragment : Fragment() {
     private fun addItemToFirestore(scannedIsbn: String) {
         sellingCartViewModel.searchByIsbn(scannedIsbn) { bookItem ->
             if (bookItem != null) {
+                // 로그인 사용자 토큰 가져오기
+                val userToken = bookApplication.loginUserModel?.userToken
+                if (userToken.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                    return@searchByIsbn
+                }
+
+                // Firestore에 저장할 모델 생성
                 val sellingCartItem = SellingCartModel(
                     sellingCartSellingPrice = (bookItem.priceStandard * 0.7).toInt(),
                     sellingCartQuality = 0,
                     sellingCartISBN = scannedIsbn,
-                    sellingCartUserToken = "", // 사용자 토큰 추가 필요
+                    sellingCartUserToken = userToken, // 사용자 토큰 추가
                     sellingCartTime = System.currentTimeMillis(),
                     sellingCartState = 0
                 )
 
-                // Firestore 객체 초기화
+                // Firestore 객체 초기화 및 데이터 추가
                 val firestore: FirebaseFirestore by lazy {
                     FirebaseFirestore.getInstance()
                 }
@@ -304,8 +346,8 @@ class SellingCartFragment : Fragment() {
                 firestore.collection("SellingCartTable").add(sellingCartItem)
                     .addOnSuccessListener {
                         Toast.makeText(requireContext(), "장바구니에 추가되었습니다.", Toast.LENGTH_SHORT).show()
-                        // ViewModel의 데이터 갱신
-                        sellingCartViewModel.fetchCartItemsWithApi()
+                        // ViewModel 데이터 갱신
+                        sellingCartViewModel.fetchCartItemsWithApi(userToken)
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(requireContext(), "데이터 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -315,6 +357,7 @@ class SellingCartFragment : Fragment() {
             }
         }
     }
+
 
     // RecyclerView 어댑터
     private inner class RecyclerSellingCartAdapter(

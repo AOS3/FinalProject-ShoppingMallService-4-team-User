@@ -55,15 +55,21 @@ class SellingCartViewModel @Inject constructor(
     private var apiDataLoaded = false
     private var uiRendered = false
 
-    fun fetchCartItemsWithApi() {
+    fun fetchCartItemsWithApi(userToken: String) {
         firestoreDataLoaded = false
         apiDataLoaded = false
         uiRendered = false
+
+        if (userToken.isEmpty()) {
+            Log.e("SellingCartViewModel", "User token is empty. Cannot fetch data.")
+            return
+        }
 
         viewModelScope.launch {
             try {
                 // Firestore 데이터 로드
                 val items = firestore.collection("SellingCartTable")
+                    .whereEqualTo("sellingCartUserToken", userToken)
                     .get()
                     .await()
                     .documents
