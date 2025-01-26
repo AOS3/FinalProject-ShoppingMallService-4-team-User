@@ -80,12 +80,6 @@ class SellingCartFragment : Fragment() {
 
             // LiveData 관찰
             observeViewModel()
-
-            // 전달된 ISBN 값을 Firestore에 추가
-            val scannedIsbn = arguments?.getString("ISBN")
-            scannedIsbn?.let {
-                addItemToFirestore(it)
-            }
         }
         // Toolbar 설정
         settingToolbar()
@@ -145,11 +139,14 @@ class SellingCartFragment : Fragment() {
             }
 
             buttonSellingCartBarcodeScanner.setOnClickListener {
-                val dataBundle = Bundle()
-                dataBundle.putString("FragmentQuery", "SellingCart")
+                val dataBundle = Bundle().apply {
+                    putString("FragmentQuery", "SellingCart")
+                    putString("userToken", bookApplication.loginUserModel.userToken) // userToken 전달
+                }
                 removeFragment()
                 replaceMainFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
             }
+
 
             buttonSellingCartAddBookForSelling.setOnClickListener {
                 if (checkedItemCount == 0) {
@@ -316,48 +313,6 @@ class SellingCartFragment : Fragment() {
             Log.d("SellingCartFragment", "Book author observed: $author")
         }
     }
-
-    // Firebase에 데이터 추가
-    private fun addItemToFirestore(scannedIsbn: String) {
-        sellingCartViewModel.searchByIsbn(scannedIsbn) { bookItem ->
-            if (bookItem != null) {
-                // 로그인 사용자 토큰 가져오기
-                val userToken = bookApplication.loginUserModel?.userToken
-                if (userToken.isNullOrEmpty()) {
-                    Toast.makeText(requireContext(), "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
-                    return@searchByIsbn
-                }
-
-                // Firestore에 저장할 모델 생성
-                val sellingCartItem = SellingCartModel(
-                    sellingCartSellingPrice = (bookItem.priceStandard * 0.7).toInt(),
-                    sellingCartQuality = 0,
-                    sellingCartISBN = scannedIsbn,
-                    sellingCartUserToken = userToken, // 사용자 토큰 추가
-                    sellingCartTime = System.currentTimeMillis(),
-                    sellingCartState = 0
-                )
-
-                // Firestore 객체 초기화 및 데이터 추가
-                val firestore: FirebaseFirestore by lazy {
-                    FirebaseFirestore.getInstance()
-                }
-
-                firestore.collection("SellingCartTable").add(sellingCartItem)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "장바구니에 추가되었습니다.", Toast.LENGTH_SHORT).show()
-                        // ViewModel 데이터 갱신
-                        sellingCartViewModel.fetchCartItemsWithApi(userToken)
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(requireContext(), "데이터 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-            } else {
-                Toast.makeText(requireContext(), "ISBN에 해당하는 도서를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
 
     // RecyclerView 어댑터
     private inner class RecyclerSellingCartAdapter(
