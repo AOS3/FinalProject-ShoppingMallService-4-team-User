@@ -56,10 +56,9 @@ class SellingCartViewModel @Inject constructor(
     private var uiRendered = false
 
     fun fetchCartItemsWithApi() {
-        _isLoading.postValue(true) // 로딩 시작
         firestoreDataLoaded = false
         apiDataLoaded = false
-        uiRendered = false // 렌더링 상태 초기화
+        uiRendered = false
 
         viewModelScope.launch {
             try {
@@ -97,7 +96,6 @@ class SellingCartViewModel @Inject constructor(
         val books = mutableListOf<BookItem>()
 
         isbns.forEach { isbn ->
-            // API 호출
             val result = runCatching {
                 sellingCartRepository.searchBooks(isbn, maxResults = 1, sort = "Accuracy")
             }
@@ -107,7 +105,6 @@ class SellingCartViewModel @Inject constructor(
                 if (bookItem != null) {
                     books.add(bookItem)
 
-                    // Firestore 업데이트 (도서명과 저자 저장)
                     updateBookDetailsInFirestore(
                         isbn,
                         bookItem.title,
@@ -125,15 +122,14 @@ class SellingCartViewModel @Inject constructor(
             }
         }
 
-        _sellingCartBooks.postValue(books) // API 데이터를 LiveData에 저장
+        _sellingCartBooks.postValue(books)
         apiDataLoaded = true
         checkIfLoadingComplete()
     }
 
     private fun checkIfLoadingComplete() {
         if (firestoreDataLoaded && apiDataLoaded && uiRendered) {
-            _isDataLoaded.postValue(true) // 데이터와 UI 모두 로드 완료
-            _isLoading.postValue(false) // 로딩 다이얼로그 종료
+            _isDataLoaded.postValue(true)
         }
     }
 

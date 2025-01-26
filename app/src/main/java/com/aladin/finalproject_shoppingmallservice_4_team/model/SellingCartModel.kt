@@ -20,5 +20,8 @@ data class SellingCartModel (
     // 0 : 판매 장바구니에 있는 상태
     // 1 : 판매 장바구니에서 체크 되어서 넘어가면 변하는 상태
     var sellingCartState:Int = 0,
+
+    var sellingCartBookTitle: String = "",
+    var sellingCartBookAuthor: String = "",
     @Exclude @DocumentId var documentId: String = "" // Firestore 문서 ID
 )
