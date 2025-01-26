@@ -12,10 +12,11 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainMenuBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.myinfo.MyInfoFragment
@@ -24,15 +25,10 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.Selling
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.setting.SettingFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainMenuFragment : Fragment() {
-
-    // ItemNewAll : 신간 전체 리스트
-    // Bestseller : 베스트셀러
-    // BlogBest : 블로거 베스트셀러
-    // Used : 중고
-    // 넘겨줄때 key: bookQuery
 
     val menuItems = listOf(
         "내가 판매하는 중고 도서",
@@ -43,76 +39,127 @@ class MainMenuFragment : Fragment() {
     )
 
     private lateinit var fragmentMainMenuBinding: FragmentMainMenuBinding
+    private val mainMenuViewModel: MainMenuViewModel by viewModels()
+    private lateinit var bookApplication: BookApplication
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        fragmentMainMenuBinding = FragmentMainMenuBinding.inflate(layoutInflater, container, false)
+    ): View {
+        fragmentMainMenuBinding = FragmentMainMenuBinding.inflate(inflater, container, false)
 
-        // Toolbar를 구성하는 메서드를 호출한다.
-        settingToolbar()
-        // Tab 버튼들을 구성하는 메서드를 호출한다.
+        // BookApplication 초기화
+        bookApplication = requireActivity().application as BookApplication
+
+        // ViewModel 데이터 관찰
+        observeViewModel()
+
+        // 로그인 상태 확인
+        checkLoginProcess()
+
+        // Tab 버튼 및 메뉴 설정
         setupTabButtons()
-        // List를 구성하는 메서드를 호출한다.
+        setupSettingIcon()
+
+        // 메뉴 리스트 설정
         setupMenuList()
 
         return fragmentMainMenuBinding.root
     }
 
-    // Toolbar를 구성하는 메서드
-    fun settingToolbar() {
-        fragmentMainMenuBinding.apply {
-            val titleTextView = TextView(requireContext()).apply {
-                text = "로그인 해 주세요"
-                textSize = 20f
-                setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                // 로그인 해 주세요 클릭
-                setOnClickListener {
-                    // 로그인 화면으로 이동
-                    removeFragment()
-                    replaceMainFragment(LoginFragment(),true)
-                    visibility = View.GONE
-                    toolbarMainMenu.title = "000 사용자님"
+    private fun observeViewModel() {
+        // ViewModel의 userName을 관찰하여 툴바 제목 업데이트
+        mainMenuViewModel.userName.observe(viewLifecycleOwner) { userName ->
+            setupToolbar(userName)
+        }
 
-                    val textMainMenuLogout = fragmentMainMenuBinding.textMainMenuLogOut
-                    textMainMenuLogout.visibility = View.VISIBLE
-                    textMainMenuLogout.paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
-
-                    // 로그아웃 버튼 클릭
-                    textMainMenuLogout.setOnClickListener {
-                        visibility = View.VISIBLE
-                        toolbarMainMenu.title = ""
-                        textMainMenuLogout.visibility = View.GONE
-                        // 로그 아웃
-                        Toast.makeText(requireContext(), "로그 아웃 성공~!", Toast.LENGTH_SHORT).show()
-                    }
-                }
+        // 로그인 상태 변경에 따라 로그인/로그아웃 UI 업데이트
+        mainMenuViewModel.isLoggedIn.observe(viewLifecycleOwner) { isLoggedIn ->
+            if (isLoggedIn) {
+                setupLogoutButton()
+            } else {
+                setupLoginButton()
             }
+        }
+    }
 
-            // 툴바에 동적으로 추가
-            toolbarMainMenu.addView(titleTextView)
+    // 로그인 여부 확인 메서드
+    private fun checkLoginProcess() {
+        try {
+            if (::bookApplication.isInitialized && bookApplication.loginUserModel.userToken.isNotEmpty()) {
+                setupToolbar(bookApplication.loginUserModel.userName)
+                setupLogoutButton()
+            } else {
+                setupToolbar(null)
+                setupLoginButton()
+            }
+        } catch (e: Exception) {
+            setupToolbar(null)
+            setupLoginButton()
+        }
+    }
 
-            // 아이콘을 Drawable로 가져와서 Tint 적용
-            val icon = ContextCompat.getDrawable(requireContext(), R.drawable.settings_24px)
-            icon?.setTint(ContextCompat.getColor(requireContext(), R.color.white))
+    // 툴바 제목 설정
+    private fun setupToolbar(userName: String?) {
+        fragmentMainMenuBinding.toolbarMainMenu.title = userName?.let {
+            "${it}님"
+        }
+    }
 
-            // 툴바에 메뉴 아이템 동적으로 추가
-            toolbarMainMenu.menu.add(Menu.NONE, 1, Menu.NONE, "설정")
-                .setIcon(R.drawable.settings_24px)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+    // 설정 아이콘 추가
+    private fun setupSettingIcon() {
+        val icon = ContextCompat.getDrawable(requireContext(), R.drawable.settings_24px)
+        icon?.setTint(ContextCompat.getColor(requireContext(), R.color.white))
+        fragmentMainMenuBinding.toolbarMainMenu.menu.add(Menu.NONE, 1, Menu.NONE, "설정")
+            .setIcon(R.drawable.settings_24px)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
 
-            toolbarMainMenu.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    // toolbar_mainMenu_goSettings
-                    1 -> {
-                        // 환경 설정으로 이동
-                        removeFragment()
-                        replaceMainFragment(SettingFragment(),true)
-                    }
-                }
-                true
+        fragmentMainMenuBinding.toolbarMainMenu.setOnMenuItemClickListener { item ->
+            if (item.itemId == 1) {
+                removeFragment()
+                replaceMainFragment(SettingFragment(), true)
+            }
+            true
+        }
+    }
+
+    // 로그인 버튼 UI 설정
+    private fun setupLoginButton() {
+        val titleTextView = TextView(requireContext()).apply {
+            text = "로그인 해 주세요"
+            textSize = 20f
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            setOnClickListener {
+                removeFragment()
+                replaceMainFragment(LoginFragment(), true)
+            }
+        }
+
+        fragmentMainMenuBinding.toolbarMainMenu.apply {
+            // 기존 메뉴를 유지하면서 TextView를 추가
+            addView(titleTextView)
+        }
+
+        fragmentMainMenuBinding.textMainMenuLogOut.visibility = View.GONE
+    }
+
+
+
+
+    // 로그아웃 버튼 UI 설정
+    private fun setupLogoutButton() {
+        fragmentMainMenuBinding.textMainMenuLogOut.apply {
+            visibility = View.VISIBLE
+            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            setOnClickListener {
+                bookApplication.loginUserModel.userToken = ""
+                bookApplication.loginUserModel.userName = ""
+
+                // 로그아웃 처리 후 ViewModel 상태 갱신
+                mainMenuViewModel.checkUserLoginStatus("")
+
+                Toast.makeText(requireContext(), "로그아웃 성공!", Toast.LENGTH_SHORT).show()
             }
         }
     }
