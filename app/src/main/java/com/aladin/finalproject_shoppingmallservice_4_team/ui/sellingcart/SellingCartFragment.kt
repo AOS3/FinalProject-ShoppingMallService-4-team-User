@@ -36,11 +36,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class SellingCartFragment : Fragment() {
 
     private lateinit var fragmentSellingCartBinding: FragmentSellingCartBinding
-    private val viewModel: SellingCartViewModel by viewModels()
     private lateinit var adapter: RecyclerSellingCartAdapter
     private lateinit var progressBarDialog: CustomDialogProgressbar
-    private var checkedItemCount: Int = 0 // 체크된 도서 수량
-    private var totalEstimatedPrice: Int = 0 // 총 예상 판매가
+
+    private val sellingCartViewModel: SellingCartViewModel by viewModels()
+    // 체크된 도서 수량
+    private var checkedItemCount: Int = 0
+    // 총 예상 판매가
+    private var totalEstimatedPrice: Int = 0
 
 
     override fun onCreateView(
@@ -49,8 +52,9 @@ class SellingCartFragment : Fragment() {
     ): View {
         fragmentSellingCartBinding = FragmentSellingCartBinding.inflate(layoutInflater, container, false)
 
-        // ProgressBar 다이얼로그 초기화
+        // ProgressBar 다이얼로그 초기화 및 표시
         progressBarDialog = CustomDialogProgressbar(requireContext())
+        progressBarDialog.show()
 
         // 팔기 장바구니 화면으로 넘어갈 올 때 sellingCartState 상태를 0으로 초기화하는 메서드 호출
         resetSellingCartStates()
@@ -74,7 +78,7 @@ class SellingCartFragment : Fragment() {
         }
 
         // Firestore 데이터 및 API 데이터 로드
-        viewModel.fetchCartItemsWithApi()
+        sellingCartViewModel.fetchCartItemsWithApi()
 
         return fragmentSellingCartBinding.root
     }
@@ -119,12 +123,12 @@ class SellingCartFragment : Fragment() {
                     Toast.makeText(requireContext(), "선택된 도서가 없습니다.", Toast.LENGTH_SHORT).show()
                 } else {
                     // checkedItemCount가 0이 아닌 경우 선택된 도서의 sellingCartState를 업데이트
-                    val selectedDocumentIds = viewModel.selectedItems.value?.toList() ?: emptyList()
+                    val selectedDocumentIds = sellingCartViewModel.selectedItems.value?.toList() ?: emptyList()
 
                     if (selectedDocumentIds.isNotEmpty()) {
                         // Firestore에서 선택된 도서들의 sellingCartState 업데이트
                         selectedDocumentIds.forEach { documentId ->
-                            viewModel.updateSellingCartState(documentId, 1) { success ->
+                            sellingCartViewModel.updateSellingCartState(documentId, 1) { success ->
                                 if (!success) {
                                     Log.e("SellingCart", "Failed to update sellingCartState for $documentId")
                                 }
@@ -137,24 +141,25 @@ class SellingCartFragment : Fragment() {
                         putInt("CHECKED_ITEM_COUNT", checkedItemCount)
                         putInt("TOTAL_ESTIMATED_PRICE", totalEstimatedPrice)
                     }
+
                     val sellingLastPageFragment = SellingLastPageFragment().apply {
                         arguments = bundle // Bundle 전달
                     }
+
                     replaceMainFragment(sellingLastPageFragment, true)
                 }
             }
 
             buttonSellingCartDelete.setOnClickListener {
-                val selectedDocumentIds = viewModel.selectedItems.value?.toList() ?: emptyList()
-
+                val selectedDocumentIds = sellingCartViewModel.selectedItems.value?.toList() ?: emptyList()
                 if (selectedDocumentIds.isNotEmpty()) {
                     // 삭제 작업 실행
-                    viewModel.deleteCheckedSellingCartBooks(selectedDocumentIds)
+                    sellingCartViewModel.deleteCheckedSellingCartBooks(selectedDocumentIds)
 
                     // UI를 명시적으로 갱신
-                    viewModel.cartItems.observe(viewLifecycleOwner) { updatedCartItems ->
+                    sellingCartViewModel.cartItems.observe(viewLifecycleOwner) { updatedCartItems ->
                         if (updatedCartItems.isEmpty()) {
-                            viewModel.calculateTotalEstimatedPrice() // 총 금액 0으로 갱신
+                            sellingCartViewModel.calculateTotalEstimatedPrice() // 총 금액 0으로 갱신
                         }
                     }
 
@@ -170,7 +175,7 @@ class SellingCartFragment : Fragment() {
 
     // 팔기 장바구니 화면으로 넘어갈 올 때 sellingCartState 상태를 0으로 초기화하는 메서드
     private fun resetSellingCartStates() {
-        viewModel.resetAllSellingCartStates { success ->
+        sellingCartViewModel.resetAllSellingCartStates { success ->
             if (success) {
                 Log.d("SellingCart", "All sellingCartState reset to 0 successfully")
             } else {
@@ -181,8 +186,8 @@ class SellingCartFragment : Fragment() {
 
     // 선택된 도서 수량 및 예상 판매가 계산 메서드
     private fun calculateCheckedItems() {
-        val selectedItems = viewModel.selectedItems.value.orEmpty()
-        val items = viewModel.cartItems.value.orEmpty()
+        val selectedItems = sellingCartViewModel.selectedItems.value.orEmpty()
+        val items = sellingCartViewModel.cartItems.value.orEmpty()
 
         // 체크된 도서
         val checkedItems = items.filter { selectedItems.contains(it.documentId) }
@@ -190,10 +195,6 @@ class SellingCartFragment : Fragment() {
         // 체크된 도서 수량 및 예상 판매가 계산
         checkedItemCount = checkedItems.size
         totalEstimatedPrice = checkedItems.sumOf { it.sellingCartSellingPrice }
-
-        // 로그로 확인
-        Log.d("SellingCartFragment", "Checked Item Count: $checkedItemCount")
-        Log.d("SellingCartFragment", "Total Estimated Price: $totalEstimatedPrice")
 
         // UI 업데이트
         fragmentSellingCartBinding.textViewSellingCartTotalPrice.text = "총 예상 판매가: ${totalEstimatedPrice}원"
@@ -212,124 +213,79 @@ class SellingCartFragment : Fragment() {
 
     // LiveData 상태 확인
     private fun observeViewModel() {
-        // 데이터 로드 완료 감지
-        viewModel.isDataLoaded.observe(viewLifecycleOwner) { isDataLoaded ->
+        // 데이터 로드 완료 시점 감지
+        sellingCartViewModel.isDataLoaded.observe(viewLifecycleOwner) { isDataLoaded ->
             Log.d("LiveData", "isDataLoaded: $isDataLoaded")
             if (isDataLoaded) {
+                // 다이얼로그 종료
                 if (progressBarDialog.isShowing) {
                     progressBarDialog.dismiss()
                 }
             }
         }
 
-        // 로딩 상태 관리
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            Log.d("LiveData", "isLoading: $isLoading")
-            if (isLoading) {
-                if (!progressBarDialog.isShowing) {
-                    progressBarDialog.show()
-                }
+        // RecyclerView 렌더링 완료 감지
+        fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                Log.d("UI Render", "RecyclerView 렌더링 완료")
+                sellingCartViewModel.setUiRendered() // 렌더링 완료 알림
+                fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
-        }
+        })
 
-        viewModel.cartItems.observe(viewLifecycleOwner) { items ->
+
+        // 장바구니 데이터 관찰
+        sellingCartViewModel.cartItems.observe(viewLifecycleOwner) { items ->
             Log.d("LiveData", "cartItems updated: ${items.size} items")
             adapter.updateData(items)
-        }
-
-        viewModel.isDataLoaded.observe(viewLifecycleOwner) { isDataLoaded ->
-            Log.d("LiveData", "isDataLoaded: $isDataLoaded")
-            if (isDataLoaded) {
-                fragmentSellingCartBinding.recyclerViewSellingCartInfo.post {
-                    adapter.notifyDataSetChanged() // RecyclerView 강제 렌더링
-                }
-            }
-        }
-
-        // 선택된 도서 LiveData 관찰
-        viewModel.selectedItems.observe(viewLifecycleOwner) {
-            calculateCheckedItems() // 체크된 도서와 총 예상 판매가 계산
-        }
-
-        // Firestore 데이터 관찰
-        viewModel.cartItems.observe(viewLifecycleOwner) { items ->
-            Log.d("LiveData", "cartItems updated: ${items.size} items")
             fragmentSellingCartBinding.recyclerViewSellingCartInfo.post {
-                adapter.updateData(items)
+                adapter.notifyDataSetChanged() // RecyclerView 강제 렌더링
             }
 
-            // RecyclerView 렌더링 감지
-            fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    Log.d("UI Render", "RecyclerView 렌더링 완료")
-                    viewModel.setUiRendered() // UI 렌더링 완료 알림
-                    fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                }
-            })
+            // UI 상태 업데이트
+            val isDataEmpty = items.isEmpty()
+            fragmentSellingCartBinding.includeSellingCartEmpty.root.visibility = if (isDataEmpty) View.VISIBLE else View.GONE
+            fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility = if (isDataEmpty) View.GONE else View.VISIBLE
+            sellingCartViewModel.setAllItems(items) // 선택 상태 업데이트
         }
 
-        // API 데이터 관찰
-        viewModel.sellingCartBooks.observe(viewLifecycleOwner) { books ->
-            Log.d("SellingCartFragment", "API 데이터를 로드했습니다: $books")
-        }
-
-        // 개별 선택 및 전체 선택 동기화
-        fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.selectAllItems(isChecked)
-        }
-
-        viewModel.selectedItems.observe(viewLifecycleOwner) { selectedItems ->
+        // 선택된 도서 데이터 관찰
+        sellingCartViewModel.selectedItems.observe(viewLifecycleOwner) { selectedItems ->
             fragmentSellingCartBinding.recyclerViewSellingCartInfo.post {
                 adapter.updateSelection(selectedItems) // 선택 상태 갱신
                 adapter.notifyDataSetChanged() // RecyclerView 강제 갱신
             }
 
+            calculateCheckedItems() // 체크된 도서와 총 예상 판매가 계산
+
             // 전체 선택 체크박스 동기화
-            val allSelected = selectedItems.size == viewModel.cartItems.value?.size
+            val allSelected = selectedItems.size == sellingCartViewModel.cartItems.value?.size
             fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener(null) // 기존 리스너 제거
             fragmentSellingCartBinding.checkBoxSellingCartAll.isChecked = allSelected // 상태 업데이트
             fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.selectAllItems(isChecked) // 다시 리스너 설정
+                sellingCartViewModel.selectAllItems(isChecked) // 다시 리스너 설정
             }
         }
 
-        // 총 예상 가격 관찰
-        viewModel.totalEstimatedPrice.observe(viewLifecycleOwner) { totalPrice ->
-            fragmentSellingCartBinding.textViewSellingCartTotalPrice.text =
-                "총 예상 판매가: ${totalPrice}원"
+        // 총 예상 판매가 관찰
+        sellingCartViewModel.totalEstimatedPrice.observe(viewLifecycleOwner) { totalPrice ->
+            fragmentSellingCartBinding.textViewSellingCartTotalPrice.text = "총 예상 판매가: ${totalPrice}원"
         }
 
-
-        viewModel.cartItems.observe(viewLifecycleOwner) { updatedCartItems ->
-            adapter.updateData(updatedCartItems)
-            val isDataEmpty = updatedCartItems.isEmpty()
-            fragmentSellingCartBinding.includeSellingCartEmpty.root.visibility = if (isDataEmpty) View.VISIBLE else View.GONE
-            fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility = if (isDataEmpty) View.GONE else View.VISIBLE
-        }
-
-        viewModel.cartItems.observe(viewLifecycleOwner) { items ->
-            adapter.updateData(items) // 어댑터에 최신 데이터 전달 (정렬은 어댑터 내에서 처리)
-
-            val isDataEmpty = items.isEmpty()
-            fragmentSellingCartBinding.includeSellingCartEmpty.root.visibility = if (isDataEmpty) View.VISIBLE else View.GONE
-            fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility = if (isDataEmpty) View.GONE else View.VISIBLE
-
-            viewModel.setAllItems(items) // 선택 상태 업데이트
-        }
-
-        viewModel.sellingCartBookTitle.observe(viewLifecycleOwner) { title ->
+        // 추가 데이터 (제목, 저자) 관찰
+        sellingCartViewModel.sellingCartBookTitle.observe(viewLifecycleOwner) { title ->
             Log.d("SellingCartFragment", "Book title observed: $title")
         }
 
-        viewModel.sellingCartBookAuthor.observe(viewLifecycleOwner) { author ->
+        sellingCartViewModel.sellingCartBookAuthor.observe(viewLifecycleOwner) { author ->
             Log.d("SellingCartFragment", "Book author observed: $author")
         }
-
     }
 
+    // Firebase에 데이터 추가
     private fun addItemToFirestore(scannedIsbn: String) {
-        viewModel.searchByIsbn(scannedIsbn) { bookItem ->
+        sellingCartViewModel.searchByIsbn(scannedIsbn) { bookItem ->
             if (bookItem != null) {
                 val sellingCartItem = SellingCartModel(
                     sellingCartSellingPrice = (bookItem.priceStandard * 0.7).toInt(),
@@ -349,7 +305,7 @@ class SellingCartFragment : Fragment() {
                     .addOnSuccessListener {
                         Toast.makeText(requireContext(), "장바구니에 추가되었습니다.", Toast.LENGTH_SHORT).show()
                         // ViewModel의 데이터 갱신
-                        viewModel.fetchCartItemsWithApi()
+                        sellingCartViewModel.fetchCartItemsWithApi()
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(requireContext(), "데이터 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -360,6 +316,7 @@ class SellingCartFragment : Fragment() {
         }
     }
 
+    // RecyclerView 어댑터
     private inner class RecyclerSellingCartAdapter(
         private var items: List<SellingCartModel>
     ) : RecyclerView.Adapter<RecyclerSellingCartAdapter.ViewHolder>() {
@@ -377,11 +334,11 @@ class SellingCartFragment : Fragment() {
             fun bind(item: SellingCartModel) {
                 // View 초기화
                 binding.checkBoxSelectRowSellingCart.setOnCheckedChangeListener(null)
-                binding.checkBoxSelectRowSellingCart.isChecked = viewModel.selectedItems.value?.contains(item.documentId) == true
+                binding.checkBoxSelectRowSellingCart.isChecked = sellingCartViewModel.selectedItems.value?.contains(item.documentId) == true
 
                 binding.checkBoxSelectRowSellingCart.setOnCheckedChangeListener { _, isChecked ->
-                    viewModel.toggleItemSelection(item.documentId, isChecked)
-                    viewModel.calculateTotalEstimatedPrice() // 총 금액 갱신
+                    sellingCartViewModel.toggleItemSelection(item.documentId, isChecked)
+                    sellingCartViewModel.calculateTotalEstimatedPrice() // 총 금액 갱신
                 }
 
                 // 품질(ToggleButton) 초기화
@@ -410,7 +367,7 @@ class SellingCartFragment : Fragment() {
                         val bookPrice = bookCache[item.sellingCartISBN]?.priceStandard ?: 0
                         item.sellingCartSellingPrice = calculateEstimatedPrice(bookPrice, item.sellingCartQuality)
 
-                        viewModel.updateSellingCartQuality(item, bookPrice) { success ->
+                        sellingCartViewModel.updateSellingCartQuality(item, bookPrice) { success ->
                             if (!success) {
                                 Toast.makeText(requireContext(), "업데이트 실패", Toast.LENGTH_SHORT).show()
                             }
@@ -423,7 +380,7 @@ class SellingCartFragment : Fragment() {
                         binding.textViewSellingCartEstimatedPrice.text = "예상 판매가: ${item.sellingCartSellingPrice}원"
 
                         // 총 금액 갱신
-                        viewModel.calculateTotalEstimatedPrice()
+                        sellingCartViewModel.calculateTotalEstimatedPrice()
                     }
                 }
 
@@ -447,7 +404,7 @@ class SellingCartFragment : Fragment() {
                     binding.textViewSellingCartEstimatedPrice.text = "데이터 로딩 중..."
 
                     // 비동기로 데이터 로드
-                    viewModel.searchByIsbn(item.sellingCartISBN) { loadedBookItem ->
+                    sellingCartViewModel.searchByIsbn(item.sellingCartISBN) { loadedBookItem ->
                         if (loadedBookItem != null) {
                             bookCache[item.sellingCartISBN] = loadedBookItem
                             binding.textViewSellingCartBookTitle.text = loadedBookItem.title
@@ -461,7 +418,7 @@ class SellingCartFragment : Fragment() {
                                 .into(binding.imageViewSellingCartBook)
 
                             // 총 금액 갱신
-                            viewModel.calculateTotalEstimatedPrice()
+                            sellingCartViewModel.calculateTotalEstimatedPrice()
                         }
                     }
                 }
@@ -473,69 +430,6 @@ class SellingCartFragment : Fragment() {
                     1 -> (price * 0.5).toInt()
                     2 -> (price * 0.3).toInt()
                     else -> 0
-                }
-            }
-
-            private fun updateUI(item: SellingCartModel, bookItem: BookItem?) {
-                if (bookItem != null) {
-                    Glide.with(requireContext()).load(bookItem.cover)
-                        .into(binding.imageViewSellingCartBook)
-                    binding.textViewSellingCartBookTitle.text = bookItem.title
-                    binding.textViewSellingCartBookAuthor.text = bookItem.author
-                    binding.textViewSellingCartBookPrice.text = "${bookItem.priceStandard}원"
-                    binding.textViewSellingCartEstimatedPrice.text =
-                        when (item.sellingCartQuality) {
-                            0 -> "예상 판매가: ${(bookItem.priceStandard * 0.7).toInt()}원"
-                            1 -> "예상 판매가: ${(bookItem.priceStandard * 0.5).toInt()}원"
-                            2 -> "예상 판매가: ${(bookItem.priceStandard * 0.3).toInt()}원"
-                            else -> "예상 판매가: 정해지지 않음"
-                        }
-
-                    setupQualityToggleGroup(item, bookItem)
-
-                    // 총 금액 계산
-                    viewModel.calculateTotalEstimatedPrice()
-                }
-            }
-
-            private fun setupQualityToggleGroup(item: SellingCartModel, bookItem: BookItem) {
-                binding.toggleGroupQuality.addOnButtonCheckedListener { _, checkedId, isChecked ->
-                    if (isChecked) {
-                        // 품질 변경에 따라 값 설정
-                        item.sellingCartQuality = when (checkedId) {
-                            R.id.button_sellingCart_High -> 0
-                            R.id.button_sellingCart_Medium -> 1
-                            R.id.button_sellingCart_Low -> 2
-                            else -> item.sellingCartQuality
-                        }
-
-                        // 품질에 따른 예상 판매가 계산
-                        val estimatedPrice = when (item.sellingCartQuality) {
-                            0 -> (bookItem.priceStandard * 0.7).toInt()
-                            1 -> (bookItem.priceStandard * 0.5).toInt()
-                            2 -> (bookItem.priceStandard * 0.3).toInt()
-                            else -> bookItem.priceStandard
-                        }
-                        item.sellingCartSellingPrice = estimatedPrice // 예상 판매가를 도서 객체에 업데이트
-
-                        // Firestore 업데이트: 품질과 예상 판매가 업데이트
-                        viewModel.updateSellingCartQuality(item, bookItem.priceStandard) { success ->
-                            if (success) {
-                                Toast.makeText(requireContext(), "품질 및 예상 판매가가 성공적으로 업데이트되었습니다.", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(requireContext(), "Firestore 업데이트 실패.", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        // UI 업데이트
-                        binding.textViewSellingCartEstimatedPrice.text = "예상 판매가: ${estimatedPrice}원"
-
-                        // 버튼 색상 업데이트
-                        updateButtonColors(item.sellingCartQuality, binding)
-
-                        // 총 금액 재계산
-                        viewModel.calculateTotalEstimatedPrice()
-                    }
                 }
             }
 
@@ -622,9 +516,9 @@ class SellingCartFragment : Fragment() {
         override fun getItemCount(): Int = items.size
 
         fun updateData(newItems: List<SellingCartModel>) {
-            items = newItems.sortedByDescending { it.sellingCartTime } // 최신순 정렬
-            notifyDataSetChanged() // RecyclerView 갱신
+            // 최신순 정렬
+            items = newItems.sortedByDescending { it.sellingCartTime }
+            notifyDataSetChanged()
         }
-
     }
 }
