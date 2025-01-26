@@ -103,6 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="비밀번호*"
+                    app:boxStrokeColor="@color/main_color"
                     app:cursorColor="@color/main_color"
                     app:endIconMode="password_toggle"
                     app:helperText="6자리 이상 입력 해주세요"
@@ -121,6 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="비밀번호 확인*"
+                    app:boxStrokeColor="@color/main_color"
                     app:cursorColor="@color/main_color"
                     app:endIconMode="password_toggle"
                     app:helperText=" "
@@ -176,6 +178,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:enabled="false"
                         android:hint="우편 번호"
                         app:helperText=" ">
 
@@ -183,7 +186,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="false"
-                            android:focusable="false" />
+                            android:focusable="false"
+                            android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
@@ -207,7 +211,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
-                        android:focusable="false" />
+                        android:focusable="false"
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

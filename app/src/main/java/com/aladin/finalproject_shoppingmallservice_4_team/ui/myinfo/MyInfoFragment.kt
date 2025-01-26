@@ -17,6 +17,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMyInfoBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.UserModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
@@ -176,7 +177,7 @@ class MyInfoFragment : Fragment() {
 
             // 1:1 문의 버튼
             buttonMyInfoAsk.setOnClickListener {
-
+                replaceMainFragment(AskFragment(),true)
             }
         }
     }

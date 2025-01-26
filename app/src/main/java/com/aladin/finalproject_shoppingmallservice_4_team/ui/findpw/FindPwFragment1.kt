@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentFindPw1Binding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
@@ -55,31 +56,56 @@ class FindPwFragment1 : Fragment() {
     }
 
     private fun observeViewModel() {
-        findPwViewModel.userIdCheckResult.observe(viewLifecycleOwner) {result ->
-            if (result == true) {
-                // ID와 전화번호가 일치 -> 화면 이동
-
-                // ID와 전화번호를 들고 가기
-                val userId = fragmentFindPw1Binding.textFieldFindPw1UserId.editText?.text.toString().trim()
-                val phoneNumber = fragmentFindPw1Binding.textFieldFindPw1PhoneNumber.editText?.text.toString().replace("-","").trim()
-
-                val bundle = Bundle().apply {
-                    putString("userId", userId)
-                    putString("phoneNumber", phoneNumber)
+        findPwViewModel.userCheckResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                FindPwResult.SUCCESS -> {
+                    // 정상 회원 - 화면 이동
+                    navigateToChangePassword()
                 }
-                val fragment = FindPwFragment2().apply {
-                    arguments = bundle
+                FindPwResult.DEACTIVATED -> {
+                    // 탈퇴 회원 - 다이얼로그 표시
+                    showErrorDialog("탈퇴한 회원입니다.")
                 }
-
-                replaceMainFragment(fragment, true)
-            } else if (result == false) {
-                // ID 전화번호 불일치 -> 에러 표시
-                fragmentFindPw1Binding.textFieldFindPw1UserId.error = "ID와 전화번호가 일치하지 않습니다"
-            } else {
-                // 오류 발생
-                Toast.makeText(requireContext(), "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                FindPwResult.NOT_FOUND -> {
+                    // 사용자 정보 없음
+                    fragmentFindPw1Binding.textFieldFindPw1UserId.error = "ID와 전화번호가 일치하지 않습니다."
+                }
+                FindPwResult.ERROR -> {
+                    // 기타 오류
+                    Toast.makeText(requireContext(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                else -> {}
             }
         }
+    }
+
+    private fun showErrorDialog(message: String) {
+        val dialog = CustomDialog(
+            context = requireContext(),
+            contentText = message,
+            icon = R.drawable.error_24px,
+            positiveText = "확인",
+            onPositiveClick = {
+                removeFragment()
+            }
+        )
+        dialog.showCustomDialog()
+    }
+
+    private fun navigateToChangePassword() {
+        val userId = fragmentFindPw1Binding.textFieldFindPw1UserId.editText?.text.toString().trim()
+        val phoneNumber = fragmentFindPw1Binding.textFieldFindPw1PhoneNumber.editText?.text.toString()
+            .replace("-", "").trim()
+
+        val bundle = Bundle().apply {
+            putString("userId", userId)
+            putString("phoneNumber", phoneNumber)
+        }
+        val fragment = FindPwFragment2().apply {
+            arguments = bundle
+        }
+
+        replaceMainFragment(fragment, true)
     }
 
     // 툴바를 설정하는 메서드

@@ -62,17 +62,32 @@ class FindIdFragment : Fragment() {
     }
 
     // 옵저버
-    private fun observeViewModel(){
+    private fun observeViewModel() {
         findIdViewModel.userIdLiveData.observe(viewLifecycleOwner) { userId ->
-            if (userId != null) {
+            userId?.let {
                 val userName = fragmentFindIdBinding.textFieldFindIdUserName.editText?.text.toString()
-                showFindIdDialog(userName, userId)
+                showFindIdDialog(userName, it)
             }
         }
 
         findIdViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { errorMessage ->
-            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            errorMessage?.let {
+                showErrorDialog(it)
+            }
         }
+    }
+
+    private fun showErrorDialog(message: String) {
+        val dialog = CustomDialog(
+            context = requireContext(),
+            contentText = message,
+            icon = R.drawable.error_24px,
+            positiveText = "확인",
+            onPositiveClick = {
+                removeFragment()
+            }
+        )
+        dialog.showCustomDialog()
     }
 
     private fun settingFindIdButton() {
