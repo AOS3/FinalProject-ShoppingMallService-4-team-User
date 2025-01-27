@@ -65,7 +65,7 @@ class LikeListFragment : Fragment() {
                     // 데이터를 받아왔을 때, RecyclerView에 전달
                     likeListAdapter =
                         LikeListAdapter(
-                            likeListBookList,
+                            likeListBookList.sortedByDescending { it.likeListTime },
                             this@LikeListFragment,
                             likeListViewModel,
                             requireContext()

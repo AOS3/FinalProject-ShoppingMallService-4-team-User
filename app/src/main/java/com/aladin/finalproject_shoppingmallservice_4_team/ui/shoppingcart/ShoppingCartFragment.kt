@@ -163,24 +163,33 @@ class ShoppingCartFragment : Fragment() {
         }
     }
 
-    // CheckBox
     private fun settingCheckBox() {
         fragmentShoppingCartBinding.apply {
+            // 전체 선택 체크박스 리스너
             checkBoxShoppingCartCheckAllList.setOnCheckedChangeListener { _, isChecked ->
-                // 모든 항목 선택/해제
+                // 전체 선택/해제
                 shoppingCartAdapter.selectAllItems(isChecked)
                 calculateTotals()
             }
         }
     }
 
-    // 총 구매 가격과 총 수량 계산
+    // 아이템 상태 변경 시 전체 체크박스 상태 업데이트
+    fun onItemCheckedChange() {
+        val allSelected = shoppingCartAdapter.shoppingCartDataList.size == shoppingCartAdapter.getSelectedItems().size
+        if (fragmentShoppingCartBinding.checkBoxShoppingCartCheckAllList.isChecked != allSelected) {
+            fragmentShoppingCartBinding.checkBoxShoppingCartCheckAllList.setOnCheckedChangeListener(null)
+            fragmentShoppingCartBinding.checkBoxShoppingCartCheckAllList.isChecked = allSelected
+            settingCheckBox() // 리스너 재등록
+        }
+        calculateTotals()
+    }
+
+    // 총 구매 가격과 수량 계산
     private fun calculateTotals() {
         val selectedItems = shoppingCartAdapter.getSelectedItems()
         val totalSize = selectedItems.sumOf { it.shoppingCartBookQualityCount }
-        val totalPrice =
-            selectedItems.sumOf { it.shoppingCartSellingPrice * it.shoppingCartBookQualityCount }
-
+        val totalPrice = selectedItems.sumOf { it.shoppingCartSellingPrice * it.shoppingCartBookQualityCount }
         fragmentShoppingCartBinding.apply {
             recyclerViewShoppingCartTotalListSize.text = "총수량 : ${totalSize}개"
             recyclerViewShoppingCartTotalListPrice.text = "총 구매 가격 : ${totalPrice.toCommaString()}원"
@@ -230,7 +239,7 @@ class ShoppingCartFragment : Fragment() {
                     emptyList(),
                     this@ShoppingCartFragment,
                     shoppingCartViewModel
-                ) { calculateTotals() } // 초기값으로 빈 리스트
+                ) { onItemCheckedChange() } // 초기값으로 빈 리스트
             recyclerViewShoppingCartShoppingCartList.run {
                 layoutManager = LinearLayoutManager(context)
                 adapter = shoppingCartAdapter
@@ -248,10 +257,10 @@ class ShoppingCartFragment : Fragment() {
                     // 데이터를 받아왔을 때, RecyclerView에 전달
                     shoppingCartAdapter =
                         ShoppingCartAdapter(
-                            usedBookList,
+                            usedBookList.sortedByDescending { it.shoppingCartTime },
                             this@ShoppingCartFragment,
                             shoppingCartViewModel
-                        ) { calculateTotals() } // 새 데이터로 Adapter를 갱신
+                        ) { onItemCheckedChange() } // 새 데이터로 Adapter를 갱신
                     recyclerViewShoppingCartShoppingCartList.adapter = shoppingCartAdapter
                     linearLayoutShoppingCartEmptyShoppingCartList.visibility = View.GONE
                     recyclerViewShoppingCartTotalListSize.visibility = View.VISIBLE

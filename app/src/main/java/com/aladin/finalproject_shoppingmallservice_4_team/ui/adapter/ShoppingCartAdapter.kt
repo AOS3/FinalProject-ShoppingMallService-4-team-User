@@ -17,7 +17,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragmen
 import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
 
 class ShoppingCartAdapter(
-    private var shoppingCartDataList: List<ShoppingCartModel>,
+    var shoppingCartDataList: List<ShoppingCartModel>,
     private val shoppingCartFragment: ShoppingCartFragment,
     private val shoppingCartViewModel: ShoppingCartViewModel,
     private val onItemCheckedChange: () -> Unit
@@ -57,6 +57,8 @@ class ShoppingCartAdapter(
                     }
                     onItemCheckedChange()
                 }
+
+
 
                 // 삭제 버튼 클릭
                 imageButtonShoppingCartDeleteList.setOnClickListener { item ->
@@ -116,12 +118,13 @@ class ShoppingCartAdapter(
 
     override fun getItemCount(): Int = shoppingCartDataList.size
 
+    // 전체 선택/해제 메서드
     fun selectAllItems(isSelected: Boolean) {
         selectedItems.clear()
         if (isSelected) {
             selectedItems.addAll(shoppingCartDataList)
         }
-        notifyDataSetChanged()
+        notifyDataSetChanged() // UI 업데이트
     }
 
     fun getCheckedItemsWithUserTokenAndIsbn(): List<Pair<String, String>> {
