@@ -76,6 +76,8 @@ class RegisterStep2Fragment : Fragment() {
 
         settingObservers()
 
+        settingPasswordTextWatchers()
+
         settingIdCheckListener()
 
 
@@ -402,7 +404,7 @@ class RegisterStep2Fragment : Fragment() {
                     fun setAddress(zoneCode: String, fullRoadAddr: String) {
                         // UI 변경은 UI 스레드에서 실행
                         requireActivity().runOnUiThread {
-                            Toast.makeText(requireContext(), "우편번호: $zoneCode\n지번 주소: $fullRoadAddr", Toast.LENGTH_LONG).show()
+                            // Toast.makeText(requireContext(), "우편번호: $zoneCode\n지번 주소: $fullRoadAddr", Toast.LENGTH_LONG).show()
 
                             // WebView 숨김 처리
                             webViewRegisterStep2Address.visibility = View.GONE
@@ -424,6 +426,57 @@ class RegisterStep2Fragment : Fragment() {
                 // assets 폴더에 저장된 daum.html 파일을 로드
                 webViewRegisterStep2Address.loadUrl("file:///android_asset/daum.html")
             }
+        }
+    }
+
+    private fun settingPasswordTextWatchers() {
+        fragmentRegisterStep2Binding.apply {
+            // 비밀번호 입력칸
+            textFieldRegisterStep2Password.editText?.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 비밀번호 확인 칸에 입력된 값과 일치 여부 확인
+                    val password = s.toString()
+                    val confirmPassword = textFieldRegisterStep2PasswordCheck.editText?.text.toString()
+
+                    if (password.isNotEmpty() && password.length >= 6) {
+                        textFieldRegisterStep2Password.error = null
+                        textFieldRegisterStep2Password.helperText = " "
+                    } else {
+                        textFieldRegisterStep2Password.error = "비밀번호는 최소 6자리 이상이어야 합니다."
+                    }
+
+                    if (confirmPassword.isNotEmpty() && password != confirmPassword) {
+                        textFieldRegisterStep2PasswordCheck.error = "비밀번호가 일치하지 않습니다."
+                    } else {
+                        textFieldRegisterStep2PasswordCheck.error = null
+                        textFieldRegisterStep2PasswordCheck.helperText = " "
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
+
+            // 비밀번호 확인 입력칸
+            textFieldRegisterStep2PasswordCheck.editText?.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 비밀번호 입력 칸에 입력된 값과 일치 여부 확인
+                    val confirmPassword = s.toString()
+                    val password = textFieldRegisterStep2Password.editText?.text.toString()
+
+                    if (confirmPassword.isNotEmpty() && password != confirmPassword) {
+                        textFieldRegisterStep2PasswordCheck.error = "비밀번호가 일치하지 않습니다."
+                    } else {
+                        textFieldRegisterStep2PasswordCheck.error = null
+                        textFieldRegisterStep2PasswordCheck.helperText = " "
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
         }
     }
 

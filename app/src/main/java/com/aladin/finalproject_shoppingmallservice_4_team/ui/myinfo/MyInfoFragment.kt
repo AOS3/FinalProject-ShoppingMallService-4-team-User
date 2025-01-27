@@ -98,7 +98,11 @@ class MyInfoFragment : Fragment() {
             toolbarMyInfo.title = "내 정보"
             toolbarMyInfo.setNavigationIcon(R.drawable.arrow_back_ios_24px)
             toolbarMyInfo.setNavigationOnClickListener {
-                removeFragment()
+                if(webViewMyInfoAddress.visibility == View.VISIBLE) {
+                    webViewMyInfoAddress.visibility = View.GONE
+                } else {
+                    removeFragment()
+                }
             }
         }
     }

@@ -204,6 +204,7 @@
                     android:id="@+id/textField_registerStep2_address1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:hint="도로명 주소"
                     app:helperText=" ">
 
@@ -211,6 +212,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
+                        android:enabled="false"
                         android:focusable="false"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
