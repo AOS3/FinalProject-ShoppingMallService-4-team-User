@@ -199,9 +199,9 @@ class SearchFragment : Fragment(), SearchOnClickListener {
     // 드롭다운 선택에 따라 recyclerView가 갱신
     private fun renewalRecyclerViewFromDropDown(value: Int) {
         when (value) {
-            1 -> adapter.sortByName()
-            2 -> adapter.sortByHighestPrice()
-            else -> adapter.sortByLowestPrice()
+            1 -> viewModel.checkNameFilter()
+            2 -> viewModel.checkTopPriceFilter()
+            else -> viewModel.checkBottomPriceFilter()
         }
     }
 
@@ -226,7 +226,33 @@ class SearchFragment : Fragment(), SearchOnClickListener {
 
     private fun updateRecyclerView() {
         viewModel.books.observe(viewLifecycleOwner) {
-            adapter.updateList(it.toMutableList())
+            if(viewModel.nameFilter.value!!) {
+                adapter.updateList(it.sortedBy { it.title }.toMutableList())
+            }
+            if(viewModel.topPriceFilter.value!!) {
+                adapter.updateList(it.sortedByDescending { it.priceStandard }.toMutableList())
+            }
+            if(viewModel.bottomPriceFilter.value!!) {
+                adapter.updateList(it.sortedBy { it.priceStandard }.toMutableList())
+            }
+        }
+
+        viewModel.nameFilter.observe(viewLifecycleOwner) {
+            if(it) {
+                adapter.updateList(viewModel.books.value!!.sortedBy { it.title }.toMutableList())
+            }
+        }
+
+        viewModel.topPriceFilter.observe(viewLifecycleOwner) {
+            if(it) {
+                adapter.updateList(viewModel.books.value!!.sortedByDescending { it.priceStandard }.toMutableList())
+            }
+        }
+
+        viewModel.bottomPriceFilter.observe(viewLifecycleOwner) {
+            if(it) {
+                adapter.updateList(viewModel.books.value!!.sortedBy { it.priceStandard }.toMutableList())
+            }
         }
     }
 
