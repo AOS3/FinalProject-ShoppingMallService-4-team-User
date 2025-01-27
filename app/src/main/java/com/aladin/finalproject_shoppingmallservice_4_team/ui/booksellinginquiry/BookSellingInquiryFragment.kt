@@ -22,6 +22,8 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentOr
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.RowBookSellingInquiryBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingInquiryModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.notification.NotificationFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.qualityguide.QualityGuideFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -108,7 +110,17 @@ class BookSellingInquiryFragment : Fragment() {
     private fun buttonSetting() {
         fragmentBookSellingInquiryBinding.apply {
             buttonBookSellingInquiryAddBookForSelling.setOnClickListener {
-                Toast.makeText(requireContext(), "알림 화면으로 가기", Toast.LENGTH_SHORT).show()
+                replaceMainFragment(NotificationFragment(), true)
+            }
+        }
+        fragmentBookSellingInquiryBinding.apply {
+            buttonBookSellingInquiryAsk.setOnClickListener {
+                replaceMainFragment(AskFragment(), true)
+            }
+        }
+        fragmentBookSellingInquiryBinding.apply {
+            buttonBookSellingInquiryFAQ.setOnClickListener {
+                Toast.makeText(requireContext(), "준비중인 기능입니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -129,6 +141,7 @@ class BookSellingInquiryFragment : Fragment() {
                     arguments = Bundle().apply {
                         putInt("sellingInquiryPrice", selectedItem.sellingInquiryPrice)
                         putInt("sellingInquiryQuality", selectedItem.sellingInquiryQuality)
+                        putInt("sellingInquiryApprovalResult", selectedItem.sellingInquiryApprovalResult)
                         putString("sellingInquiryISBN", selectedItem.sellingInquiryISBN)
                         putString("sellingInquiryUserToken", selectedItem.sellingInquiryUserToken)
                         putInt("sellingInquiryApprovalResult", selectedItem.sellingInquiryApprovalResult)
@@ -154,8 +167,6 @@ class BookSellingInquiryFragment : Fragment() {
         }
     }
 
-
-
     // RecyclerView 어댑터
     private inner class RecyclerBookSellingInquiryAdapter(
         private var items: List<SellingInquiryModel>
@@ -167,7 +178,7 @@ class BookSellingInquiryFragment : Fragment() {
         inner class ViewHolder(private val binding: RowBookSellingInquiryBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(item: SellingInquiryModel) {
                 // 상태에 따른 텍스트와 색상 설정
-                val state = when (item.sellingInquiryState) {
+                val state = when (item.sellingInquiryApprovalResult) {
                     0 -> {
                         "승인 신청"
                     }
@@ -193,7 +204,7 @@ class BookSellingInquiryFragment : Fragment() {
                 binding.textViewBookSellingInquiryListState.text = state
 
                 // 품질 설정
-                val quality = when (item.sellingInquiryQuality) {
+                val quality = when (item.sellingInquiryApprovalResult) {
                     0 -> "상"
                     1 -> "중"
                     2 -> "하"
@@ -201,14 +212,14 @@ class BookSellingInquiryFragment : Fragment() {
                 }
 
                 // 검수 완료 상태에서 직원 품질도 추가로 표시
-                val qualityText = if (item.sellingInquiryState == 2) {
+                val qualityText = if (item.sellingInquiryApprovalResult == 2) {
                     val staffQuality = when (item.sellingInquiryChoiceQuality) {
                         0 -> "상"
                         1 -> "중"
                         2 -> "하"
                         else -> "오류"
                     }
-                    "내가 선택한 품질: $quality -> $staffQuality"
+                    "최종 품질: $quality -> $staffQuality"
                 } else {
                     "내가 선택한 품질: $quality"
                 }
@@ -217,7 +228,12 @@ class BookSellingInquiryFragment : Fragment() {
                 // 나머지 데이터 설정
                 binding.textViewBookSellingInquiryListName.text = item.sellingInquiryBookName
                 binding.textViewBookSellingInquiryListAuthor.text = item.sellingInquiryBookAuthor
-                binding.textViewBookSellingInquiryListPrice.text = "예상 판매가: ${item.sellingInquiryPrice}원"
+                val priceText = if (item.sellingInquiryState == 2) {
+                    "판매가: ${item.sellingInquiryPrice}원 -> ${item.sellingInquiryFinalPrice}원"
+                } else {
+                    "예상 판매가: ${item.sellingInquiryPrice}원"
+                }
+                binding.textViewBookSellingInquiryListPrice.text = priceText
 
                 // 날짜 형식 변환
                 val formattedDate = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(
