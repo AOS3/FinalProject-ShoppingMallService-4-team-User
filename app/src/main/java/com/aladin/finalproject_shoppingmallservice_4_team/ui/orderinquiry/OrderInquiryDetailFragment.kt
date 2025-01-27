@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentOrderInquiryDetailBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -31,12 +33,23 @@ class OrderInquiryDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbarButton()
+        askButton()
         loadData()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    /*
+    버튼
+     */
+
+    private fun askButton() {
+        binding.buttonOrderInquiryAsk.setOnClickListener {
+            replaceMainFragment(AskFragment(), true)
+        }
     }
 
     /*

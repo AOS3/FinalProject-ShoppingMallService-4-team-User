@@ -12,6 +12,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentOrderInquiryBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.OrderInquiryModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
@@ -147,6 +148,7 @@ class OrderInquiryFragment : Fragment(),OrderOnClickListener {
     private fun settingAskButton() {
         binding.buttonOrderInquiryAsk.setOnClickListener {
             // 문의 화면으로 변경한다.
+            replaceMainFragment(AskFragment(), true)
         }
     }
 
