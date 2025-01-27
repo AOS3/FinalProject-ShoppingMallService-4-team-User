@@ -38,18 +38,29 @@ class BookSellingInquiryViewModel @Inject constructor(
                 val count = result.size()
                 _documentCount.postValue(count) // LiveData로 개수 업데이트
 
-                // 데이터 매핑
+                // Firestore 데이터 매핑
                 val data = result.map { document ->
                     SellingInquiryModel(
-                        sellingInquiryBookName = document.getString("sellingInquiryBookName") ?: "",
-                        sellingInquiryBookAuthor = document.getString("sellingInquiryBookAuthor") ?: "",
                         sellingInquiryPrice = document.getLong("sellingInquiryPrice")?.toInt() ?: 0,
+                        sellingInquiryFinalPrice = document.getLong("sellingInquiryFinalPrice")?.toInt() ?: 0,
                         sellingInquiryQuality = document.getLong("sellingInquiryQuality")?.toInt() ?: -1,
-                        sellingInquiryState = document.getLong("sellingInquiryState")?.toInt() ?: -1,
+                        sellingInquiryISBN = document.getString("sellingInquiryISBN").orEmpty(),
+                        sellingInquiryUserToken = document.getString("sellingInquiryUserToken").orEmpty(),
+                        sellingInquiryApprovalResult = document.getLong("sellingInquiryApprovalResult")?.toInt() ?: -1,
                         sellingInquiryTime = document.getLong("sellingInquiryTime") ?: 0L,
-                        sellingInquiryChoiceQuality = document.getLong("sellingInquiryChoiceQuality")?.toInt() ?: -1
+                        sellingInquiryShippingMethod = document.getLong("sellingInquiryShippingMethod")?.toInt() ?: -1,
+                        sellingInquiryNonPurchaseableMethod = document.getLong("sellingInquiryNonPurchaseableMethod")?.toInt() ?: -1,
+                        sellingInquiryDepositor = document.getString("sellingInquiryDepositor").orEmpty(),
+                        sellingInquiryBankName = document.getString("sellingInquiryBankName").orEmpty(),
+                        sellingInquiryBankAccountNumber = document.getString("sellingInquiryBankAccountNumber").orEmpty(),
+                        sellingInquiryBookName = document.getString("sellingInquiryBookName").orEmpty(),
+                        sellingInquiryBookAuthor = document.getString("sellingInquiryBookAuthor").orEmpty(),
+                        sellingInquiryState = document.getLong("sellingInquiryState")?.toInt() ?: -1,
+                        sellingInquiryChoiceQuality = document.getLong("sellingInquiryChoiceQuality")?.toInt() ?: -1,
+                        documentId = document.id // Firestore 문서 ID
                     )
                 }
+
                 _items.postValue(data) // LiveData로 데이터 업데이트
 
                 Log.d("BookSellingInquiryViewModel", "총 문서 개수: $count")

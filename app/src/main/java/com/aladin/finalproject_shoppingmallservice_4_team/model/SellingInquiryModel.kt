@@ -7,6 +7,8 @@ data class SellingInquiryModel (
     // 테이블 이름 : SellingInquiryTable
     // 판매가
     var sellingInquiryPrice:Int = 0,
+    // 최종 판매가
+    var sellingInquiryFinalPrice:Int = 0,
     // 퓸질
     // 0 : 상, 1 : 중, 2 : 하
     var sellingInquiryQuality:Int = 0,
