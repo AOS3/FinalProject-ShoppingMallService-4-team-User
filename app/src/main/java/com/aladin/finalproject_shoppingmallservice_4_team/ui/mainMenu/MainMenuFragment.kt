@@ -1,7 +1,9 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu
 
+import android.content.Context
 import android.graphics.Paint
 import android.os.Bundle
+import android.system.Os.remove
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
@@ -19,10 +22,12 @@ import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMa
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.SharedPreferencesHelper
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.myinfo.MyInfoFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.orderinquiry.OrderInquiryFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.setting.SettingFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -144,25 +149,50 @@ class MainMenuFragment : Fragment() {
         fragmentMainMenuBinding.textMainMenuLogOut.visibility = View.GONE
     }
 
-
-
-
     // 로그아웃 버튼 UI 설정
     private fun setupLogoutButton() {
         fragmentMainMenuBinding.textMainMenuLogOut.apply {
             visibility = View.VISIBLE
             paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
             setOnClickListener {
-                bookApplication.loginUserModel.userToken = ""
-                bookApplication.loginUserModel.userName = ""
-
-                // 로그아웃 처리 후 ViewModel 상태 갱신
-                mainMenuViewModel.checkUserLoginStatus("")
-
-                Toast.makeText(requireContext(), "로그아웃 성공!", Toast.LENGTH_SHORT).show()
+                handleLogout()
             }
         }
     }
+
+    // 로그아웃
+    private fun handleLogout() {
+        val sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
+        // 자동 로그인 토큰 제거
+        sharedPreferencesHelper.clearAutoLoginToken()
+
+        val bookApplication = requireContext().applicationContext as BookApplication
+
+        // val bookApplication = context as BookApplication
+        // 사용자 로그인 상태 초기화 (null 이 안되어서 직접 초기화)
+        // bookApplication.loginUserModel = UserModel()
+
+        bookApplication.apply {
+            // loginUserModel을 null로 설정하여 완전히 제거
+            this::class.java.getDeclaredField("loginUserModel").apply {
+                isAccessible = true
+                set(bookApplication, null)
+            }
+        }
+
+        val pref = bookApplication.getSharedPreferences("UserToken", Context.MODE_PRIVATE)
+        pref.edit{
+            remove("userToken")
+            apply()
+        }
+
+        // 메인 화면으로 이동
+        clearAllBackStack()
+
+        // 알림
+        Toast.makeText(requireContext(), "로그아웃 되었습니다", Toast.LENGTH_SHORT).show()
+    }
+
 
     // Tab 버튼 설정 메서드
     private fun setupTabButtons() {
