@@ -21,6 +21,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDeta
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.HomeAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.SearchAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.SearchOnClickListener
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeOnClickListener
 import com.aladin.finalproject_shoppingmallservice_4_team.util.hideSoftInput
@@ -144,6 +145,7 @@ class SearchFragment : Fragment(), SearchOnClickListener {
     private fun settingAskButton() {
         binding.buttonSearchAsk.setOnClickListener {
             // 1대1 문의 창으로 변경한다.
+            replaceMainFragment(AskFragment(), true)
         }
     }
 

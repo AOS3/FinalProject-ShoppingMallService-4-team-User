@@ -15,6 +15,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDeta
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.notification.NotificationFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
@@ -178,7 +179,7 @@ class HomeFragment : Fragment(), HomeOnClickListener {
                 }
                 // 알림
                 R.id.home_menu_notification -> {
-
+                    replaceMainFragment(NotificationFragment(), true)
                 }
                 // 장바구니
                 R.id.home_menu_shoppingcart -> {
