@@ -122,7 +122,31 @@ class BookSellingInquiryFragment : Fragment() {
 
     // RecyclerView 설정 메서드
     private fun settingRecyclerView() {
-        adapter = RecyclerBookSellingInquiryAdapter(emptyList())
+        adapter = RecyclerBookSellingInquiryAdapter(emptyList()).apply {
+            // 아이템 클릭 이벤트 설정
+            onItemClick = { selectedItem ->
+                val detailFragment = BookSellingInquirydetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt("sellingInquiryPrice", selectedItem.sellingInquiryPrice)
+                        putInt("sellingInquiryQuality", selectedItem.sellingInquiryQuality)
+                        putString("sellingInquiryISBN", selectedItem.sellingInquiryISBN)
+                        putString("sellingInquiryUserToken", selectedItem.sellingInquiryUserToken)
+                        putInt("sellingInquiryApprovalResult", selectedItem.sellingInquiryApprovalResult)
+                        putLong("sellingInquiryTime", selectedItem.sellingInquiryTime)
+                        putInt("sellingInquiryShippingMethod", selectedItem.sellingInquiryShippingMethod)
+                        putInt("sellingInquiryNonPurchaseableMethod", selectedItem.sellingInquiryNonPurchaseableMethod)
+                        putString("sellingInquiryDepositor", selectedItem.sellingInquiryDepositor)
+                        putString("sellingInquiryBankName", selectedItem.sellingInquiryBankName)
+                        putString("sellingInquiryBankAccountNumber", selectedItem.sellingInquiryBankAccountNumber)
+                        putString("sellingInquiryBookName", selectedItem.sellingInquiryBookName)
+                        putString("sellingInquiryBookAuthor", selectedItem.sellingInquiryBookAuthor)
+                        putInt("sellingInquiryState", selectedItem.sellingInquiryState)
+                        putInt("sellingInquiryChoiceQuality", selectedItem.sellingInquiryChoiceQuality)
+                    }
+                }
+                replaceMainFragment(detailFragment, true)
+            }
+        }
         fragmentBookSellingInquiryBinding.recyclerViewBookSellingInquiry.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@BookSellingInquiryFragment.adapter
@@ -130,10 +154,15 @@ class BookSellingInquiryFragment : Fragment() {
         }
     }
 
+
+
     // RecyclerView 어댑터
     private inner class RecyclerBookSellingInquiryAdapter(
         private var items: List<SellingInquiryModel>
     ) : RecyclerView.Adapter<RecyclerBookSellingInquiryAdapter.ViewHolder>() {
+
+        // 클릭 리스너 정의
+        var onItemClick: ((SellingInquiryModel) -> Unit)? = null
 
         inner class ViewHolder(private val binding: RowBookSellingInquiryBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(item: SellingInquiryModel) {
@@ -195,6 +224,12 @@ class BookSellingInquiryFragment : Fragment() {
                     Date(item.sellingInquiryTime)
                 )
                 binding.textViewBookSellingInquiryListDate.text = "등록 날짜: $formattedDate"
+
+
+                // 아이템 클릭 리스너 설정
+                binding.root.setOnClickListener {
+                    onItemClick?.invoke(item) // 클릭된 데이터를 전달
+                    }
             }
         }
 
