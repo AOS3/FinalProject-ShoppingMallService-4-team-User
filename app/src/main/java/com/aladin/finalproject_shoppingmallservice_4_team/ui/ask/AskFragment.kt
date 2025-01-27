@@ -115,7 +115,7 @@ class AskFragment : Fragment() {
                 askTitle = title
                 askContent = content
                 askUserEmail = email
-                askUserToken = (requireActivity().application as BookApplication).loginUserModel.userId
+                askUserToken = (requireActivity().application as BookApplication).loginUserModel.userToken
                 askAttach = askViewModel.attachmentUrl.value.orEmpty()
                 askState = 0
                 askTime = System.currentTimeMillis().toString()
