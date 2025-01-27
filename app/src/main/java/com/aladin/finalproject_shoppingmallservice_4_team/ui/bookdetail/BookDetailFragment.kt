@@ -18,6 +18,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
@@ -124,8 +125,7 @@ class BookDetailFragment : Fragment() {
 
     private fun settingSellButton() {
         binding.buttonBookDetailSellBook.setOnClickListener {
-            viewModel.sellingAddData()
-            sellingDialog()
+            checkSellLoginProcess()
         }
     }
 
@@ -160,7 +160,7 @@ class BookDetailFragment : Fragment() {
                     requireContext(),
                     onPositiveClick = {
                         removeFragment()
-                        replaceMainFragment(ShoppingCartFragment(), true)
+                        replaceMainFragment(LikeListFragment(), true)
                     },
                     positiveText = "찜으로 가기",
                     onNegativeClick = {
@@ -232,6 +232,39 @@ class BookDetailFragment : Fragment() {
         try {
             if (::bookApplication.isInitialized && bookApplication.loginUserModel.userToken != "" ) {
                 addLikeList()
+            }
+            else {
+                val loginDialog = CustomDialog(
+                    requireContext(),
+                    // 리스트 삭제 진행
+                    onPositiveClick = {
+                        removeFragment()
+                    },
+                    contentText = "로그인을 먼저 진행해주세요.",
+                    icon = R.drawable.error_24px
+                )
+                loginDialog.showCustomDialog()
+            }
+        } catch (e: Exception) {
+            val loginDialog = CustomDialog(
+                requireContext(),
+                // 리스트 삭제 진행
+                onPositiveClick = {
+                    removeFragment()
+                },
+                contentText = "로그인을 먼저 진행해주세요.",
+                icon = R.drawable.error_24px
+            )
+            loginDialog.showCustomDialog()
+        }
+    }
+
+    // Check Login
+    private fun checkSellLoginProcess() {
+        try {
+            if (::bookApplication.isInitialized && bookApplication.loginUserModel.userToken != "" ) {
+                viewModel.sellingAddData(bookApplication.loginUserModel.userToken)
+                sellingDialog()
             }
             else {
                 val loginDialog = CustomDialog(

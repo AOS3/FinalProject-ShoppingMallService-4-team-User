@@ -22,7 +22,6 @@
         android:id="@+id/textView_orderInquiry_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="411dp"
         android:text="주문한 도서가 없습니다"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
