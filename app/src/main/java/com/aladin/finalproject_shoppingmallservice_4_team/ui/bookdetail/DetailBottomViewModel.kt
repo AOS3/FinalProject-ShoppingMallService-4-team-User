@@ -60,9 +60,23 @@ class DetailBottomViewModel @Inject constructor(
     }
 
     fun updateTotal() {
-        _total.value = if(highPriceTotal.value != 0) highPriceTotal.value else 0 +
-                        if(normalPriceTotal.value != 0) normalPriceTotal.value!! else 0 +
-                        if(lowPriceTotal.value != 0) lowPriceTotal.value!! else 0
+        val high = if(highPriceTotal.value != 0)  {
+            highPriceTotal.value!!
+        } else {
+            0
+        }
+        val normal = if(normalPriceTotal.value != 0)  {
+            normalPriceTotal.value!!
+        } else  {
+            0
+        }
+        val low = if(lowPriceTotal.value != 0)  {
+            lowPriceTotal.value!!
+        } else  {
+            0
+        }
+
+        _total.value = high + normal + low
     }
 
     fun updateHighPriceTotal(price: Int) {
@@ -129,7 +143,7 @@ class DetailBottomViewModel @Inject constructor(
             if(normalPriceTotal.value != 0) {
                 val normalItem = ShoppingCartModel(
                     shoppingCartSellingPrice = normalPriceTotal.value!!,
-                    shoppingCartQuality = 0,
+                    shoppingCartQuality = 1,
                     shoppingCartISBN = isbn,
                     shoppingCartBookQualityCount = normalStock.value!!,
                     shoppingCartTime = System.currentTimeMillis(),
@@ -140,7 +154,7 @@ class DetailBottomViewModel @Inject constructor(
             if(lowPriceTotal.value != 0) {
                 val lowItem = ShoppingCartModel(
                     shoppingCartSellingPrice = lowPriceTotal.value!!,
-                    shoppingCartQuality = 0,
+                    shoppingCartQuality = 2,
                     shoppingCartISBN = isbn,
                     shoppingCartBookQualityCount = lowStock.value!!,
                     shoppingCartTime = System.currentTimeMillis(),
