@@ -27,10 +27,12 @@ import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.aladin.apiTestApplication.dto.BookItem
+import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingsearch.SellingSearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -197,25 +199,48 @@ class BarcodeScannerFragment : Fragment() {
 
     private fun navigateBasedOnQuery(item: BookItem) {
         val fragmentQuery = arguments?.getString("FragmentQuery")
+        val userToken = arguments?.getString("userToken")
+        when (fragmentQuery) {
+            "SellingCart" -> {
+                if (userToken.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "사용자 정보가 없습니다. 로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
+                    return
+                }
 
-        val fragment = when (fragmentQuery) {
-            "SellingCart" -> SellingCartFragment().apply {
-                arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+                val sellingCartItem = SellingCartModel(
+                    sellingCartSellingPrice = (item.priceStandard * 0.7).toInt(),
+                    sellingCartQuality = 0,
+                    sellingCartISBN = item.isbn13,
+                    sellingCartUserToken = userToken,
+                    sellingCartTime = System.currentTimeMillis(),
+                    sellingCartState = 0
+                )
+
+                val firestore = FirebaseFirestore.getInstance()
+                firestore.collection("SellingCartTable")
+                    .add(sellingCartItem)
+
+                removeFragment()
+                replaceMainFragment(SellingCartFragment(), true)
             }
-            "SellingSearch" -> SellingSearchFragment().apply {
-                arguments = Bundle().apply { putString("ISBN", item.isbn13) }
-            }
-            "Search" -> SearchFragment().apply {
-                arguments = Bundle().apply { putString("ISBN", item.isbn13) }
-            }
-            else -> BarcodeScanResultFragment().apply {
-                arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+            else -> {
+                val fragment = when (fragmentQuery) {
+                    "SellingSearch" -> SellingSearchFragment().apply {
+                        arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+                    }
+                    "Search" -> SearchFragment().apply {
+                        arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+                    }
+                    else -> BarcodeScanResultFragment().apply {
+                        arguments = Bundle().apply { putString("ISBN", item.isbn13) }
+                    }
+                }
+                removeFragment()
+                replaceMainFragment(fragment, true)
             }
         }
-
-        removeFragment()
-        replaceMainFragment(fragment, true)
     }
+
 
     private fun inISBNButtonOnCLick() {
         fragmentBarcodeScannerBinding.apply {
