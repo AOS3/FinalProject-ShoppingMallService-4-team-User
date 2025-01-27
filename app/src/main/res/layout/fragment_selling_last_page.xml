@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginBottom="4dp"
-                android:text="책방 마켓 자쳇 택배사 신청"
+                android:text="책방 마켓 자체 택배사 신청"
                 app:layout_constraintBottom_toTopOf="@+id/checkBox_sellingLastPage_wayChoice2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view2_sellingLastPage"
