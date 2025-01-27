@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingLastPageBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.booksellinginquiry.BookSellingInquiryFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellinglastpage.SellingLastPageViewModel
 import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
@@ -161,11 +162,11 @@ class SellingLastPageFragment : Fragment() {
                 onSuccess = {
                     Toast.makeText(requireContext(), "상품 승인 신청이 완료되었습니다.", Toast.LENGTH_SHORT).show()
 
-                    // 2. 저장 후 삭제 작업 실행
                     viewModel.deleteBooksFromSellingCart(
                         onSuccess = {
                             clearAllBackStack()
                             removeFragment()
+                            replaceMainFragment(BookSellingInquiryFragment(), true)
                         },
                         onFailure = { error ->
                             Toast.makeText(requireContext(), "삭제 실패: ${error.message}", Toast.LENGTH_SHORT).show()
