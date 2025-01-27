@@ -181,7 +181,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_bookOrder_bookList"
                 android:layout_width="0dp"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 tools:listitem="@layout/item_book_order_list"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
