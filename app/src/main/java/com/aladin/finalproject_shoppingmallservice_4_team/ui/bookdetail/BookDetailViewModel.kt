@@ -43,12 +43,12 @@ class BookDetailViewModel @Inject constructor(
 
     }
 
-    fun sellingAddData() {
+    fun sellingAddData(userToken: String) {
         val sellingCartItem = SellingCartModel(
             sellingCartSellingPrice = (books.value!!.first().priceStandard * 0.7).toInt(),
             sellingCartQuality = 0,
             sellingCartISBN = books.value!!.first().isbn13,
-            sellingCartUserToken = "",
+            sellingCartUserToken = userToken,
             sellingCartTime = System.currentTimeMillis(),
             sellingCartState = 0
         )

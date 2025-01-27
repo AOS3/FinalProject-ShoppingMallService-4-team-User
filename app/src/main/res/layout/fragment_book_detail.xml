@@ -319,33 +319,44 @@
                     app:layout_constraintStart_toEndOf="@id/textview_bookDetail_footer6"
                     app:layout_constraintTop_toTopOf="@id/textview_bookDetail_footer6" />
 
-                <Button
-                    android:id="@+id/button_bookDetail_ask"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="190dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="1:1 문의"
-                    android:textColor="#000000"
-                    app:cornerRadius="0dp"
-                    app:layout_constraintStart_toStartOf="@id/footer_bookDetail"
-                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer6"
-                    app:strokeColor="@color/white" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textview_bookDetail_footer7"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:layout_editor_absoluteX="0dp">
 
-                <Button
-                    android:id="@+id/button_bookDetail_FAQ"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="190dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="FAQ"
-                    android:textColor="#000000"
-                    app:cornerRadius="0dp"
-                    app:layout_constraintStart_toEndOf="@id/button_bookDetail_ask"
-                    app:layout_constraintTop_toBottomOf="@id/textview_bookDetail_footer6"
-                    app:strokeColor="@color/white" />
+                    <Button
+                        android:id="@+id/button_bookDetail_ask"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="1:1 문의"
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/button_bookDetail_FAQ"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="FAQ"
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
