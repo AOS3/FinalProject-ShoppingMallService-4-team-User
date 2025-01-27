@@ -15,6 +15,12 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
+enum class LoginStatus {
+    SUCCESS,
+    USER_DEACTIVATED,
+    ERROR,
+}
+
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
@@ -27,25 +33,13 @@ class LoginViewModel @Inject constructor(
     val textFieldUserLoginIdValue = MutableLiveData("")
     // 비밀번호 입력 요소
     val textFieldUserLoginPasswordValue = MutableLiveData("")
-    // 자동 로그인 입력 요소
-    val checkBoxAutoLoginValue = MutableLiveData(false)
     // 로그인 결과 값
-    val loginResult = MutableLiveData<Boolean>()
+    val loginResult = MutableLiveData<LoginStatus?>()
     // 로그인 에러 메시지
     val loginErrorMessage = MutableLiveData("")
 
     private val _autoLoginTokenResult = MutableLiveData<Boolean>()
     val autoLoginTokenResult: LiveData<Boolean> get() = _autoLoginTokenResult
-
-    // buttonUserLoginFindId - onClick
-    fun buttonUserLoginFindId(){
-
-    }
-
-    // buttonUserLoginFindPw - onClick
-    fun buttonUserLoginFindPw(){
-
-    }
 
     // buttonUserLogin - onClick
     fun buttonUserLogin() {
@@ -79,18 +73,17 @@ class LoginViewModel @Inject constructor(
 
                     user.userPw.trim() != password -> { // Firestore 비밀번호 공백 제거 후 비교
                         loginErrorMessage.value = "비밀번호가 일치하지 않습니다."
-                        Log.d(
-                            "test100",
-                            "로그인 실패 - 비밀번호 불일치. 입력 비밀번호: $password, Firestore 비밀번호: ${user.userPw.trim()}"
-                        )
+                        Log.d("test100", "로그인 실패 - 비밀번호 불일치. 입력 비밀번호: $password, Firestore 비밀번호: ${user.userPw.trim()}")
                     }
-
+                    user.userState == 1 -> { // 탈퇴한 사용자
+                        loginResult.postValue(LoginStatus.USER_DEACTIVATED)
+                    }
                     else -> {
                         // 로그인 성공 시 사용자 정보 저장
                         val bookApplication = application as BookApplication
                         bookApplication.loginUserModel = user // 사용자 정보를 Application 객채에 저장
 
-                        loginResult.value = true
+                        loginResult.postValue(LoginStatus.SUCCESS)
                         // 사용자 정보 로그 출력
                         Log.d("test100", """
                         로그인 성공!
@@ -112,6 +105,11 @@ class LoginViewModel @Inject constructor(
 
     fun generateAutoLoginToken(): String {
         return UUID.randomUUID().toString()
+    }
+
+    fun clearUserCheckResult() {
+        loginResult.value = null
+        loginErrorMessage.value = ""
     }
 
     // 자동 로그인 토큰 저장

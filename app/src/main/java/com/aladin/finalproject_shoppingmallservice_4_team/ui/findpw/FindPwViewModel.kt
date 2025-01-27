@@ -20,6 +20,9 @@ class FindPwViewModel @Inject constructor(
     private val _userIdCheckResult = MutableLiveData<Boolean?>()
     val userIdCheckResult: LiveData<Boolean?> = _userIdCheckResult
 
+    private val _userCheckResult = MutableLiveData<FindPwResult>()
+    val userCheckResult: LiveData<FindPwResult> = _userCheckResult
+
     private val _passwordUpdateResult = MutableLiveData<Boolean>()
     val passwordUpdateResult: LiveData<Boolean> = _passwordUpdateResult
 
@@ -27,10 +30,21 @@ class FindPwViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val userList = userRepository.selectUserDataByUserId(userId)
-                val isMatch = userList.any { it.userPhoneNumber == phoneNumber }
-                _userIdCheckResult.value = isMatch
+                val user = userList.firstOrNull { it.userPhoneNumber == phoneNumber }
+
+                if (user == null) {
+                    // ID와 전화번호가 일치하지 않음
+                    _userCheckResult.value = FindPwResult.NOT_FOUND
+                } else if (user.userState == 1) {
+                    // 탈퇴한 회원
+                    _userCheckResult.value = FindPwResult.DEACTIVATED
+                } else {
+                    // 정상 회원
+                    _userCheckResult.value = FindPwResult.SUCCESS
+                }
             } catch (e: Exception) {
-                _userIdCheckResult.value = null
+                // 오류 발생
+                _userCheckResult.value = FindPwResult.ERROR
             }
         }
     }
@@ -46,4 +60,12 @@ class FindPwViewModel @Inject constructor(
         }
     }
 
+}
+
+// 비밀번호 찾기 상태를 나타내는 enum class
+enum class FindPwResult {
+    SUCCESS,        // 정상 회원
+    DEACTIVATED,    // 탈퇴 회원
+    NOT_FOUND,      // 사용자 정보 없음
+    ERROR           // 기타 오류
 }

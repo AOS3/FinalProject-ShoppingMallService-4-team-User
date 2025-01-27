@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentLoginBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.findid.FindIdFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.findpw.FindPwFragment1
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
@@ -53,6 +54,11 @@ class LoginFragment : Fragment() {
         settingButtons()
 
         return fragmentLoginBinding.root
+    }
+
+    override fun onStop() {
+        super.onStop()
+        loginViewModel.clearUserCheckResult()
     }
 
 //    fun settingViewModel() {
@@ -100,33 +106,62 @@ class LoginFragment : Fragment() {
             }
         }
 
-        loginViewModel.loginResult.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess) {
-                Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
+        loginViewModel.loginResult.observe(viewLifecycleOwner) { loginStatus ->
+            when (loginStatus) {
+                LoginStatus.SUCCESS -> {
+                    Toast.makeText(requireContext(), "로그인 성공", Toast.LENGTH_SHORT).show()
+                    handleAutoLogin()
+                    loginViewModel.clearUserCheckResult()
+                }
+                LoginStatus.USER_DEACTIVATED -> {
+                    showDialog("탈퇴한 회원입니다.", isSuccess = false)
+                    loginViewModel.clearUserCheckResult()
+                }
+                LoginStatus.ERROR -> {
+                    Toast.makeText(requireContext(), "로그인 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    loginViewModel.clearUserCheckResult()
+                }
 
-                // 자동 로그인 처리
-                if (fragmentLoginBinding.checkBoxLoginAutoLogin.isChecked) {
-                    val userId = fragmentLoginBinding.textFieldLoginId.editText?.text.toString()
-                    val autoLoginToken = loginViewModel.generateAutoLoginToken()
+                null -> {}
 
-                    sharedPreferencesHelper.saveAutoLoginToken(autoLoginToken) // SharedPreferences에 저장
+            }
+        }
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val saveResult = loginViewModel.saveAutoLoginToken(userId, autoLoginToken)
-                        withContext(Dispatchers.Main) {
-                            if (saveResult) {
-                                Log.d("LoginFragment", "자동 로그인 토큰 저장 성공")
-                            } else {
-                                Toast.makeText(requireContext(), "자동 로그인 저장 실패", Toast.LENGTH_SHORT).show()
-                            }
-                            removeFragment()
-                        }
+    }
+
+    private fun handleAutoLogin() {
+        // 자동 로그인 처리
+        if (fragmentLoginBinding.checkBoxLoginAutoLogin.isChecked) {
+            val userId = fragmentLoginBinding.textFieldLoginId.editText?.text.toString()
+            val autoLoginToken = loginViewModel.generateAutoLoginToken()
+
+            sharedPreferencesHelper.saveAutoLoginToken(autoLoginToken) // SharedPreferences에 저장
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val saveResult = loginViewModel.saveAutoLoginToken(userId, autoLoginToken)
+                withContext(Dispatchers.Main) {
+                    if (saveResult) {
+                        Log.d("LoginFragment", "자동 로그인 토큰 저장 성공")
+                    } else {
+                        Toast.makeText(requireContext(), "자동 로그인 저장 실패", Toast.LENGTH_SHORT).show()
                     }
-                } else {
                     removeFragment()
                 }
             }
+        } else {
+            removeFragment()
         }
+    }
+
+    private fun showDialog(message: String, isSuccess: Boolean = true) {
+        val dialog = CustomDialog(
+            context = requireContext(),
+            contentText = message,
+            icon = if (isSuccess) R.drawable.check_circle_24px else R.drawable.error_24px,
+            positiveText = "확인",
+            onPositiveClick = {}
+        )
+        dialog.showCustomDialog()
     }
 
     // 버튼 리스너들
