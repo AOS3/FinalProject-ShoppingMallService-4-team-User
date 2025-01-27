@@ -80,9 +80,13 @@ class BookOrderFragment1 : Fragment() {
 
     private fun settingKakaoPost() {
         fragmentBookOrder1Binding.apply {
+            materialToolbarBookOrderFindAddress.setNavigationOnClickListener {
+                linearLayoutBookOrderFindAddress.visibility = View.GONE
+            }
             buttonBookOrderPostCode.setOnClickListener {
-                webViewBookOrderFindAddress.bringToFront()
-                webViewBookOrderFindAddress.visibility = View.VISIBLE
+                linearLayoutBookOrderFindAddress.bringToFront()
+                linearLayoutBookOrderFindAddress.visibility = View.VISIBLE
+                materialToolbarBookOrderFindAddress.visibility = View.VISIBLE
                 webViewBookOrderFindAddress.settings.javaScriptEnabled = true // JavaScript 허용
                 webViewBookOrderFindAddress.settings.javaScriptCanOpenWindowsAutomatically =
                     true // 새로운 창 자동 열기 허용
@@ -327,8 +331,12 @@ class BookOrderFragment1 : Fragment() {
                     phoneNumber,
                     userAddress
                 )
-                bookOrderViewModel.saveOrderDataToOrderInquiryTable()
 
+                bookOrderViewModel.userAddress.observe(viewLifecycleOwner) { address ->
+                    if (!address.isNullOrEmpty()) {
+                        bookOrderViewModel.saveOrderDataToOrderInquiryTable()
+                    }
+                }
                 // 저장 완료시 띄울 ProgressDialog
                 val successProgressBarDialog = CustomDialogProgressbar(requireContext())
                 successProgressBarDialog.show()
@@ -342,7 +350,8 @@ class BookOrderFragment1 : Fragment() {
                                 val dataBundle = Bundle()
                                 dataBundle.putLong(
                                     "orderInquiryTime",
-                                    bookOrderViewModel.todayCurrentTime)
+                                    bookOrderViewModel.todayCurrentTime
+                                )
                                 dataBundle.putStringArrayList(
                                     "userCoverList",
                                     ArrayList(bookOrderViewModel.inquiryBookCoverList) // List를 ArrayList로 변환

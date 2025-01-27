@@ -6,12 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ui.bookOrder.BookOrderFragment1">
 
-    <WebView
-        android:id="@+id/webView_bookOrder_findAddress"
-        android:visibility="gone"
+    <LinearLayout
+        android:id="@+id/linearLayout_bookOrder_findAddress"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolbar_bookOrder_findAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/arrow_back_ios_24px" />
+
+        <WebView
+            android:id="@+id/webView_bookOrder_findAddress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

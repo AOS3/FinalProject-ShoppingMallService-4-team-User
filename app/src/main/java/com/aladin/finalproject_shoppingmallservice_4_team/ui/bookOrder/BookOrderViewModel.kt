@@ -48,6 +48,7 @@ class BookOrderViewModel @Inject constructor(private val bookOrderRepository: Bo
 
     // 유저 주소
     private val _userAddress = MutableLiveData<String>()
+    val userAddress: LiveData<String> get() = _userAddress
 
     // 현재 시간 값
     private val _todayCurrentTime = System.currentTimeMillis()
@@ -192,7 +193,7 @@ class BookOrderViewModel @Inject constructor(private val bookOrderRepository: Bo
                     _isSuccessOrder.postValue(Pair(true, 1))
                 }
                 // true, 0 -> 성공적으로 저장되었음
-                // true -> 오류가 발생하여 구매 실패
+                // true, 1 -> 오류가 발생하여 구매 실패
             }
         }
     }
