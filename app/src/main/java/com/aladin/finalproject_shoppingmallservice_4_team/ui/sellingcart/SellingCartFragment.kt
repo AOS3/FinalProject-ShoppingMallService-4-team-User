@@ -24,15 +24,14 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.Barc
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booksellinginquiry.BookSellingInquiryFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.notification.NotificationFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellinglastpage.SellingLastPageFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingsearch.SellingSearchFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
-import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,17 +44,17 @@ class SellingCartFragment : Fragment() {
 
     private val sellingCartViewModel: SellingCartViewModel by viewModels()
 
+    // 상태 플래그
+    private var firestoreDataLoaded = false
+    private var apiDataLoaded = false
+    private var uiRendered = false
+
     // 체크된 도서 수량
     private var checkedItemCount: Int = 0
-
     // 총 예상 판매가
     private var totalEstimatedPrice: Int = 0
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentSellingCartBinding =
             FragmentSellingCartBinding.inflate(layoutInflater, container, false)
 
@@ -64,22 +63,28 @@ class SellingCartFragment : Fragment() {
 
         // 로그인 여부 확인
         if (checkLoginProcess()) {
-
-            // ProgressBar 다이얼로그 초기화 및 표시
             progressBarDialog = CustomDialogProgressbar(requireContext())
             progressBarDialog.show()
+
+            // 상태 플래그 초기화
+            firestoreDataLoaded = false
+            apiDataLoaded = false
+            uiRendered = false
 
             // 팔기 장바구니 화면으로 넘어갈 올 때 sellingCartState 상태를 0으로 초기화하는 메서드 호출
             resetSellingCartStates()
 
-            // RecyclerView 설정
+            // RecyclerView 설정 메서드 호출
             settingRecyclerView()
 
-            // 버튼 클릭 메서드 호출
-            buttonSellingCartOnClick()
+            // 프로그레스 다이얼로그 호출
+            startDataLoading()
 
             // LiveData 관찰
             observeViewModel()
+
+            // 버튼 클릭 메서드 호출
+            buttonSellingCartOnClick()
         }
         // Toolbar 설정
         settingToolbar()
@@ -118,10 +123,8 @@ class SellingCartFragment : Fragment() {
             materialToolbarSellingCart.setNavigationOnClickListener {
                 requireActivity().onBackPressed()
             }
-
             materialToolbarSellingCart.menu.add(Menu.NONE, 1, Menu.NONE, "판매 조회")
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-
             materialToolbarSellingCart.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     1 -> replaceMainFragment(BookSellingInquiryFragment(), true)
@@ -137,7 +140,6 @@ class SellingCartFragment : Fragment() {
             buttonSellingCartSearch.setOnClickListener {
                 replaceMainFragment(SellingSearchFragment(), true)
             }
-
             buttonSellingCartBarcodeScanner.setOnClickListener {
                 val dataBundle = Bundle().apply {
                     putString("FragmentQuery", "SellingCart")
@@ -146,8 +148,6 @@ class SellingCartFragment : Fragment() {
                 removeFragment()
                 replaceMainFragment(BarcodeScannerFragment(), true, dataBundle = dataBundle)
             }
-
-
             buttonSellingCartAddBookForSelling.setOnClickListener {
                 if (checkedItemCount == 0) {
                     // Toast 메시지 표시
@@ -166,21 +166,17 @@ class SellingCartFragment : Fragment() {
                             }
                         }
                     }
-
                     // 다음 화면으로 이동
                     val bundle = Bundle().apply {
                         putInt("CHECKED_ITEM_COUNT", checkedItemCount)
                         putInt("TOTAL_ESTIMATED_PRICE", totalEstimatedPrice)
                     }
-
                     val sellingLastPageFragment = SellingLastPageFragment().apply {
                         arguments = bundle // Bundle 전달
                     }
-
                     replaceMainFragment(sellingLastPageFragment, true)
                 }
             }
-
             buttonSellingCartDelete.setOnClickListener {
                 val selectedDocumentIds = sellingCartViewModel.selectedItems.value?.toList() ?: emptyList()
                 if (selectedDocumentIds.isNotEmpty()) {
@@ -193,7 +189,6 @@ class SellingCartFragment : Fragment() {
                             sellingCartViewModel.calculateTotalEstimatedPrice() // 총 금액 0으로 갱신
                         }
                     }
-
                     // 삭제 완료 메시지
                     Toast.makeText(requireContext(), "선택한 도서가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                 } else {
@@ -201,18 +196,36 @@ class SellingCartFragment : Fragment() {
                     Toast.makeText(requireContext(), "삭제할 항목을 선택하세요.", Toast.LENGTH_SHORT).show()
                 }
             }
+            buttonSellingCartAsk.setOnClickListener {
+                replaceMainFragment(NotificationFragment(),true)
+            }
+            buttonSellingCartFAQ.setOnClickListener {
+                Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     // 팔기 장바구니 화면으로 넘어갈 올 때 sellingCartState 상태를 0으로 초기화하는 메서드
     private fun resetSellingCartStates() {
         sellingCartViewModel.resetAllSellingCartStates { success ->
-            if (success) {
-                Log.d("SellingCart", "All sellingCartState reset to 0 successfully")
-            } else {
-                Log.e("SellingCart", "Failed to reset sellingCartState")
-            }
+            if (success) Log.d("SellingCart", "SellingCartState 초기화 성공")
+            else Log.e("SellingCart", "SellingCartState 초기화 실패")
         }
+    }
+
+    // RecyclerView 설정
+    private fun settingRecyclerView() {
+        adapter = RecyclerSellingCartAdapter(emptyList())
+        fragmentSellingCartBinding.recyclerViewSellingCartInfo.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = this@SellingCartFragment.adapter
+            addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+        }
+    }
+
+    private fun startDataLoading() {
+        val userToken = bookApplication.loginUserModel.userToken
+        sellingCartViewModel.fetchCartItemsWithApi(userToken)
     }
 
     // 선택된 도서 수량 및 예상 판매가 계산 메서드
@@ -231,53 +244,37 @@ class SellingCartFragment : Fragment() {
         fragmentSellingCartBinding.textViewSellingCartTotalPrice.text = "총 예상 판매가: ${totalEstimatedPrice}원"
     }
 
-
-    // RecyclerView 설정
-    private fun settingRecyclerView() {
-        adapter = RecyclerSellingCartAdapter(emptyList())
-        fragmentSellingCartBinding.recyclerViewSellingCartInfo.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@SellingCartFragment.adapter
-            addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
-        }
-    }
-
     // LiveData 상태 확인
     private fun observeViewModel() {
-        // 데이터 로드 완료 시점 감지
         sellingCartViewModel.isDataLoaded.observe(viewLifecycleOwner) { isDataLoaded ->
-            Log.d("LiveData", "isDataLoaded: $isDataLoaded")
             if (isDataLoaded) {
-                // 다이얼로그 종료
-                if (progressBarDialog.isShowing) {
-                    progressBarDialog.dismiss()
-                }
+                firestoreDataLoaded = true
+                apiDataLoaded = true
+                checkIfAllTasksCompleted()
             }
         }
 
-        // RecyclerView 렌더링 완료 감지
-        fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                Log.d("UI Render", "RecyclerView 렌더링 완료")
-                sellingCartViewModel.setUiRendered() // 렌더링 완료 알림
-                fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
 
+        // RecyclerView 렌더링 완료 감지
+        fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.addOnGlobalLayoutListener(
+            object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    uiRendered = true
+                    checkIfAllTasksCompleted()
+                    fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            })
 
         // 장바구니 데이터 관찰
         sellingCartViewModel.cartItems.observe(viewLifecycleOwner) { items ->
-            Log.d("LiveData", "cartItems updated: ${items.size} items")
             adapter.updateData(items)
-            fragmentSellingCartBinding.recyclerViewSellingCartInfo.post {
-                adapter.notifyDataSetChanged() // RecyclerView 강제 렌더링
-            }
-
-            // UI 상태 업데이트
             val isDataEmpty = items.isEmpty()
-            fragmentSellingCartBinding.includeSellingCartEmpty.root.visibility = if (isDataEmpty) View.VISIBLE else View.GONE
-            fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility = if (isDataEmpty) View.GONE else View.VISIBLE
+
+            fragmentSellingCartBinding.includeSellingCartEmpty.root.visibility =
+                if (isDataEmpty) View.VISIBLE else View.GONE
+            fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility =
+                if (isDataEmpty) View.GONE else View.VISIBLE
+
             sellingCartViewModel.setAllItems(items) // 선택 상태 업데이트
         }
 
@@ -311,6 +308,14 @@ class SellingCartFragment : Fragment() {
 
         sellingCartViewModel.sellingCartBookAuthor.observe(viewLifecycleOwner) { author ->
             Log.d("SellingCartFragment", "Book author observed: $author")
+        }
+    }
+
+    private fun checkIfAllTasksCompleted() {
+        if (firestoreDataLoaded && apiDataLoaded && uiRendered) {
+            if (progressBarDialog.isShowing) {
+                progressBarDialog.dismiss()
+            }
         }
     }
 

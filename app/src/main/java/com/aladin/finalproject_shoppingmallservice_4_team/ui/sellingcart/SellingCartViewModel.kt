@@ -53,12 +53,11 @@ class SellingCartViewModel @Inject constructor(
     private val fetchedBookIds = mutableSetOf<String>() // 중복 방지용 Set
     private var firestoreDataLoaded = false
     private var apiDataLoaded = false
-    private var uiRendered = false
+
 
     fun fetchCartItemsWithApi(userToken: String) {
         firestoreDataLoaded = false
         apiDataLoaded = false
-        uiRendered = false
 
         if (userToken.isEmpty()) {
             Log.e("SellingCartViewModel", "User token is empty. Cannot fetch data.")
@@ -79,6 +78,7 @@ class SellingCartViewModel @Inject constructor(
                         }
                     }.sortedByDescending { it.sellingCartTime }
 
+                allItems = items
                 _cartItems.postValue(items)
                 firestoreDataLoaded = true
 
@@ -86,7 +86,7 @@ class SellingCartViewModel @Inject constructor(
                 val isbns = items.map { it.sellingCartISBN }
                 fetchApiData(isbns)
             } catch (e: Exception) {
-                Log.e("SellingCart", "Error fetching data", e)
+                Log.e("SellingCart", "Error fetching data from Firestore", e)
             } finally {
                 checkIfLoadingComplete()
             }
@@ -100,12 +100,10 @@ class SellingCartViewModel @Inject constructor(
         }
 
         val books = mutableListOf<BookItem>()
-
         isbns.forEach { isbn ->
             val result = runCatching {
                 sellingCartRepository.searchBooks(isbn, maxResults = 1, sort = "Accuracy")
             }
-
             result.onSuccess { bookItems ->
                 val bookItem = bookItems.firstOrNull()
                 if (bookItem != null) {
@@ -124,7 +122,7 @@ class SellingCartViewModel @Inject constructor(
                     }
                 }
             }.onFailure { error ->
-                Log.e("fetchAndUpdateApiData", "Error fetching API data for ISBN: $isbn", error)
+                Log.e("fetchApiData", "Error fetching API data for ISBN: $isbn", error)
             }
         }
 
@@ -134,14 +132,9 @@ class SellingCartViewModel @Inject constructor(
     }
 
     private fun checkIfLoadingComplete() {
-        if (firestoreDataLoaded && apiDataLoaded && uiRendered) {
+        if (firestoreDataLoaded && apiDataLoaded) {
             _isDataLoaded.postValue(true)
         }
-    }
-
-    fun setUiRendered() {
-        uiRendered = true
-        checkIfLoadingComplete()
     }
 
     fun searchBooks(query: String, maxResults: Int, sort: String) {
@@ -395,6 +388,4 @@ class SellingCartViewModel @Inject constructor(
                 onComplete(false) // 실패
             }
     }
-
-
 }
