@@ -15,6 +15,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFr
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListViewModel
 import com.aladin.finalproject_shoppingmallservice_4_team.util.loadImage
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.toCommaString
 
@@ -61,7 +62,7 @@ class LikeListAdapter(
                 buttonLikeListInLikeList.setOnClickListener {
                     val dataBundle = Bundle()
                     dataBundle.putString("bookIsbn",data.likeListISBN)
-                    likeListFragment.replaceSubFragment(BookDetailFragment(),true,dataBundle)
+                    likeListFragment.replaceMainFragment(BookDetailFragment(),true,dataBundle)
                 }
             }
         }
