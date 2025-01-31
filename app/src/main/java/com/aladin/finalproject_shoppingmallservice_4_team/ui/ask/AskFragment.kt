@@ -15,6 +15,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentAskBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.AskModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.main.MainFragment
@@ -30,6 +31,7 @@ class AskFragment : Fragment() {
     lateinit var fragmentAskBinding: FragmentAskBinding
     private val askViewModel : AskViewModel by viewModels()
     private var attachmentUri: Uri? = null
+    private lateinit var progressDialog: CustomDialogProgressbar
 
     companion object {
         private const val REQUEST_CODE_ATTACHMENT = 1001
@@ -145,6 +147,8 @@ class AskFragment : Fragment() {
 
     private fun observeViewModel() {
         askViewModel.attachmentUrl.observe(viewLifecycleOwner) { url ->
+            progressDialog.dismiss()
+
             if (url != null) {
                 val fileName = attachmentUri?.lastPathSegment.orEmpty()
                 fragmentAskBinding.textFieldAskAttach.editText?.setText(fileName)
@@ -164,7 +168,14 @@ class AskFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ATTACHMENT && resultCode == Activity.RESULT_OK) {
             attachmentUri = data?.data
-            attachmentUri?.let { askViewModel.uploadAttachment(it) }
+            attachmentUri?.let {
+                // 프로그레스 다이얼로그 표시
+                progressDialog = CustomDialogProgressbar(requireContext())
+                progressDialog.show()
+
+
+                askViewModel.uploadAttachment(it)
+            }
         }
     }
 }
