@@ -178,7 +178,7 @@ class BookListFragment : Fragment() {
                             // 데이터를 받아왔을 때, RecyclerView에 전달
                             usedBookListAdapter =
                                 UsedBookListAdapter(
-                                    usedBookList,
+                                    usedBookList.sortedBy { it.usedBookTitle },
                                     this@BookListFragment
                                 ) // 새 데이터로 Adapter를 갱신
                             recyclerViewBookList.adapter = usedBookListAdapter
