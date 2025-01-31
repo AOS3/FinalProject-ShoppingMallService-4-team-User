@@ -102,6 +102,9 @@ class AskFragment : Fragment() {
 
     private fun buttonAskSend() {
         fragmentAskBinding.buttonAskSend.setOnClickListener {
+            val bookApplication = requireActivity().application as BookApplication
+            val user = bookApplication.loginUserModel
+
             val title = fragmentAskBinding.textFieldAskTitle.editText?.text.toString()
             val content = fragmentAskBinding.textFieldAskSummary.editText?.text.toString()
             val email = fragmentAskBinding.textFieldAskEmail.editText?.text.toString()
@@ -119,6 +122,7 @@ class AskFragment : Fragment() {
                 askAttach = askViewModel.attachmentUrl.value.orEmpty()
                 askState = 0
                 askTime = System.currentTimeMillis().toString()
+                askUserName = user.userName
             }
 
             // Custom Dialog 사용
