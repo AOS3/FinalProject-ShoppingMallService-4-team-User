@@ -148,7 +148,7 @@ class BookSellingInquirydetailFragment : Fragment() {
     // 배송 수단 텍스트 변환
     private fun getShippingMethodText(method: Int): String {
         return when (method) {
-            0 -> "책방 마켓 자체 택바사 신청"
+            0 -> "책방 마켓 자체 택배사 신청"
             1 -> "편의점 택배 신청"
             else -> "오류"
         }
