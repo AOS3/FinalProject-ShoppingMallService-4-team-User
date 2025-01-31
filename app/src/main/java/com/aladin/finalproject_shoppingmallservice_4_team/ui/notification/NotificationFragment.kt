@@ -98,7 +98,7 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
 
     private fun updateList() {
         viewModel.notificationList.observe(viewLifecycleOwner) {
-            adapter.updateList(it.toMutableList())
+            adapter.updateList(it.sortedByDescending { it.notificationTime }.toMutableList())
             if(it.isNotEmpty()) {
                 binding.scrollViewNotification.isVisible = true
                 binding.nofiticationEmpty.root.isVisible = false

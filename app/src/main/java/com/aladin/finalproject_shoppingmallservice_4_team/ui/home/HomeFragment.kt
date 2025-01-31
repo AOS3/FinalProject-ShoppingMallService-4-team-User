@@ -11,6 +11,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentHomeBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.HomeAdapter
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.HomeBannerAdapter
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booklist.BookListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
@@ -69,6 +70,7 @@ class HomeFragment : Fragment(), HomeOnClickListener {
         settingRecyclerView()
         settingBanner()
         combineButtonMethod()
+        settingFooterButton()
     }
 
     override fun onDestroyView() {
@@ -162,6 +164,12 @@ class HomeFragment : Fragment(), HomeOnClickListener {
             dataBundle.putString("bookQuery", items)
             dataBundle.putInt("moreValue", 1)
             replaceSubFragment(BookListFragment(), true, dataBundle = dataBundle)
+        }
+    }
+
+    private fun settingFooterButton() {
+        binding.buttonHomeAsk.setOnClickListener {
+            replaceMainFragment(AskFragment(),true)
         }
     }
 
