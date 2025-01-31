@@ -10,6 +10,9 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentNoticeDetailBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class NoticeDetailFragment : Fragment() {
@@ -33,9 +36,16 @@ class NoticeDetailFragment : Fragment() {
         fragmentNoticeDetailBinding.apply {
             textViewNoticeDetailNoticeTitle.text = arguments?.getString("noticeTitle")!!
             textViewNoticeDetailNoticeContent.text = arguments?.getString("noticeContent")!!
-            textViewNoticeDetailNoticeDate.text = "작성일 : ${arguments?.getString("noticeDate")!!}"
+            textViewNoticeDetailNoticeDate.text = formatOrderTime(arguments?.getString("noticeDate")!!.toLong())
         }
 
+    }
+
+    // format
+    private fun formatOrderTime(orderInquiryTime: Long): String {
+        val date = Date(orderInquiryTime)
+        val formatter = SimpleDateFormat("yy년 MM월 dd일", Locale.KOREAN)
+        return "작성일 : ${formatter.format(date)}"
     }
 
     private fun settingToolbar() {

@@ -52,7 +52,6 @@ class ShoppingCartViewModel @Inject constructor(private val shoppingCartReposito
             withContext(Dispatchers.IO) {
                 // 업데이트된 리스트 전달
                 _shoppingCartBookList.postValue(shoppingCartTableList)
-                Log.e("asd", shoppingCartTableList.toString())
             }
 
             // 가져온 리스트가 비어있지 않다면
@@ -64,28 +63,36 @@ class ShoppingCartViewModel @Inject constructor(private val shoppingCartReposito
         }
     }
 
-    // 체크된 장바구니 데이터 삭제
-    fun deleteCheckedShoppingCartBookList(deleteList: List<Pair<String, String>>) {
+    // 로딩 다이얼로그 초기화 함수
+    fun refreshProgressDialog() {
+        _isLoadShoppingCartList.postValue(false)
+    }
+
+    fun deleteCheckedShoppingCartBookList(deleteList: List<Triple<String, String, Int>>, onComplete: (Boolean) -> Unit) {
         viewModelScope.launch {
             val currentList = _shoppingCartBookList.value.orEmpty()
 
             // IO 스레드에서 삭제 작업 수행
-            val updatedList = withContext(Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 // Firestore에서 데이터 삭제
                 shoppingCartRepository.deleteShoppingCartBookData(deleteList)
 
                 // 삭제된 데이터를 현재 리스트에서 제외
-                currentList.filterNot { item ->
+                val updatedList = currentList.filterNot { item ->
                     deleteList.any { it.first == item.shoppingCartUserToken && it.second == item.shoppingCartISBN }
                 }
+
+                // LiveData에 갱신된 리스트 반영 (postValue 사용)
+                _shoppingCartBookList.postValue(updatedList)
+
+                // 삭제 완료 후 콜백 호출
+                onComplete(true)
             }
-            // LiveData에 갱신된 리스트 반영
-            _shoppingCartBookList.value = updatedList
         }
     }
 
     // 구매하는 책 상태 변경 함수
-    fun updateShoppingCartState(buyList: List<Pair<String, String>>, onComplete: (Boolean) -> Unit) {
+    fun updateShoppingCartState(buyList: List<Triple<String, String,Int>>, onComplete: (Boolean) -> Unit) {
         viewModelScope.launch {
 
             withContext(Dispatchers.IO) {

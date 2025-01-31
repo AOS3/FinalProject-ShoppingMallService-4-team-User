@@ -1,11 +1,13 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.ItemShoppingCartListBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.model.NoticeModel
 import com.aladin.finalproject_shoppingmallservice_4_team.model.ShoppingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
@@ -25,6 +27,12 @@ class ShoppingCartAdapter(
 
     private val selectedItems = mutableSetOf<ShoppingCartModel>()
 
+    fun updateData(newData: List<ShoppingCartModel>) {
+        shoppingCartDataList = newData
+        Log.e("asd", "asdasdsad$shoppingCartDataList")
+        notifyDataSetChanged()
+    }
+
     inner class ShoppingCartViewHolder(private val binding: ItemShoppingCartListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ShoppingCartModel) {
@@ -35,7 +43,7 @@ class ShoppingCartAdapter(
                 textViewShoppingCartBookAuthor.text = data.shoppingCartBookAuthor
                 // 판매가
                 textViewShoppingCartBookSellPrice.text =
-                    "판매가 : ${data.shoppingCartSellingPrice.toCommaString()}원"
+                    "${data.shoppingCartSellingPrice.toCommaString()}원"
                 // 이미지
                 imageViewShoppingCartBookIcon.loadImage(data.shoppingCartBookCoverImage)
                 // 수량
@@ -59,24 +67,36 @@ class ShoppingCartAdapter(
                 }
 
 
-
                 // 삭제 버튼 클릭
                 imageButtonShoppingCartDeleteList.setOnClickListener { item ->
                     val twoButtonDialog = CustomDialog(
                         shoppingCartFragment.requireContext(),
                         // 리스트 삭제 진행
                         onPositiveClick = {
+//                            shoppingCartViewModel.deleteCheckedShoppingCartBookList(
+//                                getClickItemData(
+//                                    data
+//                                )
+//                            )
                             shoppingCartViewModel.deleteCheckedShoppingCartBookList(
                                 getClickItemData(
                                     data
                                 )
-                            )
-                            // 삭제된 항목을 반영하여 shoppingCartDataList 갱신
-                            shoppingCartDataList = shoppingCartDataList.filterNot { it.shoppingCartISBN == data.shoppingCartISBN }
-                            // 선택된 항목에서 삭제된 항목도 제거
-                            selectedItems.remove(data)
-                            // 어댑터에 변경 사항 알리기
-                            notifyDataSetChanged()
+                            ) { success ->
+                                if (success) {
+                                    // 삭제 성공
+                                    shoppingCartViewModel.gettingShoppingCartBookData(data.shoppingCartUserToken)
+                                    shoppingCartViewModel.refreshProgressDialog()
+                                } else {
+                                    // 삭제 실패
+                                }
+                            }
+//                            // 삭제된 항목을 반영하여 shoppingCartDataList 갱신
+//                            shoppingCartDataList =
+//                                shoppingCartDataList.filterNot { it.shoppingCartISBN == data.shoppingCartISBN && it.shoppingCartQuality == data.shoppingCartQuality }
+//                            // 선택된 항목에서 삭제된 항목도 제거
+//                            selectedItems.remove(data)
+//                            // 어댑터에 변경 사항 알리기
                         },
                         onNegativeClick = {
 
@@ -127,14 +147,26 @@ class ShoppingCartAdapter(
         notifyDataSetChanged() // UI 업데이트
     }
 
-    fun getCheckedItemsWithUserTokenAndIsbn(): List<Pair<String, String>> {
+    fun getCheckedItemsWithUserTokenAndIsbn(): List<Triple<String, String, Int>> {
         // 체크된 항목만 필터링하여 userToken과 isbn을 Pair로 묶어서 반환
-        return selectedItems.map { Pair(it.shoppingCartUserToken, it.shoppingCartISBN) }
+        return selectedItems.map {
+            Triple(
+                it.shoppingCartUserToken,
+                it.shoppingCartISBN,
+                it.shoppingCartQuality
+            )
+        }
     }
 
-    fun getClickItemData(data: ShoppingCartModel): List<Pair<String, String>> {
+    fun getClickItemData(data: ShoppingCartModel): List<Triple<String, String, Int>> {
         // 클릭한 항목을 Pair로 묶어서 List로 반환 (하나의 Pair를 포함하는 리스트 반환)
-        return listOf(Pair(data.shoppingCartUserToken, data.shoppingCartISBN))
+        return listOf(
+            Triple(
+                data.shoppingCartUserToken,
+                data.shoppingCartISBN,
+                data.shoppingCartQuality
+            )
+        )
     }
 
     fun updateShoppingCartDataList(dataList: List<ShoppingCartModel>) {
