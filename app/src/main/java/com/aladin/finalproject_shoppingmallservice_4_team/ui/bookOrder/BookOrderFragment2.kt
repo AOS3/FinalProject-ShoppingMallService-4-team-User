@@ -1,6 +1,7 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.bookOrder
 
 import android.os.Bundle
+import android.text.TextUtils.split
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -113,7 +114,7 @@ class BookOrderFragment2 : Fragment() {
                 if (orderBookList.isNotEmpty()) {
                     fragmentBookOrder2Binding.apply {
                         // 사용자 정보 Set
-                        val userAddress = bookApplication.loginUserModel.userAddress.split("/")
+                        val userAddress = bookOrderViewModel.userAddress.value?.split("/")!!
                         textFieldBookOrder2Name.editText?.setText(bookApplication.loginUserModel.userName)
                         textFieldBookOrder2PostCode.editText?.setText(userAddress[0])
                         textFieldBookOrder2RoadNameAddress.editText?.setText(userAddress[1])
