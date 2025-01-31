@@ -33,7 +33,6 @@ class QualityGuideFragment : Fragment() {
             materialToolbarQualityGuide.setNavigationIcon(R.drawable.arrow_back_ios_24px)
             materialToolbarQualityGuide.setNavigationOnClickListener {
                 // 전 화면으로 이동
-                removeFragment()
                 requireActivity().onBackPressed()
             }
         }

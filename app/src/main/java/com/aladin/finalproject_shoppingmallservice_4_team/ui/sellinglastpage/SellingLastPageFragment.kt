@@ -10,124 +10,138 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingLastPageBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booksellinginquiry.BookSellingInquiryFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellinglastpage.SellingLastPageViewModel
 import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import java.text.NumberFormat
+import java.util.Locale
 
 class SellingLastPageFragment : Fragment() {
 
-    private lateinit var binding: FragmentSellingLastPageBinding
+    private lateinit var fragmmentSellingLastPageBinding: FragmentSellingLastPageBinding
     private val viewModel: SellingLastPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSellingLastPageBinding.inflate(layoutInflater, container, false)
+        fragmmentSellingLastPageBinding = FragmentSellingLastPageBinding.inflate(layoutInflater, container, false)
 
-        // 툴바 설정
+        // Toolbar 설정 메서드 호출
         setupToolbar()
 
-        // 텍스트뷰에 데이터 설정
+        // 텍스트뷰에 데이터 설정 메서드 호출
         setupTextView()
 
-        // 발송 방법 체크박스 설정
+        // 발송 방법 체크박스 설정 메서드 호출
         setupWayChoiceCheckbox()
 
-        // 매입 불가 상품 처리 방법 체크박스 설정
+        // 매입 불가 상품 처리 방법 체크박스 설정 메서드 호출
         setupNoChoiceCheckbox()
 
-        // 은행 선택 드롭다운 설정
+        // 은행 선택 드롭다운 설정 메서드 호출
         setupBankDropdown()
 
-        // 버튼 클릭 이벤트
+        // 버튼 클릭 이벤트 메서드 호출
         setupButtonClickListener()
 
-        return binding.root
+        return fragmmentSellingLastPageBinding.root
     }
 
+    // Toolbar 설정 메서드
     private fun setupToolbar() {
-        binding.materialToolbarSellingLastPage.title = "중고 서적 팔기"
-        binding.materialToolbarSellingLastPage.setNavigationIcon(R.drawable.arrow_back_ios_24px)
-        binding.materialToolbarSellingLastPage.setNavigationOnClickListener {
+        fragmmentSellingLastPageBinding.materialToolbarSellingLastPage.title = "중고 서적 팔기"
+        fragmmentSellingLastPageBinding.materialToolbarSellingLastPage.setNavigationIcon(R.drawable.arrow_back_ios_24px)
+        fragmmentSellingLastPageBinding.materialToolbarSellingLastPage.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
     }
 
+    // 세 자리마다 콤마 추가하는 함수
+    private fun formatNumber(number: Int): String {
+        return NumberFormat.getNumberInstance(Locale.US).format(number)
+    }
+
+    // 텍스트뷰에 데이터 설정 메서드
     private fun setupTextView() {
         val bundle = arguments
         if (bundle != null) {
             val checkedItemCount = bundle.getInt("CHECKED_ITEM_COUNT", 0)
             val totalEstimatedPrice = bundle.getInt("TOTAL_ESTIMATED_PRICE", 0)
 
-            binding.textViewSellingLastPage.text =
-                "판매 상품 : 총 ${checkedItemCount}권, ${totalEstimatedPrice}원"
-            binding.textViewSellingLastPageTotalPrice.text =
-                "판매 상품 : 총 ${checkedItemCount}권\n총 예상 판매 가격 : ${totalEstimatedPrice}원"
+            fragmmentSellingLastPageBinding.textViewSellingLastPage.text =
+                "판매 상품 : 총 ${checkedItemCount}권, ${formatNumber(totalEstimatedPrice)}원"
+            fragmmentSellingLastPageBinding.textViewSellingLastPageTotalPrice.text =
+                "판매 상품 : 총 ${checkedItemCount}권\n총 예상 판매 가격 : ${formatNumber(totalEstimatedPrice)}원"
         } else {
-            binding.textViewSellingLastPage.text = "판매 상품 정보가 없습니다."
+            fragmmentSellingLastPageBinding.textViewSellingLastPage.text = "판매 상품 정보가 없습니다."
         }
     }
 
+    // 발송 방법 체크박스 설정 메서드
     private fun setupWayChoiceCheckbox() {
-        binding.checkBoxSellingLastPageWayChoice1.isChecked = true
+        fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice1.isChecked = true
 
-        binding.checkBoxSellingLastPageWayChoice1.setOnCheckedChangeListener { _, isChecked ->
+        fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice1.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                binding.checkBoxSellingLastPageWayChoice2.isChecked = false
-            } else if (!binding.checkBoxSellingLastPageWayChoice2.isChecked) {
-                binding.checkBoxSellingLastPageWayChoice1.isChecked = true
+                fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice2.isChecked = false
+            } else if (!fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice2.isChecked) {
+                fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice1.isChecked = true
             }
         }
 
-        binding.checkBoxSellingLastPageWayChoice2.setOnCheckedChangeListener { _, isChecked ->
+        fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice2.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                binding.checkBoxSellingLastPageWayChoice1.isChecked = false
-            } else if (!binding.checkBoxSellingLastPageWayChoice1.isChecked) {
-                binding.checkBoxSellingLastPageWayChoice2.isChecked = true
+                fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice1.isChecked = false
+            } else if (!fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice1.isChecked) {
+                fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice2.isChecked = true
             }
         }
     }
 
+    // 매입 불가 상품 처리 방법 체크박스 설정 메서드
     private fun setupNoChoiceCheckbox() {
-        binding.checkBoxSellingLastPageNoChoice1.isChecked = true
+        fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice1.isChecked = true
 
-        binding.checkBoxSellingLastPageNoChoice1.setOnCheckedChangeListener { _, isChecked ->
+        fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice1.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                binding.checkBoxSellingLastPageNoChoice2.isChecked = false
-            } else if (!binding.checkBoxSellingLastPageNoChoice2.isChecked) {
-                binding.checkBoxSellingLastPageNoChoice1.isChecked = true
+                fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice2.isChecked = false
+            } else if (!fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice2.isChecked) {
+                fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice1.isChecked = true
             }
         }
 
-        binding.checkBoxSellingLastPageNoChoice2.setOnCheckedChangeListener { _, isChecked ->
+        fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice2.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                binding.checkBoxSellingLastPageNoChoice1.isChecked = false
-            } else if (!binding.checkBoxSellingLastPageNoChoice1.isChecked) {
-                binding.checkBoxSellingLastPageNoChoice2.isChecked = true
+                fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice1.isChecked = false
+            } else if (!fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice1.isChecked) {
+                fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice2.isChecked = true
             }
         }
     }
 
+    // 은행 선택 드롭다운 설정 메서드
     private fun setupBankDropdown() {
         val bankOptions = listOf("선택하세요", "KB국민은행", "신한은행", "우리은행", "하나은행", "농협은행")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, bankOptions)
-        binding.autoCompleteTextViewSellingLastPageBank.setAdapter(adapter)
+        fragmmentSellingLastPageBinding.autoCompleteTextViewSellingLastPageBank.setAdapter(adapter)
     }
 
+    // 버튼 클릭 이벤트 메서드
     private fun setupButtonClickListener() {
-        binding.buttonSellingLastPageAddBookForSelling.setOnClickListener {
-            val shippingMethod = if (binding.checkBoxSellingLastPageWayChoice1.isChecked) 0 else 1
+        fragmmentSellingLastPageBinding.buttonSellingLastPageAddBookForSelling.setOnClickListener {
+            val shippingMethod = if (fragmmentSellingLastPageBinding.checkBoxSellingLastPageWayChoice1.isChecked) 0 else 1
             val nonPurchaseableMethod =
-                if (binding.checkBoxSellingLastPageNoChoice1.isChecked) 0 else 1
-            val depositorName = binding.textFieldSellingLastPageDepositor.editText?.text.toString()
+                if (fragmmentSellingLastPageBinding.checkBoxSellingLastPageNoChoice1.isChecked) 0 else 1
+            val depositorName = fragmmentSellingLastPageBinding.textFieldSellingLastPageDepositor.editText?.text.toString()
                 .trim()
-            val bankName = binding.autoCompleteTextViewSellingLastPageBank.text.toString().trim()
+            val bankName = fragmmentSellingLastPageBinding.autoCompleteTextViewSellingLastPageBank.text.toString().trim()
             val accountNumber =
-                binding.textFieldSellingLastPageAccount.editText?.text.toString().trim()
+                fragmmentSellingLastPageBinding.textFieldSellingLastPageAccount.editText?.text.toString().trim()
             val userToken = "USER_TOKEN" // 로그인 모듈과 연동 필요
 
             // 입력 값 검증
@@ -146,7 +160,7 @@ class SellingLastPageFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (!binding.checkBoxSellingLastPageAgree.isChecked) {
+            if (!fragmmentSellingLastPageBinding.checkBoxSellingLastPageAgree.isChecked) {
                 Toast.makeText(requireContext(), "약관에 동의해야 상품 승인 신청이 가능합니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -177,6 +191,15 @@ class SellingLastPageFragment : Fragment() {
                     Toast.makeText(requireContext(), "저장 실패: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             )
+        }
+
+        fragmmentSellingLastPageBinding.buttonSellingLastPageAsk.setOnClickListener {
+            clearAllBackStack()
+            removeFragment()
+            replaceMainFragment(AskFragment(),true)
+        }
+        fragmmentSellingLastPageBinding.buttonSellingLastPageFAQ.setOnClickListener {
+            Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }

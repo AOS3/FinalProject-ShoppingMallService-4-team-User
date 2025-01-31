@@ -21,6 +21,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.bookdetail.BookDetailFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingcart.SellingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.hideSoftInput
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
@@ -69,12 +70,26 @@ class SellingSearchFragment : Fragment() {
         // "더보기" 버튼 설정 메서드 호출
         setupMoreButton()
 
+        observeLoadingState()
+
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // 🔹 로딩 상태를 감지하고 다이얼로그를 표시 또는 해제
+    private fun observeLoadingState() {
+        val progressBarDialog = CustomDialogProgressbar(requireContext())
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                progressBarDialog.show() // 로딩 시작 시 다이얼로그 표시
+            } else {
+                progressBarDialog.dismiss() // 로딩 완료 시 다이얼로그 닫기
+            }
+        }
     }
 
 
@@ -143,6 +158,18 @@ class SellingSearchFragment : Fragment() {
 
         binding.imageViewSellingSearchSearchIcon.setOnClickListener {
             performSearch()
+        }
+    }
+
+    private fun loadingDialog() {
+        // 로딩을 위한 Dialog
+        val progressBarDialog = CustomDialogProgressbar(requireContext())
+        progressBarDialog.show()
+
+        viewModel.isLoadSearchList.observe(viewLifecycleOwner) {
+            if (it) {
+                progressBarDialog.dismiss()
+            }
         }
     }
 

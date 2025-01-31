@@ -20,6 +20,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSellingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.RowSellingCartBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.BarcodeScannerFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booksellinginquiry.BookSellingInquiryFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
@@ -33,6 +34,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.NumberFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class SellingCartFragment : Fragment() {
@@ -63,6 +66,7 @@ class SellingCartFragment : Fragment() {
 
         // 로그인 여부 확인
         if (checkLoginProcess()) {
+            // 프로그레스 다이얼로그 설정
             progressBarDialog = CustomDialogProgressbar(requireContext())
             progressBarDialog.show()
 
@@ -86,12 +90,13 @@ class SellingCartFragment : Fragment() {
             // 버튼 클릭 메서드 호출
             buttonSellingCartOnClick()
         }
-        // Toolbar 설정
+        // Toolbar 설정 메서드 호출
         settingToolbar()
 
         return fragmentSellingCartBinding.root
     }
 
+    // 로그인 여부 확인 메서드
     private fun checkLoginProcess(): Boolean {
         return try {
             // 로그인 상태 확인
@@ -172,7 +177,7 @@ class SellingCartFragment : Fragment() {
                         putInt("TOTAL_ESTIMATED_PRICE", totalEstimatedPrice)
                     }
                     val sellingLastPageFragment = SellingLastPageFragment().apply {
-                        arguments = bundle // Bundle 전달
+                        arguments = bundle
                     }
                     replaceMainFragment(sellingLastPageFragment, true)
                 }
@@ -186,7 +191,7 @@ class SellingCartFragment : Fragment() {
                     // UI를 명시적으로 갱신
                     sellingCartViewModel.cartItems.observe(viewLifecycleOwner) { updatedCartItems ->
                         if (updatedCartItems.isEmpty()) {
-                            sellingCartViewModel.calculateTotalEstimatedPrice() // 총 금액 0으로 갱신
+                            sellingCartViewModel.calculateTotalEstimatedPrice()
                         }
                     }
                     // 삭제 완료 메시지
@@ -197,7 +202,7 @@ class SellingCartFragment : Fragment() {
                 }
             }
             buttonSellingCartAsk.setOnClickListener {
-                replaceMainFragment(NotificationFragment(),true)
+                replaceMainFragment(AskFragment(),true)
             }
             buttonSellingCartFAQ.setOnClickListener {
                 Toast.makeText(requireContext(), "준비중입니다.", Toast.LENGTH_SHORT).show()
@@ -213,7 +218,7 @@ class SellingCartFragment : Fragment() {
         }
     }
 
-    // RecyclerView 설정
+    // RecyclerView 설정 메서드
     private fun settingRecyclerView() {
         adapter = RecyclerSellingCartAdapter(emptyList())
         fragmentSellingCartBinding.recyclerViewSellingCartInfo.apply {
@@ -223,6 +228,7 @@ class SellingCartFragment : Fragment() {
         }
     }
 
+    // 데이터 로딩 시작 메서드
     private fun startDataLoading() {
         val userToken = bookApplication.loginUserModel.userToken
         sellingCartViewModel.fetchCartItemsWithApi(userToken)
@@ -241,7 +247,7 @@ class SellingCartFragment : Fragment() {
         totalEstimatedPrice = checkedItems.sumOf { it.sellingCartSellingPrice }
 
         // UI 업데이트
-        fragmentSellingCartBinding.textViewSellingCartTotalPrice.text = "총 예상 판매가: ${totalEstimatedPrice}원"
+        fragmentSellingCartBinding.textViewSellingCartTotalPrice.text = "총 예상 판매가: ${formatNumber(totalEstimatedPrice)}원"
     }
 
     // LiveData 상태 확인
@@ -253,7 +259,6 @@ class SellingCartFragment : Fragment() {
                 checkIfAllTasksCompleted()
             }
         }
-
 
         // RecyclerView 렌더링 완료 감지
         fragmentSellingCartBinding.recyclerViewSellingCartInfo.viewTreeObserver.addOnGlobalLayoutListener(
@@ -275,30 +280,37 @@ class SellingCartFragment : Fragment() {
             fragmentSellingCartBinding.recyclerViewSellingCartInfo.visibility =
                 if (isDataEmpty) View.GONE else View.VISIBLE
 
-            sellingCartViewModel.setAllItems(items) // 선택 상태 업데이트
+            // 선택 상태 업데이트
+            sellingCartViewModel.setAllItems(items)
         }
 
         // 선택된 도서 데이터 관찰
         sellingCartViewModel.selectedItems.observe(viewLifecycleOwner) { selectedItems ->
             fragmentSellingCartBinding.recyclerViewSellingCartInfo.post {
-                adapter.updateSelection(selectedItems) // 선택 상태 갱신
-                adapter.notifyDataSetChanged() // RecyclerView 강제 갱신
+                // 선택 상태 갱신
+                adapter.updateSelection(selectedItems)
+                // RecyclerView 강제 갱신
+                adapter.notifyDataSetChanged()
             }
 
-            calculateCheckedItems() // 체크된 도서와 총 예상 판매가 계산
+            // 체크된 도서와 총 예상 판매가 계산
+            calculateCheckedItems()
 
             // 전체 선택 체크박스 동기화
             val allSelected = selectedItems.size == sellingCartViewModel.cartItems.value?.size
-            fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener(null) // 기존 리스너 제거
-            fragmentSellingCartBinding.checkBoxSellingCartAll.isChecked = allSelected // 상태 업데이트
+            // 기존 리스너 제거
+            fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener(null)
+            // 상태 업데이트
+            fragmentSellingCartBinding.checkBoxSellingCartAll.isChecked = allSelected
             fragmentSellingCartBinding.checkBoxSellingCartAll.setOnCheckedChangeListener { _, isChecked ->
-                sellingCartViewModel.selectAllItems(isChecked) // 다시 리스너 설정
+                // 다시 리스너 설정
+                sellingCartViewModel.selectAllItems(isChecked)
             }
         }
 
         // 총 예상 판매가 관찰
         sellingCartViewModel.totalEstimatedPrice.observe(viewLifecycleOwner) { totalPrice ->
-            fragmentSellingCartBinding.textViewSellingCartTotalPrice.text = "총 예상 판매가: ${totalPrice}원"
+            fragmentSellingCartBinding.textViewSellingCartTotalPrice.text = "총 예상 판매가: ${formatNumber(totalPrice)}원"
         }
 
         // 추가 데이터 (제목, 저자) 관찰
@@ -311,12 +323,18 @@ class SellingCartFragment : Fragment() {
         }
     }
 
+    // 프로그레스 다이얼로그 해제 메서드
     private fun checkIfAllTasksCompleted() {
         if (firestoreDataLoaded && apiDataLoaded && uiRendered) {
             if (progressBarDialog.isShowing) {
                 progressBarDialog.dismiss()
             }
         }
+    }
+
+    // 세 자리마다 콤마 추가하는 함수
+    private fun formatNumber(number: Int): String {
+        return NumberFormat.getNumberInstance(Locale.US).format(number)
     }
 
     // RecyclerView 어댑터
@@ -392,9 +410,9 @@ class SellingCartFragment : Fragment() {
                 if (bookItem != null) {
                     binding.textViewSellingCartBookTitle.text = bookItem.title
                     binding.textViewSellingCartBookAuthor.text = bookItem.author
-                    binding.textViewSellingCartBookPrice.text = "${bookItem.priceStandard}원"
+                    binding.textViewSellingCartBookPrice.text = "${formatNumber(bookItem.priceStandard)}원"
                     binding.textViewSellingCartEstimatedPrice.text =
-                        "예상 판매가: ${item.sellingCartSellingPrice}원"
+                        "예상 판매가: ${formatNumber(item.sellingCartSellingPrice)}원"
 
                     Glide.with(binding.imageViewSellingCartBook.context)
                         .load(bookItem.cover)
@@ -412,9 +430,9 @@ class SellingCartFragment : Fragment() {
                             bookCache[item.sellingCartISBN] = loadedBookItem
                             binding.textViewSellingCartBookTitle.text = loadedBookItem.title
                             binding.textViewSellingCartBookAuthor.text = loadedBookItem.author
-                            binding.textViewSellingCartBookPrice.text = "${loadedBookItem.priceStandard}원"
+                            binding.textViewSellingCartBookPrice.text = "${formatNumber(loadedBookItem.priceStandard)}원"
                             binding.textViewSellingCartEstimatedPrice.text =
-                                "예상 판매가: ${calculateEstimatedPrice(loadedBookItem.priceStandard, item.sellingCartQuality)}원"
+                                "예상 판매가: ${formatNumber(calculateEstimatedPrice(loadedBookItem.priceStandard, item.sellingCartQuality))}원"
 
                             Glide.with(binding.imageViewSellingCartBook.context)
                                 .load(loadedBookItem.cover)
@@ -427,6 +445,7 @@ class SellingCartFragment : Fragment() {
                 }
             }
 
+            // 품질에 따른 계산
             private fun calculateEstimatedPrice(price: Int, quality: Int): Int {
                 return when (quality) {
                     0 -> (price * 0.7).toInt()
@@ -436,6 +455,7 @@ class SellingCartFragment : Fragment() {
                 }
             }
 
+            // 상태에 따른 버튼 색상 변경
             private fun updateButtonColors(selectedQuality: Int, binding: RowSellingCartBinding) {
                 when (selectedQuality) {
                     0 -> setButtonState(
@@ -464,6 +484,7 @@ class SellingCartFragment : Fragment() {
                 }
             }
 
+            // 버튼 상태 설정
             private fun setButtonState(selected: MaterialButton, vararg others: MaterialButton) {
                 selected.setBackgroundColor(
                     ContextCompat.getColor(
@@ -489,6 +510,7 @@ class SellingCartFragment : Fragment() {
                 }
             }
 
+            // 버튼 상태 리셋
             private fun resetButtonState(vararg buttons: MaterialButton) {
                 buttons.forEach { button ->
                     button.setBackgroundColor(
@@ -507,17 +529,20 @@ class SellingCartFragment : Fragment() {
             }
         }
 
+        // ViewHolder 생성
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val binding = RowSellingCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return ViewHolder(binding)
         }
 
+        // ViewHolder 바인딩
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.bind(items[position])
         }
 
         override fun getItemCount(): Int = items.size
 
+        // 데이터 업데이트 메서드
         fun updateData(newItems: List<SellingCartModel>) {
             // 최신순 정렬
             items = newItems.sortedByDescending { it.sellingCartTime }

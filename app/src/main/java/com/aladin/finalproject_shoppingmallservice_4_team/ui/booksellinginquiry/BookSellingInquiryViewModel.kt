@@ -69,5 +69,4 @@ class BookSellingInquiryViewModel @Inject constructor(
                 Log.e("BookSellingInquiryViewModel", "데이터 로드 실패: ${e.message}")
             }
     }
-
 }

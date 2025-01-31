@@ -26,6 +26,7 @@ import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import androidx.fragment.app.viewModels
 import com.aladin.apiTestApplication.dto.BookItem
 import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingCartModel
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.search.SearchFragment
@@ -37,16 +38,18 @@ import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
+@AndroidEntryPoint
 class BarcodeScannerFragment : Fragment() {
 
     private lateinit var fragmentBarcodeScannerBinding: FragmentBarcodeScannerBinding
+    private val viewModel: BarcodeScannerViewModel by viewModels()
     private var camera: Camera? = null
     private var isProcessing = false
     private var lastProcessedTime = 0L
 
-    // 권한 요청 런처
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -58,17 +61,21 @@ class BarcodeScannerFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        fragmentBarcodeScannerBinding = FragmentBarcodeScannerBinding.inflate(layoutInflater,container,false)
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        fragmentBarcodeScannerBinding = FragmentBarcodeScannerBinding.inflate(layoutInflater, container, false)
 
         // Toolbar 설정 메서드 호출
         settingToolbar()
-        // 권한 요청 메서드 호출
+
+        // 카메라 권한 확인 메서드 호출
         checkCameraPermission()
-        // 바코드 입력 버튼 클릭 메서드 호출
-        inISBNButtonOnCLick()
+
+        // 관찰 메서드 호출
+        setupObservers()
+
+        // ISBN 수동 입력 메서드 호출
+        setupManualISBNInput()
 
         return fragmentBarcodeScannerBinding.root
     }
@@ -76,83 +83,49 @@ class BarcodeScannerFragment : Fragment() {
     // Toolbar 설정 메서드
     private fun settingToolbar() {
         fragmentBarcodeScannerBinding.toolbarBarcodeScanner.apply {
-            title = "제품 추가"
+            title = "바코드 검색"
             setNavigationIcon(R.drawable.arrow_back_ios_24px)
-            setNavigationOnClickListener {
-                requireActivity().onBackPressed()
-            }
+            setNavigationOnClickListener { requireActivity().onBackPressed() }
         }
     }
 
-    // 권한 요청 메서드
+    // 카메라 권한 확인 메서드
     private fun checkCameraPermission() {
         when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                startCameraPreview()
-            }
-            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
-                Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_LONG).show()
-                permissionLauncher.launch(Manifest.permission.CAMERA)
-            }
-            else -> {
-                permissionLauncher.launch(Manifest.permission.CAMERA)
-            }
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> startCameraPreview()
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> permissionLauncher.launch(Manifest.permission.CAMERA)
+            else -> permissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
-    // CameraX 미리보기 시작
+    // 카메라 PreView 시작 메서드
     private fun startCameraPreview() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
-
-            // 미리보기 설정
             val preview = androidx.camera.core.Preview.Builder().build().also {
                 it.setSurfaceProvider(fragmentBarcodeScannerBinding.cameraPreviewBarcodeScanner.surfaceProvider)
             }
-
-            // 후면 카메라 선택
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-            val imageAnalyzer = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-                .also {
+            val imageAnalyzer = androidx.camera.core.ImageAnalysis.Builder()
+                .setBackpressureStrategy(androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build().also {
                     it.setAnalyzer(ContextCompat.getMainExecutor(requireContext())) { imageProxy ->
-                        val bookItem = BookItem(
-                            title = "Sample Title",
-                            author = "Sample Author",
-                            pubDate = "2023-01-01",
-                            publisher = "Sample Publisher",
-                            priceStandard = 10000,
-                            priceSales = 8000,
-                            cover = "",
-                            description = "Sample Description",
-                            link = "",
-                            isbn = "",
-                            categoryName = "Sample Category",
-                            isbn13 = ""
-                        )
-                        processBarcodeFromImage(imageProxy, bookItem)
+                        processBarcodeFromImage(imageProxy)
                     }
                 }
             try {
-                // 기존에 바인딩된 카메라가 있으면 해제
                 cameraProvider.unbindAll()
                 camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
             } catch (e: Exception) {
-                e.printStackTrace()
                 Toast.makeText(requireContext(), "카메라를 시작할 수 없습니다.", Toast.LENGTH_LONG).show()
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
+    // 바코드 처리 메서드
     @OptIn(ExperimentalGetImage::class)
-    private fun processBarcodeFromImage(imageProxy: ImageProxy, item: BookItem) {
+    private fun processBarcodeFromImage(imageProxy: androidx.camera.core.ImageProxy) {
         if (isProcessing) {
             imageProxy.close()
             return
@@ -168,35 +141,43 @@ class BarcodeScannerFragment : Fragment() {
         if (mediaImage != null) {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             val scanner: BarcodeScanner = BarcodeScanning.getClient()
-
             scanner.process(image)
                 .addOnSuccessListener { barcodes ->
                     for (barcode in barcodes) {
                         if (barcode.valueType == Barcode.TYPE_ISBN) {
-                            val updatedItem = item.copy(isbn13 = barcode.displayValue ?: "")
                             isProcessing = true
                             lastProcessedTime = currentTime
-                            Toast.makeText(requireContext(), "ISBN: ${updatedItem.isbn13}", Toast.LENGTH_SHORT).show()
 
+                            Toast.makeText(requireContext(), "ISBN 인식 중...", Toast.LENGTH_SHORT).show()
+
+                            // 1초 대기 후 데이터 처리 시작
                             GlobalScope.launch(Dispatchers.Main) {
                                 delay(1000)
-                                navigateBasedOnQuery(updatedItem)
+                                viewModel.searchByIsbn(barcode.displayValue ?: "")
                                 isProcessing = false
                             }
+                            break
                         }
                     }
                 }
-                .addOnFailureListener {
-                    it.printStackTrace()
-                }
-                .addOnCompleteListener {
-                    imageProxy.close()
-                }
+                .addOnCompleteListener { imageProxy.close() }
         } else {
             imageProxy.close()
         }
     }
 
+    // 관찰 메서드
+    private fun setupObservers() {
+        viewModel.BarcodeScannerBooks.observe(viewLifecycleOwner) { books ->
+            val book = books.firstOrNull()
+            book?.let {
+                navigateBasedOnQuery(it)
+            }
+            isProcessing = false
+        }
+    }
+
+    // 쿼리에 따라 다른 프래그먼트로 이동하는 메서드
     private fun navigateBasedOnQuery(item: BookItem) {
         val fragmentQuery = arguments?.getString("FragmentQuery")
         val userToken = arguments?.getString("userToken")
@@ -241,58 +222,31 @@ class BarcodeScannerFragment : Fragment() {
         }
     }
 
+    // ISBN 수동 입력 메서드
+    private fun setupManualISBNInput() {
+        fragmentBarcodeScannerBinding.buttonBarcodeScannerInISBN.setOnClickListener {
+            val dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_barcode_scanner_input, null)
+            val dialog = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create()
+            dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
 
-    private fun inISBNButtonOnCLick() {
-        fragmentBarcodeScannerBinding.apply {
-            buttonBarcodeScannerInISBN.setOnClickListener {
-                val dialogView = LayoutInflater.from(requireContext())
-                    .inflate(R.layout.dialog_barcode_scanner_input, null)
+            val editTextISBN = dialogView.findViewById<EditText>(R.id.editTextISBN)
+            val buttonCancel = dialogView.findViewById<Button>(R.id.button_dialog_negative)
+            val buttonConfirm = dialogView.findViewById<Button>(R.id.button_dialog_positive)
 
-                // 다이얼로그 생성
-                val dialog = AlertDialog.Builder(requireContext())
-                    .setView(dialogView)
-                    .create()
-
-                // 다이얼로그 배경을 투명하게 설정
-                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-                // 레이아웃 내부의 요소 참조 및 설정
-                val editTextISBN = dialogView.findViewById<EditText>(R.id.editTextISBN)
-                val buttonCancel = dialogView.findViewById<Button>(R.id.button_dialog_negative)
-                val buttonConfirm = dialogView.findViewById<Button>(R.id.button_dialog_positive)
-
-                // 취소 버튼 클릭 이벤트
-                buttonCancel.setOnClickListener {
+            buttonCancel.setOnClickListener { dialog.dismiss() }
+            buttonConfirm.setOnClickListener {
+                val isbnInput = editTextISBN.text.toString()
+                if (isbnInput.length == 13) {
+                    viewModel.searchByIsbn(isbnInput)
                     dialog.dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "ISBN은 13자리여야 합니다.", Toast.LENGTH_SHORT).show()
                 }
-
-                buttonConfirm.setOnClickListener {
-                    val isbnInput = editTextISBN.text.toString()
-                    if (isbnInput.length == 13) {
-                        Toast.makeText(requireContext(), "입력된 ISBN: $isbnInput", Toast.LENGTH_SHORT).show()
-                        val bookItem = BookItem(
-                            title = "Sample Title",
-                            author = "Sample Author",
-                            pubDate = "2023-01-01",
-                            publisher = "Sample Publisher",
-                            priceStandard = 10000,
-                            priceSales = 8000,
-                            cover = "",
-                            description = "Sample Description",
-                            link = "",
-                            isbn = isbnInput,
-                            categoryName = "Sample Category",
-                            isbn13 = isbnInput
-                        )
-                        navigateBasedOnQuery(bookItem)
-                        dialog.dismiss()
-                    } else {
-                        Toast.makeText(requireContext(), "ISBN은 13자리여야 합니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                dialog.show()
             }
+            dialog.show()
         }
     }
 }

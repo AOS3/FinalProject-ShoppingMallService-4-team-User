@@ -30,13 +30,15 @@ class SellingCartViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _selectedItems = MutableLiveData<Set<String>>(emptySet()) // 초기화
+    // 초기화
+    private val _selectedItems = MutableLiveData<Set<String>>(emptySet())
     val selectedItems: LiveData<Set<String>> get() = _selectedItems
 
     private val _totalEstimatedPrice = MutableLiveData<Int>(0)
     val totalEstimatedPrice: LiveData<Int> get() = _totalEstimatedPrice
 
-    private val _isDataLoaded = MutableLiveData<Boolean>() // UI 표시 여부 상태
+    // UI 표시 여부 상태
+    private val _isDataLoaded = MutableLiveData<Boolean>()
     val isDataLoaded: LiveData<Boolean> get() = _isDataLoaded
 
     private val _sellingCartBookTitle = MutableLiveData<String>()
@@ -45,16 +47,17 @@ class SellingCartViewModel @Inject constructor(
     private val _sellingCartBookAuthor = MutableLiveData<String>()
     val sellingCartBookAuthor: LiveData<String> get() = _sellingCartBookAuthor
 
-
-    private var allItems: List<SellingCartModel> = emptyList() // 초기화
+    // 초기화
+    private var allItems: List<SellingCartModel> = emptyList()
 
     private var currentPage: Int = 1
     private var currentQuery: String = ""
-    private val fetchedBookIds = mutableSetOf<String>() // 중복 방지용 Set
+    // 중복 방지용 Set
+    private val fetchedBookIds = mutableSetOf<String>()
     private var firestoreDataLoaded = false
     private var apiDataLoaded = false
 
-
+    // Firestore에서 데이터 가져오기
     fun fetchCartItemsWithApi(userToken: String) {
         firestoreDataLoaded = false
         apiDataLoaded = false
@@ -93,6 +96,7 @@ class SellingCartViewModel @Inject constructor(
         }
     }
 
+    // API 데이터 로드
     private suspend fun fetchApiData(isbns: List<String>) {
         if (isbns.isEmpty()) {
             apiDataLoaded = true
@@ -131,8 +135,10 @@ class SellingCartViewModel @Inject constructor(
         checkIfLoadingComplete()
     }
 
+    // 로딩 완료 확인
     private fun checkIfLoadingComplete() {
         if (firestoreDataLoaded && apiDataLoaded) {
+            _cartItems.value = allItems // Firestore와 API 데이터가 모두 로드된 후 UI 갱신
             _isDataLoaded.postValue(true)
         }
     }
@@ -241,12 +247,6 @@ class SellingCartViewModel @Inject constructor(
         calculateTotalEstimatedPrice() // 총 예상 금액 재계산
     }
 
-    // 모든 아이템이 선택되었는지 확인
-    fun areAllItemsSelected(): Boolean {
-        val currentSelection = _selectedItems.value.orEmpty()
-        return currentSelection.size == allItems.size
-    }
-
     fun calculateTotalEstimatedPrice() {
         val selectedDocumentIds = _selectedItems.value.orEmpty()
         val selectedBooks = allItems.filter { selectedDocumentIds.contains(it.documentId) }
@@ -255,25 +255,6 @@ class SellingCartViewModel @Inject constructor(
         val totalPrice = if (selectedBooks.isEmpty()) 0 else selectedBooks.sumOf { it.sellingCartSellingPrice }
 
         _totalEstimatedPrice.postValue(totalPrice) // 총 금액 업데이트
-    }
-
-    // Firestore에서 중복 데이터 제거 및 정렬 처리
-    fun fetchDistinctCartItemsFromFirestore() {
-        _isLoading.value = true // 로딩 시작
-        viewModelScope.launch {
-            firestore.collection("SellingCartTable")
-                .get()
-                .addOnSuccessListener { result ->
-                    val items = result.documents.mapNotNull { it.toObject(SellingCartModel::class.java) }
-                        .distinctBy { it.sellingCartISBN } // 중복 제거
-                    _cartItems.postValue(items)
-                    _isLoading.value = false // 로딩 종료
-                }
-                .addOnFailureListener { e ->
-                    Log.e("SellingCart", "Error fetching cart items", e)
-                    _isLoading.value = false // 로딩 종료
-                }
-        }
     }
 
     // Firestore에서 데이터 삭제 및 리스트에서 삭제
@@ -296,7 +277,8 @@ class SellingCartViewModel @Inject constructor(
                     // 삭제된 항목을 제외한 리스트로 갱신
                     val updatedCartItems = _cartItems.value.orEmpty()
                         .filterNot { deleteDocumentIds.contains(it.documentId) }
-                    _cartItems.postValue(updatedCartItems)
+                    // 수정 코드 (즉시 UI 반영)
+                    _cartItems.value = updatedCartItems
 
                     // 선택 항목 초기화
                     _selectedItems.postValue(emptySet())

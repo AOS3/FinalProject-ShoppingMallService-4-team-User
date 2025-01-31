@@ -9,11 +9,7 @@ class BarcodeScanResultRepository @Inject constructor(
     private val apiService: AladdinApiService
 ) {
     suspend fun fetchBookData(isbn: String): List<BookItem> {
-        val response = apiService.searchBooks(
-            apiKey = BuildConfig.API_KEY,
-            query = isbn,
-            queryType = "ISBN"
-        )
+        val response = apiService.searchBooks(apiKey = BuildConfig.API_KEY, query = isbn, queryType = "ISBN")
         return response.items
     }
 }

@@ -22,15 +22,19 @@ import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragme
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.NumberFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class BarcodeScanResultFragment : Fragment() {
 
     private lateinit var binding: FragmentBarcodeScanResultBinding
     private val viewModel: BarcodeScanResultViewModel by viewModels()
-    private var isbn: String? = null // 전달받은 ISBN 값을 저장하는 변수
-    private var progressDialog: CustomDialogProgressbar? = null // 다이얼로그
-    private var isLoaded = false // 중복 호출 방지 플래그
+    // 전달받은 ISBN 값을 저장하는 변수
+    private var isbn: String? = null
+    private var progressDialog: CustomDialogProgressbar? = null
+    // 중복 호출 방지 플래그
+    private var isLoaded = false
     private var bookApplication: BookApplication?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +61,7 @@ class BarcodeScanResultFragment : Fragment() {
             progressDialog?.show()
         }
 
-        // Toolbar 설정 추가
+        // Toolbar 설정 메서드 호출
         settingToolbar()
 
         // ISBN 값이 있으면 ViewModel을 통해 책 정보 로드
@@ -66,7 +70,7 @@ class BarcodeScanResultFragment : Fragment() {
             isbn?.let { viewModel.fetchBookData(it) }
         }
 
-        // ViewModel의 책 데이터를 도서 정보 업데이트
+        // 관찰 메서드 호출
         observeViewModel()
     }
 
@@ -81,6 +85,7 @@ class BarcodeScanResultFragment : Fragment() {
         }
     }
 
+    // 관찰 메서드
     private fun observeViewModel() {
         // 책 데이터를 업데이트
         viewModel.ISBNbook.observe(viewLifecycleOwner) { book ->
@@ -107,6 +112,12 @@ class BarcodeScanResultFragment : Fragment() {
         }
     }
 
+    // 세 자리마다 콤마 추가하는 함수
+    private fun formatNumber(number: Int): String {
+        return NumberFormat.getNumberInstance(Locale.US).format(number)
+    }
+
+    // UI를 업데이트하는 메서드
     private fun updateUI(book: BookItem) {
         with(binding) {
             // 책 이미지를 업데이트
@@ -117,7 +128,7 @@ class BarcodeScanResultFragment : Fragment() {
             // 텍스트 뷰를 API 응답 데이터로 업데이트
             textViewBarcodeScanResultBookName.text = book.title
             textViewBarcodeScanResultBookAuthor.text = book.author
-            textViewBarcodeScanResultPrice.text = "정가 : ${book.priceStandard}"
+            textViewBarcodeScanResultPrice.text = "정가 : ${formatNumber(book.priceStandard)}"
 
             // 버튼 클릭 리스너
             buttonBarcodeScanResultPurchase.setOnClickListener {
@@ -127,6 +138,7 @@ class BarcodeScanResultFragment : Fragment() {
                 removeFragment()
                 replaceMainFragment(BookDetailFragment(), true, dataBundle = dataBundle)
             }
+
             buttonBarcodeScanResultSelling.setOnClickListener {
                 val userToken = try {
                     bookApplication?.loginUserModel?.userToken

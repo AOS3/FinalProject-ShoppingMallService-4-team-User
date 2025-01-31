@@ -15,7 +15,7 @@ class SellingLastPageViewModel : ViewModel() {
         depositor: String,
         bankName: String,
         accountNumber: String,
-        userToken: String, // 전달받은 userToken
+        userToken: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -37,6 +37,7 @@ class SellingLastPageViewModel : ViewModel() {
                     val author = document.getString("sellingCartBookAuthor").orEmpty()
                     val price = document.getLong("sellingCartSellingPrice")?.toInt() ?: 0
                     val cartUserToken = document.getString("sellingCartUserToken").orEmpty() // userToken 가져오기
+                    val quality = document.getLong("sellingCartQuality")?.toInt() ?: 0
 
                     if (isbn.isEmpty() || title.isEmpty() || cartUserToken.isEmpty()) {
                         onFailure(Exception("도서 정보 또는 사용자 정보가 누락되었습니다."))
@@ -48,6 +49,7 @@ class SellingLastPageViewModel : ViewModel() {
                         sellingInquiryBookName = title,
                         sellingInquiryBookAuthor = author,
                         sellingInquiryPrice = price,
+                        sellingInquiryQuality = quality,
                         sellingInquiryShippingMethod = shippingMethod,
                         sellingInquiryNonPurchaseableMethod = nonPurchaseableMethod,
                         sellingInquiryDepositor = depositor,
@@ -78,8 +80,6 @@ class SellingLastPageViewModel : ViewModel() {
                 onFailure(e)
             }
     }
-
-
 
     fun deleteBooksFromSellingCart(onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         firestore.collection("SellingCartTable")

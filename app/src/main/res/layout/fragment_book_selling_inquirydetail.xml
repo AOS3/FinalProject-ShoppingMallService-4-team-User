@@ -21,6 +21,7 @@
                 android:layout_height="wrap_content"
                 app:titleTextAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:title="팔기 상세내역"
+                app:titleCentered="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

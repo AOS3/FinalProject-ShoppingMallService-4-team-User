@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
+        app:titleCentered="true"
         app:layout_constraintTop_toTopOf="parent"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
