@@ -399,7 +399,7 @@ class SellingCartFragment : Fragment() {
                         updateButtonColors(item.sellingCartQuality, binding)
 
                         // 예상 판매가 업데이트
-                        binding.textViewSellingCartEstimatedPrice.text = "예상 판매가: ${item.sellingCartSellingPrice}원"
+                        binding.textViewSellingCartEstimatedPrice.text = "예상 판매가: ${formatNumber(item.sellingCartSellingPrice)}원"
 
                         // 총 금액 갱신
                         sellingCartViewModel.calculateTotalEstimatedPrice()
