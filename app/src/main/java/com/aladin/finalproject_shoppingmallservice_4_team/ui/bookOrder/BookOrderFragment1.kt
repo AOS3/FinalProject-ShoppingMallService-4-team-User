@@ -360,6 +360,8 @@ class BookOrderFragment1 : Fragment() {
                                     "userCountList",
                                     ArrayList(bookOrderViewModel.inquiryBookCountList) // List를 ArrayList로 변환
                                 )
+                                dataBundle.putString("userAddress",userAddress)
+
 
                                 replaceMainFragment(BookOrderFragment2(), true, dataBundle)
                             }

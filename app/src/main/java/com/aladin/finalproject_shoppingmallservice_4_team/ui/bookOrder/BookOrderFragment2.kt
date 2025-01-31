@@ -114,7 +114,7 @@ class BookOrderFragment2 : Fragment() {
                 if (orderBookList.isNotEmpty()) {
                     fragmentBookOrder2Binding.apply {
                         // 사용자 정보 Set
-                        val userAddress = bookOrderViewModel.userAddress.value?.split("/")!!
+                        val userAddress = arguments?.getString("userAddress")?.split("/")!!
                         textFieldBookOrder2Name.editText?.setText(bookApplication.loginUserModel.userName)
                         textFieldBookOrder2PostCode.editText?.setText(userAddress[0])
                         textFieldBookOrder2RoadNameAddress.editText?.setText(userAddress[1])

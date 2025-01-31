@@ -161,7 +161,8 @@ class BookOrderViewModel @Inject constructor(private val bookOrderRepository: Bo
                 orderInquiryState = 0,
                 orderInquiryName = _username.value!!,
                 orderInquiryPhoneNumber = _userPhoneNumber.value!!,
-                orderInquiryAddress = _userAddress.value!!
+                orderInquiryAddress = _userAddress.value!!,
+                orderInquiryTotal = shoppingCartModel.shoppingCartBookQualityCount
             )
         }
     }
