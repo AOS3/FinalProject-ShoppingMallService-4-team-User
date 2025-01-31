@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.notification.NotificationDetailFragment" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolbar_notificationDetail"
+                android:layout_width="match_parent"
+                app:navigationIcon="@drawable/arrow_back_ios_24px"
+                app:title="알림 상세"
+                app:titleCentered="true"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme" />
+
+            <TextView
+                android:id="@+id/textView_notificationDetail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="배송 준비 중입니다."
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/materialToolbar_notificationDetail" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_notificationDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_color"
+                app:layout_constraintTop_toBottomOf="@id/textView_notificationDetail_title" />
+
+            <TextView
+                android:id="@+id/textView_notificationDetail_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_notificationDetail"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/textView_notificationDetail_title"
+                android:text="택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다.택배사에 물품이 전송중입니다." />
+
+            <TextView
+                android:id="@+id/textView_notificationDetail_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/textView_notificationDetail_content"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="@id/textView_notificationDetail_content"
+                android:text="2025년 1월 21일" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

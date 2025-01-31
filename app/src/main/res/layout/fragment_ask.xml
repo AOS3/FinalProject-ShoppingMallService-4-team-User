@@ -88,8 +88,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
                             android:layout_weight="1"
-                            android:background="@color/gray_color"
-                            android:backgroundTint="@color/gray_color"
+                            android:background="@android:color/darker_gray"
+                            android:backgroundTint="@android:color/darker_gray"
                             android:clickable="false"
                             android:enabled="false"
                             android:hint="첨부파일"
@@ -144,7 +144,7 @@
                 <Button
                     android:id="@+id/button_ask_send"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:backgroundTint="@color/main_color"
                     android:text="문의 하기"
                     app:cornerRadius="10dp" />
@@ -260,7 +260,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textview_ask_footer7"

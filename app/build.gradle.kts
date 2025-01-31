@@ -10,6 +10,8 @@ plugins {
     id("com.google.gms.google-services")
     // Serialization
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.0"
+    //hilt
+    id("com.google.dagger.hilt.android")
 }
 
 // api_key를 숨기기 위해 작성
@@ -72,6 +74,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore:25.1.1")
     implementation("com.google.firebase:firebase-storage:21.0.1")
+    implementation("com.google.firebase:firebase-auth:23.1.0")
     // CameraX
     implementation ("androidx.camera:camera-core:1.2.2")
     implementation ("androidx.camera:camera-lifecycle:1.2.2")
@@ -91,4 +94,9 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+    // hilt
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    // MLKit
+    implementation ("com.google.mlkit:barcode-scanning:17.0.3")
 }

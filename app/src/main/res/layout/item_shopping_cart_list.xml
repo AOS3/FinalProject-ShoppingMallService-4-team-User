@@ -8,87 +8,93 @@
     android:backgroundTint="#F4F9FF">
 
     <ImageView
-        android:id="@+id/imageView_bookList_bookIcon"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="20dp"
-        android:src="@drawable/test_book_icon"
+        android:id="@+id/imageView_shoppingCart_bookIcon"
+        android:layout_width="70dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/checkBox_bookList_choice"
+        android:id="@+id/checkBox_shoppingCart_choice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
+        android:id="@+id/imageButton_shoppingCart_deleteList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
         android:src="@drawable/close_24px"
-        app:layout_constraintStart_toStartOf="@+id/checkBox_bookList_choice"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox_bookList_choice"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox_bookList_choice"/>
+        app:layout_constraintEnd_toEndOf="@+id/checkBox_shoppingCart_choice"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_shoppingCart_choice"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_shoppingCart_choice" />
 
     <TextView
-        android:id="@+id/textView_bookList_bookTitle"
+        android:id="@+id/textView_shoppingCart_bookTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:layout_marginStart="10dp"
-        android:text="깡 샘의 안드로이드 앱 프로그래밍 with 코틀린"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBox_bookList_choice"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox_bookList_choice"
-        app:layout_constraintStart_toEndOf="@+id/imageView_bookList_bookIcon"
-        app:layout_constraintTop_toTopOf="@+id/checkBox_bookList_choice" />
-
-    <TextView
-        android:id="@+id/textView_bookList_bookAuthor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxWidth="200dp"
+        android:singleLine="true"
+        android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:layout_marginTop="10dp"
-        android:text="강성윤"
-        app:layout_constraintStart_toStartOf="@+id/textView_bookList_bookTitle"
-        app:layout_constraintTop_toBottomOf="@+id/textView_bookList_bookTitle" />
+        app:layout_constraintBottom_toBottomOf="@+id/checkBox_shoppingCart_choice"
+        app:layout_constraintStart_toEndOf="@+id/imageView_shoppingCart_bookIcon"
+        app:layout_constraintTop_toTopOf="@+id/checkBox_shoppingCart_choice" />
 
     <TextView
-        android:id="@+id/textView_bookList_bookSellPrice"
+        android:id="@+id/textView_shoppingCart_bookAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:maxWidth="250dp"
+        android:singleLine="true"
+        android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:text="판매가 : 40,000원"
-        app:layout_constraintStart_toStartOf="@+id/textView_bookList_bookAuthor"
-        app:layout_constraintTop_toBottomOf="@+id/textView_bookList_bookAuthor" />
+        app:layout_constraintStart_toStartOf="@+id/textView_shoppingCart_bookTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textView_shoppingCart_bookTitle" />
 
     <TextView
-        android:id="@+id/textView_likeList_bookQuality"
+        android:id="@+id/textView_shoppingCart_bookSellPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:text="품질 : 중"
-        app:layout_constraintStart_toStartOf="@+id/textView_bookList_bookSellPrice"
-        app:layout_constraintTop_toBottomOf="@+id/textView_bookList_bookSellPrice" />
+        app:layout_constraintStart_toStartOf="@+id/textView_shoppingCart_bookAuthor"
+        app:layout_constraintTop_toBottomOf="@+id/textView_shoppingCart_bookAuthor" />
 
     <TextView
-        android:id="@+id/textView_likeList_bookCount"
+        android:id="@+id/textView_shoppingCart_bookQuality"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="수량 : 1개"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintStart_toStartOf="@+id/textView_shoppingCart_bookSellPrice"
+        app:layout_constraintTop_toBottomOf="@+id/textView_shoppingCart_bookSellPrice" />
+
+    <TextView
+        android:id="@+id/textView_shoppingCart_bookCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        app:layout_constraintStart_toEndOf="@+id/textView_bookList_bookSellPrice"
-        app:layout_constraintTop_toTopOf="@+id/textView_likeList_bookQuality" />
+        app:layout_constraintStart_toEndOf="@+id/textView_shoppingCart_bookSellPrice"
+        app:layout_constraintTop_toTopOf="@+id/textView_shoppingCart_bookQuality" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView_likeList_bookQuality" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_shoppingCart_bookQuality" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

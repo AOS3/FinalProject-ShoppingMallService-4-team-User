@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.booksellinginquiry.BookSellingInquirydetailFragment">
+
+
+<androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolbar_bookSellingInquiryDetail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:titleTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:title="팔기 상세내역"
+                app:titleCentered="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/arrow_back_ios_24px" />
+
+
+            <TextView
+                android:id="@+id/textView_bookSellingInquiryDetail_sellingInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+
+                android:text="신청 정보"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/materialToolbar_bookSellingInquiryDetail" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookSellingInquiryDetail_depoistor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="예금주"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_bookSellingInquiryDetail_sellingInfo">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text=" "
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookSellingInquiryDetail_bankName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="은행"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookSellingInquiryDetail_depoistor">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text=" "
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookSellingInquiryDetail_bankAccountNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="계좌번호"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookSellingInquiryDetail_bankName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text=" "
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookSellingInquiryDetail_shippingMethod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="발송 방법"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookSellingInquiryDetail_bankAccountNumber"
+                tools:layout_editor_absoluteX="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text=" "
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_bookSellingInquiryDetail_nonPurchaseableMethod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="매입 불가 상품 처리 방법"
+                app:boxStrokeColor="@color/main_color"
+                app:cursorColor="@color/main_color"
+                app:hintTextColor="@color/main_color"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookSellingInquiryDetail_shippingMethod"
+                app:placeholderText="상세 주소를 입력해주세요"
+                tools:layout_editor_absoluteX="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text=" "
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:id="@+id/space_bookSellingInquiryDetail"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:layout_constraintTop_toBottomOf="@+id/textField_bookSellingInquiryDetail_nonPurchaseableMethod" />
+
+            <TextView
+                android:id="@+id/textView_bookSellingInquiryDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:text="상품 정보"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/space_bookSellingInquiryDetail" />
+
+
+            <TextView
+                android:id="@+id/textView_bookSellingInquiryDetail_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:text="도서명"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:singleLine="true"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiryDetail" />
+
+            <TextView
+                android:id="@+id/textView_bookSellingInquiryDetail_writer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="저자 : "
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_bookSellingInquiryDetail_title" />
+
+            <TextView
+                android:id="@+id/textView_bookSellingInquiryDetail_quality"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="내가 선택한 품질 : "
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_bookSellingInquiryDetail_writer" />
+
+            <TextView
+                android:id="@+id/textView_bookSellingInquiryDetail_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="예상 판매가 : "
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_bookSellingInquiryDetail_quality" />
+
+            <TextView
+                android:id="@+id/textView_bookSellingInquiryDetail_sellingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="등록 날짜 :"
+                app:layout_constraintEnd_toEndOf="@id/textView_bookSellingInquiryDetail_price"
+                app:layout_constraintTop_toTopOf="@+id/space_bookSellingInquiryDetail_bottomSpace" />
+
+            <TextView
+                android:id="@+id/textView_bookSellingInquiryDetail_approvalResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="승인 상태"
+                app:layout_constraintEnd_toEndOf="@id/textView_bookSellingInquiryDetail_price"
+                app:layout_constraintTop_toBottomOf="@id/textView_bookSellingInquiryDetail_sellingTime" />
+
+            <Space
+                android:id="@+id/space_bookSellingInquiryDetail_bottomSpace"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_bookSellingInquiryDetail_price" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/footer_orderInquiry"
+                android:layout_width="match_parent"
+                android:layout_marginTop="43dp"
+                android:layout_height="270dp"
+                app:layout_constraintTop_toBottomOf="@id/space_bookSellingInquiryDetail_bottomSpace"
+                android:background="@color/gray_color"
+                android:backgroundTint="#F3F3F5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="0dp">
+
+                <TextView
+                    android:id="@+id/textview_orderInquiry_footer1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="쇼핑몰 프로젝트 - 4조"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_orderInquiry"
+                    app:layout_constraintStart_toStartOf="@id/footer_orderInquiry"
+                    app:layout_constraintTop_toTopOf="@id/footer_orderInquiry" />
+
+                <TextView
+                    android:id="@+id/textview_orderInquiry_footer2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="LikeLion AOS3"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_orderInquiry"
+                    app:layout_constraintStart_toStartOf="@id/footer_orderInquiry"
+                    app:layout_constraintTop_toBottomOf="@id/textview_orderInquiry_footer1" />
+
+                <TextView
+                    android:id="@+id/textview_orderInquiry_footer3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="전화번호: 010-1234-5678"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_orderInquiry"
+                    app:layout_constraintStart_toStartOf="@id/footer_orderInquiry"
+                    app:layout_constraintTop_toBottomOf="@id/textview_orderInquiry_footer2" />
+
+                <TextView
+                    android:id="@+id/textview_orderInquiry_footer4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="이메일 : likeLion@naver.com"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_orderInquiry"
+                    app:layout_constraintStart_toStartOf="@id/footer_orderInquiry"
+                    app:layout_constraintTop_toBottomOf="@id/textview_orderInquiry_footer3" />
+
+                <TextView
+                    android:id="@+id/textview_orderInquiry_footer5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="©책방마켓 Communication. All Rights Reserved."
+                    android:textColor="#dcdcdd"
+                    app:layout_constraintEnd_toEndOf="@id/footer_orderInquiry"
+                    app:layout_constraintStart_toStartOf="@id/footer_orderInquiry"
+                    app:layout_constraintTop_toBottomOf="@id/textview_orderInquiry_footer4" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_orderInquiry_footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/gray_color"
+                    app:layout_constraintTop_toBottomOf="@id/textview_orderInquiry_footer5" />
+
+                <TextView
+                    android:id="@+id/textview_orderInquiry_footer6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="일반문의(발신자 부담)"
+                    android:textColor="#c9c9ca"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/footer_orderInquiry"
+                    app:layout_constraintHorizontal_bias="0.35"
+                    app:layout_constraintStart_toStartOf="@id/footer_orderInquiry"
+                    app:layout_constraintTop_toBottomOf="@id/divider_orderInquiry_footer" />
+
+                <TextView
+                    android:id="@+id/textview_orderInquiry_footer7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="1544-2544"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/textview_orderInquiry_footer6"
+                    app:layout_constraintStart_toEndOf="@id/textview_orderInquiry_footer6"
+                    app:layout_constraintTop_toTopOf="@id/textview_orderInquiry_footer6" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textview_orderInquiry_footer7"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:layout_editor_absoluteX="0dp">
+
+                    <Button
+                        android:id="@+id/button_orderInquiry_ask"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="1:1 문의"
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/button_orderInquiry_FAQ"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="FAQ"
+                        android:textColor="#000000"
+                        app:cornerRadius="0dp"
+                        app:strokeColor="@color/white" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

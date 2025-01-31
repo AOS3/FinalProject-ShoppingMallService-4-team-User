@@ -24,17 +24,19 @@
             <TextView
                 android:id="@+id/textView_noticeItem_title"
                 android:layout_width="wrap_content"
+                android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:layout_height="25dp"
-                android:text="오늘의 공지" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/textView_noticeItem_content"
                 android:layout_width="wrap_content"
+                android:singleLine="true"
                 android:layout_height="25dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:gravity="bottom"
-                android:text="2024년 01월 06월" />
+                android:text="" />
         </LinearLayout>
     </LinearLayout>
 

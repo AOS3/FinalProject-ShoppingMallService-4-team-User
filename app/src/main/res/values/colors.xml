@@ -12,4 +12,10 @@
     <color name="gray_color">#898080</color>
     <!--빨간 글씨-->
     <color name="red_color">#FF0000</color>
+    <!--주황 글씨-->
+    <color name="orange_color">#FF6A00</color>
+    <!--초록 글씨-->
+    <color name="green_color">#0064C8</color>
+    <!--파랑 글씨-->
+    <color name="blue_color">#32BE07</color>
 </resources>

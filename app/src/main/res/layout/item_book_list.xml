@@ -9,8 +9,8 @@
         android:id="@+id/imageView_bookList_bookIcon"
         android:layout_width="50dp"
         android:layout_height="100dp"
+        android:scaleType="fitCenter"
         android:layout_marginStart="20dp"
-        android:src="@drawable/test_book_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -18,19 +18,19 @@
         android:id="@+id/textView_bookList_bookTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:layout_marginStart="10dp"
-        android:text="깡 샘의 안드로이드 앱 프로그래밍 with 코틀린"
         app:layout_constraintStart_toEndOf="@+id/imageView_bookList_bookIcon"
         app:layout_constraintTop_toTopOf="@+id/imageView_bookList_bookIcon" />
 
     <TextView
         android:id="@+id/textView_bookList_bookAuthor"
         android:layout_width="wrap_content"
+        android:singleLine="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="강성윤"
         app:layout_constraintStart_toStartOf="@+id/textView_bookList_bookTitle"
         app:layout_constraintTop_toBottomOf="@+id/textView_bookList_bookTitle" />
 
@@ -40,7 +40,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="판매가 : 40,000원"
         app:layout_constraintStart_toStartOf="@+id/textView_bookList_bookAuthor"
         app:layout_constraintTop_toBottomOf="@+id/textView_bookList_bookAuthor" />
 
@@ -50,9 +49,16 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="품질 : 중"
         app:layout_constraintStart_toStartOf="@+id/textView_bookList_bookSellPrice"
         app:layout_constraintTop_toBottomOf="@+id/textView_bookList_bookSellPrice" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_likeList_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/gray_color"
+        app:layout_constraintTop_toBottomOf="@id/textView_likeList_bookQuality" />
 
 
 

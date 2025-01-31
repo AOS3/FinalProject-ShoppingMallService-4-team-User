@@ -11,6 +11,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.Barc
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.home.HomeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.likeList.LikeListFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.myinfo.MyInfoFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
@@ -24,9 +25,13 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentMainBinding = FragmentMainBinding.inflate(layoutInflater,container,false)
-        setBottomNavigationView()
-        replaceSubFragment(HomeFragment(), false)
+        if (::fragmentMainBinding.isInitialized == false) {
+            fragmentMainBinding = FragmentMainBinding.inflate(layoutInflater, container, false)
+            setBottomNavigationView()
+            // replaceSubFragment(HomeFragment(), false)
+            fragmentMainBinding.bottomAppBarMain.selectedItemId = R.id.nav_home
+        }
+
         return fragmentMainBinding.root
     }
 
@@ -40,11 +45,11 @@ class MainFragment : Fragment() {
                 }
                 R.id.nav_barcode -> {
                     clearAllBackStack()
-                    replaceMainFragment(BarcodeScannerFragment(),true)
+                    replaceSubFragment(BarcodeScannerFragment(),true)
                 }
                 R.id.nav_info -> {
                     clearAllBackStack()
-                    replaceSubFragment(LoginFragment(),true)
+                    replaceSubFragment(MyInfoFragment(),true)
                 }
                 R.id.nav_like_list -> {
                     clearAllBackStack()

@@ -23,6 +23,7 @@
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme"
+                app:titleCentered="true"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
@@ -71,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginBottom="4dp"
-                android:text="책방 마켓 자쳇 택배사 신청"
+                android:text="책방 마켓 자체 택배사 신청"
                 app:layout_constraintBottom_toTopOf="@+id/checkBox_sellingLastPage_wayChoice2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view2_sellingLastPage"
@@ -297,7 +298,7 @@
             <View
                 android:id="@+id/view5_sellingLastPage"
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
+                android:layout_height="500dp"
                 android:layout_marginTop="16dp"
                 android:background="#f1f1f1"
                 android:backgroundTint="@null"
@@ -308,34 +309,43 @@
 
             <TextView
                 android:id="@+id/textView_sellingLastPage_termsAndConditions"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
-                android:text=" 반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n
-반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n
-반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n
-반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n
-반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n
-반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n
-반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n
-반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n
-반송(반송비 고객 부담, 보낸 주소로 반송)
-반송(반송비 고객 부담, 보낸 주소로 반송)\n"
-                app:layout_constraintBottom_toBottomOf="@+id/view5_sellingLastPage"
-                app:layout_constraintEnd_toEndOf="@id/view5_sellingLastPage"
+                android:text="📢 최종 안내사항\n\n
+1. 판매 상품 내역을 확인해주세요.\n
+- 총 판매 수량과 예상 판매 금액이 정확한지 다시확인하세요.\n
+- 예상 판매가는 책 상태에 따라 변동될 수 있습니다.\n\n
+
+2. 발송 방법을 선택해주세요.\n
+- 📦 책방 마켓 자체 택배사 이용 (자동 방문 수거)\n
+- 🏪 편의점 택배 이용 (직접 발송 필요)\n\n
+
+3. 매입 불가 상품 처리 방식을 선택해주세요.\n
+- 반송 (반송비 고객 부담)\n
+- 폐기 (선택 시 상품 반환 불가)\n\n
+
+4. 정산 계좌 정보를 입력해주세요.\n
+- 예금주명, 은행명, 계좌번호를 정확히 입력하세요.\n\n
+
+5. 매입 약관을 확인 후 동의해주세요.\n
+- 약관을 읽고 체크박스를 선택해야 판매가 진행됩니다.\n\n
+
+🚀 판매 신청 후 진행 절차 🚀\n
+1) 판매 신청 완료\n
+2) 택배 발송 및 접수 확인\n
+3) 상품 검수 진행\n
+4) 최종 정산 금액 안내\n
+5) 정산금 계좌 입금\n\n
+
+📞 문의: 1234-5678 (평일 09:00 - 18:00)"
+                app:layout_constraintTop_toTopOf="@id/view5_sellingLastPage"
                 app:layout_constraintStart_toStartOf="@id/view5_sellingLastPage"
-                app:layout_constraintTop_toTopOf="@+id/view5_sellingLastPage" />
+                app:layout_constraintEnd_toEndOf="@id/view5_sellingLastPage"
+                app:layout_constraintBottom_toBottomOf="@id/view5_sellingLastPage" />
 
             <TextView
                 android:id="@+id/textView_sellingLastPage_totalPrice"
@@ -343,7 +353,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="50dp"
-                android:text="총 판매 가격 : "
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5_sellingLastPage" />
 

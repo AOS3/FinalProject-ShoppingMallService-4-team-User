@@ -37,6 +37,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_registerStep2">
 
+        <WebView
+            android:id="@+id/webView_registerStep2_address"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -67,7 +73,11 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:inputType="text"
+                            android:maxLength="20"
+                            android:singleLine="true" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,6 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="비밀번호*"
+                    app:boxStrokeColor="@color/main_color"
                     app:cursorColor="@color/main_color"
                     app:endIconMode="password_toggle"
                     app:helperText="6자리 이상 입력 해주세요"
@@ -102,7 +113,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text|textPassword" />
+                        android:inputType="text|textPassword"
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -110,6 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="비밀번호 확인*"
+                    app:boxStrokeColor="@color/main_color"
                     app:cursorColor="@color/main_color"
                     app:endIconMode="password_toggle"
                     app:helperText=" "
@@ -119,7 +132,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text|textPassword" />
+                        android:inputType="text|textPassword"
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.divider.MaterialDivider
@@ -143,7 +157,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.divider.MaterialDivider
@@ -163,6 +178,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:enabled="false"
                         android:hint="우편 번호"
                         app:helperText=" ">
 
@@ -170,7 +186,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="false"
-                            android:focusable="false" />
+                            android:focusable="false"
+                            android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
@@ -187,6 +204,7 @@
                     android:id="@+id/textField_registerStep2_address1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:hint="도로명 주소"
                     app:helperText=" ">
 
@@ -194,7 +212,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
-                        android:focusable="false" />
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -238,21 +258,40 @@
                         app:endIconMode="clear_text"
                         app:helperText="- 없이 입력해주세요"
                         app:hintTextColor="@color/main_color"
-                        app:placeholderText="01012345678">
+                        app:placeholderText="010-0000-0000">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="phone" />
+                            android:inputType="phone"
+                            android:maxLength="13"
+                            android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/button_registerStep2_verifyPhoneNumber"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:backgroundTint="@color/main_color"
-                        android:text="인증번호 받기" />
+                        android:orientation="vertical"
+                        android:paddingTop="20dp">
+
+                        <Button
+                            android:id="@+id/button_registerStep2_verifyPhoneNumber"
+                            android:layout_width="130dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:backgroundTint="@color/main_color"
+                            android:text="인증번호 받기" />
+
+                        <TextView
+                            android:id="@+id/textView_registerStep2_timer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:text="5:00"
+                            android:textColor="@color/main_color"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -260,6 +299,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="인증번호*"
+                    android:visibility="gone"
                     app:boxStrokeColor="@color/main_color"
                     app:cursorColor="@color/main_color"
                     app:endIconMode="clear_text"
@@ -270,8 +310,19 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_registerStep2_verifyCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/main_color"
+                    android:text="휴대번호 인증하기"
+                    android:visibility="gone"
+                    app:cornerRadius="10dp" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -286,6 +337,7 @@
                     android:layout_height="60dp"
                     android:backgroundTint="@color/main_color"
                     android:text="가입하기"
+                    android:visibility="gone"
                     app:cornerRadius="10dp" />
 
                 <Space

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/empty_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView_book_selling_inquiry_empty"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/error_24px" />
+
+    <TextView
+        android:id="@+id/textView_book_selling_inquiry_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="판매한 도서가 없습니다"
+        app:layout_constraintEnd_toEndOf="@id/imageView_book_selling_inquiry_empty"
+        app:layout_constraintStart_toStartOf="@id/imageView_book_selling_inquiry_empty"
+        app:layout_constraintTop_toBottomOf="@id/imageView_book_selling_inquiry_empty" />
+</androidx.constraintlayout.widget.ConstraintLayout>

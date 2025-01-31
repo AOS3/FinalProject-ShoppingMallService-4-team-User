@@ -20,11 +20,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_myInfo">
+
+        <WebView
+            android:id="@+id/webView_myInfo_address"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -56,6 +62,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:text=" " />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,6 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
+                        android:enabled="false"
                         android:hint="휴대폰"
                         app:boxStrokeColor="@color/main_color"
                         app:cursorColor="@color/main_color"
@@ -85,6 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="false"
+                        android:enabled="false"
                         android:hint="아이디"
                         app:boxStrokeColor="@color/main_color"
                         app:cursorColor="@color/main_color"
@@ -115,10 +124,8 @@
                             android:paddingRight="10dp"
                             app:boxStrokeColor="@color/main_color"
                             app:cursorColor="@color/main_color"
-                            app:endIconMode="clear_text"
                             app:helperText=" "
-                            app:hintTextColor="@color/main_color"
-                            app:placeholderText="아이디를 입력해주세요">
+                            app:hintTextColor="@color/main_color">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -143,10 +150,8 @@
                         android:hint="도로명 주소"
                         app:boxStrokeColor="@color/main_color"
                         app:cursorColor="@color/main_color"
-                        app:endIconMode="clear_text"
                         app:helperText=" "
-                        app:hintTextColor="@color/main_color"
-                        app:placeholderText="아이디를 입력해주세요">
+                        app:hintTextColor="@color/main_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -177,13 +182,24 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
+                        android:id="@+id/button_myInfo_logout"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="로그아웃"
+                        android:textColor="@android:color/darker_gray"
+                        app:rippleColor="@color/ripple_color" />
+
+                    <Button
                         android:id="@+id/button_myInfo_accountDelete"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="회원 탈퇴"
-                        android:textColor="@color/red_color" />
+                        android:textColor="#FC6B6B"
+                        app:rippleColor="@color/ripple_color" />
                 </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentMainMenuBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentQualityGuideBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 
 class QualityGuideFragment : Fragment() {
 
@@ -32,7 +33,7 @@ class QualityGuideFragment : Fragment() {
             materialToolbarQualityGuide.setNavigationIcon(R.drawable.arrow_back_ios_24px)
             materialToolbarQualityGuide.setNavigationOnClickListener {
                 // 전 화면으로 이동
-
+                requireActivity().onBackPressed()
             }
         }
     }

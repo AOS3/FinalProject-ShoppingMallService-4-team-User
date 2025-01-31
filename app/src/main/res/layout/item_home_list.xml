@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/imageView_homeList"
         android:layout_width="100dp"
-        android:layout_height="120dp"
+        android:layout_height="140dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
@@ -18,19 +18,23 @@
 
     <TextView
         android:id="@+id/textView_homeList_name"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         app:layout_constraintStart_toEndOf="@id/imageView_homeList"
         app:layout_constraintTop_toTopOf="@id/imageView_homeList"
         tools:text="강쌤의 안드로이드 앱 프로그래밍 with 코틀린" />
 
     <TextView
         android:id="@+id/textView_homeList_writer"
-        android:layout_width="150dp"
-        android:layout_height="20dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         app:layout_constraintStart_toStartOf="@id/textView_homeList_name"
         app:layout_constraintTop_toBottomOf="@id/textView_homeList_name"
         tools:text="강성윤" />

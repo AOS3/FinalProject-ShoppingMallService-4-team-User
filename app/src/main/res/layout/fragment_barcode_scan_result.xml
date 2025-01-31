@@ -13,6 +13,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        app:titleCentered="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +48,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
-                android:text="도서명" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView_barcodeScanResult_bookAuthor"
@@ -56,8 +57,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:layout_weight="1"
-                android:text="저자" />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/textView_barcodeScanResult_price"
@@ -68,7 +68,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:text="정가" />
+                android:text="정가 : " />
         </LinearLayout>
 
     </LinearLayout>
@@ -101,6 +101,5 @@
         app:layout_constraintStart_toEndOf="@id/button_barcodeScanResult_purchase"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout_barcodeScanResult_bookAndInfo"
         app:strokeColor="@color/main_color" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
