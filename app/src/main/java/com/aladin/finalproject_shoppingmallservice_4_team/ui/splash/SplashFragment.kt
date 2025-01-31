@@ -1,5 +1,8 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.splash
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,12 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.replace
 import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.BuildConfig
 import com.aladin.finalproject_shoppingmallservice_4_team.MainActivity
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentSplashBinding
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.SharedPreferencesHelper
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.UserRepository
@@ -28,6 +33,10 @@ class SplashFragment : Fragment() {
 
     private lateinit var fragmentSplashBinding: FragmentSplashBinding
     private lateinit var mainActivity: MainActivity
+
+    companion object {
+        private const val NOTIFICATION_PERMISSION_CODE = 1001
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +62,10 @@ class SplashFragment : Fragment() {
                 .withEndAction {
                     // 애니메이션 완료 후 실행할 함수
                     // replaceMainFragment()
-                    checkAutoLogin()
+                    // checkAutoLogin()
+
+                    requestNotificationPermission()
+
                 }
                 .start()
         }
@@ -88,5 +100,50 @@ class SplashFragment : Fragment() {
             Log.d("test100", "토큰이 없음 -> 비로그인 상태로 메인 화면 이동")
             replaceMainFragment(MainFragment(), false)
         }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13 (API 33) 이상
+            val permission = Manifest.permission.POST_NOTIFICATIONS
+
+            if (ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED) {
+                // requestPermissions(arrayOf(permission), NOTIFICATION_PERMISSION_CODE)
+                // 권한이 이미 허용됨 -> 로그인 체크 진행
+                checkAutoLogin()
+            } else {
+                // 권한 요청
+                requestPermissions(arrayOf(permission), NOTIFICATION_PERMISSION_CODE)
+            }
+        } else {
+            // Android 12 이하 -> 권한 요청 필요 없음
+            checkAutoLogin()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == NOTIFICATION_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용됨 -> 로그인 체크 진행
+                checkAutoLogin()
+            } else {
+                // 권한이 거부됨 -> 다이얼로그 표시 후 로그인 체크 진행
+                showPermissionDeniedDialog()
+            }
+        }
+    }
+
+    private fun showPermissionDeniedDialog() {
+        val dialog = CustomDialog(
+            context = requireContext(),
+            contentText = "알림 권한을 허용하지 않으면 주문 알림 및 공지사항을 받을 수 없습니다.\n설정에서 변경할 수 있습니다.",
+            icon = R.drawable.error_24px,
+            positiveText = "확인",
+            onPositiveClick = {
+                checkAutoLogin()
+            }
+        )
+        dialog.showCustomDialog()
     }
 }

@@ -15,4 +15,6 @@ class AskModel {
     var askTime = ""
     // 문의하기 상태
     var askState = 0
+    // 문의한 사용자 이름
+    var askUserName = ""
 }
