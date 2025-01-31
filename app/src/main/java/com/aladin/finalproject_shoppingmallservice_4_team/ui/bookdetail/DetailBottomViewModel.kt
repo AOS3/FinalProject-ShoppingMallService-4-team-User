@@ -93,7 +93,7 @@ class DetailBottomViewModel @Inject constructor(
 
     // 수량 업데이트
     fun updateHighStock(increase: Boolean) {
-        val stock = _highStock.value ?: 1
+        val stock = _highStock.value ?: 0
         val updateStock = if(increase) {
             (stock + 1).coerceAtMost(highCount.value!!)
         }
@@ -105,7 +105,7 @@ class DetailBottomViewModel @Inject constructor(
 
     // 수량 업데이트
     fun updateNormalStock(increase: Boolean) {
-        val stock = _normalStock.value ?: 1
+        val stock = _normalStock.value ?: 0
         val updateStock = if(increase) {
             (stock + 1).coerceAtMost(normalCount.value!!)
         }
@@ -117,7 +117,7 @@ class DetailBottomViewModel @Inject constructor(
 
     // 수량 업데이트
     fun updateLowStock(increase: Boolean) {
-        val stock = _lowStock.value ?: 1
+        val stock = _lowStock.value ?: 0
         val updateStock = if(increase) {
             (stock + 1).coerceAtMost(lowCount.value!!)
         }
