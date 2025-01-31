@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:ellipsize="end"
-        android:maxWidth="250dp"
+        android:maxWidth="200dp"
         android:singleLine="true"
         android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Small"

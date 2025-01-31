@@ -16,6 +16,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notice.NoticeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.notification.NotificationFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart.ShoppingCartFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.clearAllBackStack
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
@@ -150,7 +151,7 @@ class LikeListFragment : Fragment() {
                     }
 
                     R.id.item_likeList_notification -> {
-                        replaceMainFragment(NoticeFragment(), true)
+                        replaceMainFragment(NotificationFragment(), true)
                         true
                     }
 

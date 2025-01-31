@@ -21,13 +21,11 @@ class ShoppingCartRepository @Inject constructor(
         for (item in buyList) {
             val userToken = item.first
             val isbn = item.second
-            val quality = item.third
 
             // Firestore에서 해당 문서 가져오기
             val documents = collectionReference
                 .whereEqualTo("shoppingCartUserToken", userToken)
                 .whereEqualTo("shoppingCartISBN", isbn)
-                .whereEqualTo("shoppingCartISBN", quality)
                 .get()
                 .await()
 
