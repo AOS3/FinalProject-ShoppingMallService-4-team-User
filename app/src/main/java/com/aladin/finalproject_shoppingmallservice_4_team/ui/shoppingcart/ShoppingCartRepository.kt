@@ -15,17 +15,19 @@ class ShoppingCartRepository @Inject constructor(
     private val firebaseFireStore: FirebaseFirestore
 ) {
 
-    suspend fun changeShoppingCartStateToOne(buyList: List<Pair<String, String>>) {
+    suspend fun changeShoppingCartStateToOne(buyList: List<Triple<String, String,Int>>) {
         val collectionReference = firebaseFireStore.collection("ShoppingCartTable")
 
         for (item in buyList) {
             val userToken = item.first
             val isbn = item.second
+            val quality = item.third
 
             // Firestore에서 해당 문서 가져오기
             val documents = collectionReference
                 .whereEqualTo("shoppingCartUserToken", userToken)
                 .whereEqualTo("shoppingCartISBN", isbn)
+                .whereEqualTo("shoppingCartISBN", quality)
                 .get()
                 .await()
 
@@ -88,17 +90,19 @@ class ShoppingCartRepository @Inject constructor(
     }
 
     // 리스트 삭제
-    suspend fun deleteShoppingCartBookData(deleteList: List<Pair<String, String>>): Boolean {
+    suspend fun deleteShoppingCartBookData(deleteList: List<Triple<String, String,Int>>): Boolean {
         val collectionReference = firebaseFireStore.collection("ShoppingCartTable")
 
         for (item in deleteList) {
             val userToken = item.first  // userToken
             val isbn = item.second      // ISBN
+            val quality = item.third
 
             // Firestore에서 userToken과 ISBN에 해당하는 문서 찾기
             val querySnapshot = collectionReference
                 .whereEqualTo("shoppingCartUserToken", userToken)
                 .whereEqualTo("shoppingCartISBN", isbn)
+                .whereEqualTo("shoppingCartQuality", quality)
                 .get()
                 .await()
 

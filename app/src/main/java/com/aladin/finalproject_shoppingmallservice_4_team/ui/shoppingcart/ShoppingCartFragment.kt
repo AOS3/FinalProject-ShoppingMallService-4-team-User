@@ -1,5 +1,6 @@
 package com.aladin.finalproject_shoppingmallservice_4_team.ui.shoppingcart
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
@@ -31,6 +32,7 @@ class ShoppingCartFragment : Fragment() {
     private lateinit var fragmentShoppingCartBinding: FragmentShoppingCartBinding
     private lateinit var shoppingCartAdapter: ShoppingCartAdapter
     private lateinit var bookApplication: BookApplication
+    private lateinit var progressBarDialog: Dialog
 
     private val shoppingCartViewModel: ShoppingCartViewModel by viewModels()
     override fun onCreateView(
@@ -39,6 +41,9 @@ class ShoppingCartFragment : Fragment() {
     ): View? {
         fragmentShoppingCartBinding =
             FragmentShoppingCartBinding.inflate(layoutInflater, container, false)
+
+        // 화면 입장 시 다이얼로그
+        progressBarDialog = CustomDialogProgressbar(requireContext())
 
         // bookApplication 초기화
         bookApplication = requireActivity().application as BookApplication
@@ -111,7 +116,7 @@ class ShoppingCartFragment : Fragment() {
                 requireContext(),
                 // 리스트 삭제 진행
                 onPositiveClick = {
-                 removeFragment()
+                    removeFragment()
                 },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px
@@ -136,9 +141,16 @@ class ShoppingCartFragment : Fragment() {
                             ).show()
                         } else {
                             // 리스트 삭제
-                            shoppingCartViewModel.deleteCheckedShoppingCartBookList(deleteList)
-                            // 리스트 업데이트
-                            shoppingCartAdapter.updateShoppingCartDataList(shoppingCartViewModel.shoppingCartBookList.value!!)
+                            //shoppingCartViewModel.deleteCheckedShoppingCartBookList(deleteList)
+                            shoppingCartViewModel.deleteCheckedShoppingCartBookList(deleteList) { success ->
+                                if (success) {
+                                    // 삭제 성공
+                                    // 리스트 업데이트
+                                    shoppingCartAdapter.updateShoppingCartDataList(shoppingCartViewModel.shoppingCartBookList.value!!)
+                                } else {
+                                    // 삭제 실패
+                                }
+                            }
                         }
                     },
                     onNegativeClick = {
@@ -176,9 +188,12 @@ class ShoppingCartFragment : Fragment() {
 
     // 아이템 상태 변경 시 전체 체크박스 상태 업데이트
     fun onItemCheckedChange() {
-        val allSelected = shoppingCartAdapter.shoppingCartDataList.size == shoppingCartAdapter.getSelectedItems().size
+        val allSelected =
+            shoppingCartAdapter.shoppingCartDataList.size == shoppingCartAdapter.getSelectedItems().size
         if (fragmentShoppingCartBinding.checkBoxShoppingCartCheckAllList.isChecked != allSelected) {
-            fragmentShoppingCartBinding.checkBoxShoppingCartCheckAllList.setOnCheckedChangeListener(null)
+            fragmentShoppingCartBinding.checkBoxShoppingCartCheckAllList.setOnCheckedChangeListener(
+                null
+            )
             fragmentShoppingCartBinding.checkBoxShoppingCartCheckAllList.isChecked = allSelected
             settingCheckBox() // 리스너 재등록
         }
@@ -189,7 +204,7 @@ class ShoppingCartFragment : Fragment() {
     private fun calculateTotals() {
         val selectedItems = shoppingCartAdapter.getSelectedItems()
         val totalSize = selectedItems.sumOf { it.shoppingCartBookQualityCount }
-        val totalPrice = selectedItems.sumOf { it.shoppingCartSellingPrice * it.shoppingCartBookQualityCount }
+        val totalPrice = selectedItems.sumOf { it.shoppingCartSellingPrice }
         fragmentShoppingCartBinding.apply {
             recyclerViewShoppingCartTotalListSize.text = "총수량 : ${totalSize}개"
             recyclerViewShoppingCartTotalListPrice.text = "총 구매 가격 : ${totalPrice.toCommaString()}원"
@@ -221,12 +236,11 @@ class ShoppingCartFragment : Fragment() {
     // Dialog
     private fun observeProgressDialog() {
         // 화면 입장 시 공지사항 로딩을 위한 Dialog
-        val progressBarDialog = CustomDialogProgressbar(requireContext())
-        progressBarDialog.show()
-
         shoppingCartViewModel.isLoadShoppingCartList.observe(viewLifecycleOwner) {
             if (it) {
                 progressBarDialog.dismiss()
+            } else {
+                progressBarDialog.show()
             }
         }
     }
@@ -255,13 +269,6 @@ class ShoppingCartFragment : Fragment() {
             shoppingCartViewModel.shoppingCartBookList.observe(viewLifecycleOwner) { usedBookList ->
                 if (usedBookList.isNotEmpty()) {
                     // 데이터를 받아왔을 때, RecyclerView에 전달
-                    shoppingCartAdapter =
-                        ShoppingCartAdapter(
-                            usedBookList.sortedByDescending { it.shoppingCartTime },
-                            this@ShoppingCartFragment,
-                            shoppingCartViewModel
-                        ) { onItemCheckedChange() } // 새 데이터로 Adapter를 갱신
-                    recyclerViewShoppingCartShoppingCartList.adapter = shoppingCartAdapter
                     linearLayoutShoppingCartEmptyShoppingCartList.visibility = View.GONE
                     recyclerViewShoppingCartTotalListSize.visibility = View.VISIBLE
                     recyclerViewShoppingCartTotalListPrice.visibility = View.VISIBLE
@@ -269,7 +276,9 @@ class ShoppingCartFragment : Fragment() {
                     linearLayoutShoppingCartSelectAll.visibility = View.VISIBLE
                     linearLayoutShoppingCartSelectAll.visibility = View.VISIBLE
                     textViewShoppingCartListInfo.visibility = View.VISIBLE
+                    shoppingCartAdapter.updateData(usedBookList.sortedByDescending { it.shoppingCartTime })
                 } else {
+                    shoppingCartAdapter.updateData(emptyList())
                     // 데이터가 없을 시
                     linearLayoutShoppingCartEmptyShoppingCartList.visibility = View.VISIBLE
                     recyclerViewShoppingCartTotalListSize.visibility = View.GONE
