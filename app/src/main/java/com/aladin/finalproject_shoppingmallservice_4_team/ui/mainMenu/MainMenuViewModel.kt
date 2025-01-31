@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainMenuViewModel @Inject constructor(
-    private val firestore: FirebaseFirestore // Firestore 주입
+    private val firestore: FirebaseFirestore
 ) : ViewModel() {
 
     private val _userName = MutableLiveData<String?>()

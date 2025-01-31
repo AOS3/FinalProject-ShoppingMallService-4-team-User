@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SellingSearchViewModel @Inject constructor(
-    private val searchRepository: SearchRepository
+    private val sellingSearchRepository: SellingSearchRepository
 ) : ViewModel() {
 
     private val _sellingSearchBooksBooks = MutableLiveData<List<BookItem>>(emptyList())
@@ -21,6 +21,9 @@ class SellingSearchViewModel @Inject constructor(
 
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
+
+    private val _isLoadSearchList = MutableLiveData<Boolean>(false)
+    val isLoadSearchList: LiveData<Boolean> get() = _isLoadSearchList
 
     private var currentPage: Int = 1
     private var currentQuery: String = ""
@@ -31,28 +34,27 @@ class SellingSearchViewModel @Inject constructor(
     fun searchBooks(query: String, maxResults: Int, sort: String) {
         if (_isLoading.value == true) return
         _isLoading.value = true
+
         currentQuery = query
         currentPage = 1
-        // 새 검색 시 중복 데이터 추적 초기화
         fetchedBookIds.clear()
 
         viewModelScope.launch {
             runCatching {
-                searchRepository.searchBooks(query, maxResults, sort)
-            }.onSuccess { sellingSearchBooks ->
-                val newBooks = sellingSearchBooks.filterNot { fetchedBookIds.contains(it.isbn13) }
-                // 새로 가져온 데이터의 ID 저장
+                sellingSearchRepository.searchBooks(query, maxResults, sort)
+            }.onSuccess { books ->
+                val newBooks = books.filterNot { fetchedBookIds.contains(it.isbn13) }
                 fetchedBookIds.addAll(newBooks.map { it.isbn13 })
-                _sellingSearchBooksBooks.value = newBooks
-                _isLoading.value = false
+                _sellingSearchBooksBooks.postValue(newBooks)
             }.onFailure { error ->
                 Log.e("SellingSearchViewModel", "Error fetching books: $error")
-                _isLoading.value = false
+            }.also {
+                _isLoading.postValue(false) // 로딩 종료
             }
         }
     }
 
-    // "더보기" 버튼을 클릭 했을 때 데이터 호출
+    // "더보기" 버튼을 클릭했을 때 추가 데이터 호출
     fun loadMoreBooks(query: String, sort: String) {
         if (_isLoading.value == true) return
         _isLoading.value = true
@@ -60,16 +62,16 @@ class SellingSearchViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                searchRepository.searchBooks(query, 10 * currentPage, sort)
+                sellingSearchRepository.searchBooks(query, 10 * currentPage, sort)
             }.onSuccess { books ->
                 val newBooks = books.filterNot { fetchedBookIds.contains(it.isbn13) }
-                fetchedBookIds.addAll(newBooks.map { it.isbn13 }) // 새로 가져온 데이터의 ID 저장
+                fetchedBookIds.addAll(newBooks.map { it.isbn13 })
                 val currentList = _sellingSearchBooksBooks.value ?: emptyList()
-                _sellingSearchBooksBooks.value = currentList + newBooks
-                _isLoading.value = false
+                _sellingSearchBooksBooks.postValue(currentList + newBooks)
             }.onFailure { error ->
                 Log.e("SellingSearchViewModel", "Error fetching more books: $error")
-                _isLoading.value = false
+            }.also {
+                _isLoading.postValue(false) // 로딩 종료
             }
         }
     }

@@ -14,17 +14,19 @@ import javax.inject.Inject
 class BarcodeScanResultViewModel @Inject constructor(
     private val repository: BarcodeScanResultRepository
 ) : ViewModel() {
-    // LiveData
+    // 책 정보
     private val _ISBNbook = MutableLiveData<BookItem?>()
     val ISBNbook: LiveData<BookItem?> get() = _ISBNbook
 
-    // 책이 정상적으로 가져와 졌는지
+    // 책 정보 로드 여부
     private val _isBookFetched = MutableLiveData<Boolean>(false)
     val isBookFetched: LiveData<Boolean> get() = _isBookFetched
 
+    // 에러 메시지
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
 
+    // 책 정보 로드
     fun fetchBookData(isbn: String) {
         viewModelScope.launch {
             try {

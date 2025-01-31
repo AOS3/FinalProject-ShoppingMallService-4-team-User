@@ -39,6 +39,8 @@ data class SellingInquiryModel (
     var sellingInquiryState:Int = 0,
     // 관리자가 선택한 품질
     var sellingInquiryChoiceQuality:Int = 0,
+    // 정상가
+    var sellingInquiryOriginalPrice:Int = 0,
     // Firestore 문서 ID
     @Exclude @DocumentId var documentId: String = ""
 )

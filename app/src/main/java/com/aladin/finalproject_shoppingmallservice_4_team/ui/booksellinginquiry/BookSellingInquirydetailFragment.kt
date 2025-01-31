@@ -16,6 +16,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.model.SellingInquiryMo
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.ask.AskFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.qualityguide.QualityGuideFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -33,6 +34,10 @@ class BookSellingInquirydetailFragment : Fragment() {
         // Toolbar 설정 메서드 호출
         settingToolbar()
 
+        // 버튼 설정 메서드 호출
+        buttonSetting()
+
+        // 텍스트 설정 호출
         detailSetting()
 
         return fragmentBookSellingInquirydetailBinding.root
@@ -63,6 +68,7 @@ class BookSellingInquirydetailFragment : Fragment() {
         }
     }
 
+    // 텍스트 설정 메서드
     private fun detailSetting() {
         arguments?.let { bundle ->
             // 데이터 추출
@@ -102,9 +108,9 @@ class BookSellingInquirydetailFragment : Fragment() {
 
                 // 판매가 표시
                 val priceText = if (sellingInquiryApprovalResult == 2) {
-                    "판매가: ${sellingInquiryPrice}원 -> ${sellingInquiryFinalPrice}원"
+                    "판매가: ${formatNumber(sellingInquiryPrice)}원 -> ${formatNumber(sellingInquiryFinalPrice)}원"
                 } else {
-                    "예상 판매가: ${sellingInquiryPrice}원"
+                    "예상 판매가: ${formatNumber(sellingInquiryPrice)}원"
                 }
                 textViewBookSellingInquiryDetailPrice.text = priceText
                 textViewBookSellingInquiryDetailSellingTime.text = "등록 날짜: ${formatDate(sellingInquiryTime)}"
@@ -113,12 +119,18 @@ class BookSellingInquirydetailFragment : Fragment() {
         }
     }
 
+    // 세 자리마다 콤마 추가하는 함수
+    private fun formatNumber(number: Int): String {
+        return NumberFormat.getNumberInstance(Locale.US).format(number)
+    }
+
     // 품질 상태 텍스트 변환
     private fun getQualityText(quality: Int): String {
         return when (quality) {
             0 -> "상"
             1 -> "중"
             2 -> "하"
+            3 -> "매입 불가"
             else -> "오류"
         }
     }
@@ -133,6 +145,7 @@ class BookSellingInquirydetailFragment : Fragment() {
         }
     }
 
+    // 배송 수단 텍스트 변환
     private fun getShippingMethodText(method: Int): String {
         return when (method) {
             0 -> "책방 마켓 자체 택바사 신청"
@@ -141,6 +154,7 @@ class BookSellingInquirydetailFragment : Fragment() {
         }
     }
 
+    // 반송 수단 텍스트 변환
     private fun getNonPurchaseableMethodText(method: Int): String {
         return when (method) {
             0 -> "반송(반송비 고객 부담, 보낸 주소로 발송)"
@@ -154,5 +168,4 @@ class BookSellingInquirydetailFragment : Fragment() {
         val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
         return dateFormat.format(Date(time))
     }
-
 }

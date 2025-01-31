@@ -56,22 +56,23 @@ class MainMenuFragment : Fragment() {
         // BookApplication 초기화
         bookApplication = requireActivity().application as BookApplication
 
-        // ViewModel 데이터 관찰
+        // 관찰 메서드 호출
         observeViewModel()
 
-        // 로그인 상태 확인
+        // 로그인 여부 확인 메서드 호출
         checkLoginProcess()
 
-        // Tab 버튼 및 메뉴 설정
+        // Tab 버튼 및 메뉴 설정 메서드 호출
         setupTabButtons()
         setupSettingIcon()
 
-        // 메뉴 리스트 설정
+        // ListView 설정 메서드 호출
         setupMenuList()
 
         return fragmentMainMenuBinding.root
     }
 
+    // 관찰 메서드
     private fun observeViewModel() {
         // ViewModel의 userName을 관찰하여 툴바 제목 업데이트
         mainMenuViewModel.userName.observe(viewLifecycleOwner) { userName ->
@@ -111,7 +112,7 @@ class MainMenuFragment : Fragment() {
         }
     }
 
-    // 설정 아이콘 추가
+    // 메뉴 설정 메서드
     private fun setupSettingIcon() {
         val icon = ContextCompat.getDrawable(requireContext(), R.drawable.settings_24px)
         icon?.setTint(ContextCompat.getColor(requireContext(), R.color.white))

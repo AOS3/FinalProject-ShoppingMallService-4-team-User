@@ -28,6 +28,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.qualityguide.Qualit
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -66,7 +67,6 @@ class BookSellingInquiryFragment : Fragment() {
         // Application에서 로그인된 사용자 토큰 가져오기
         val userToken = (requireActivity().application as BookApplication).loginUserModel?.userToken.orEmpty()
 
-
         // 데이터 로드 호출
         viewModel.loadSellingInquiries(userToken)
 
@@ -85,7 +85,7 @@ class BookSellingInquiryFragment : Fragment() {
         }
     }
 
-    // Toolbar를 설정 메서드
+    // Toolbar 설정 메서드
     private fun settingToolbar() {
         fragmentBookSellingInquiryBinding.apply {
             materialToolbarBookSellingInquiry.title = "판매 조회"
@@ -106,7 +106,7 @@ class BookSellingInquiryFragment : Fragment() {
         }
     }
 
-    // 버튼 설정
+    // 버튼 설정 메서드
     private fun buttonSetting() {
         fragmentBookSellingInquiryBinding.apply {
             buttonBookSellingInquiryAddBookForSelling.setOnClickListener {
@@ -132,6 +132,12 @@ class BookSellingInquiryFragment : Fragment() {
         }
     }
 
+
+    // 세 자리마다 콤마 추가하는 함수
+    private fun formatNumber(number: Int): String {
+        return NumberFormat.getNumberInstance(Locale.US).format(number)
+    }
+
     // RecyclerView 설정 메서드
     private fun settingRecyclerView() {
         adapter = RecyclerBookSellingInquiryAdapter(emptyList()).apply {
@@ -155,6 +161,7 @@ class BookSellingInquiryFragment : Fragment() {
                         putString("sellingInquiryBookAuthor", selectedItem.sellingInquiryBookAuthor)
                         putInt("sellingInquiryState", selectedItem.sellingInquiryState)
                         putInt("sellingInquiryChoiceQuality", selectedItem.sellingInquiryChoiceQuality)
+                        putInt("sellingInquiryFinalPrice", selectedItem.sellingInquiryFinalPrice)
                     }
                 }
                 replaceMainFragment(detailFragment, true)
@@ -204,7 +211,7 @@ class BookSellingInquiryFragment : Fragment() {
                 binding.textViewBookSellingInquiryListState.text = state
 
                 // 품질 설정
-                val quality = when (item.sellingInquiryApprovalResult) {
+                val quality = when (item.sellingInquiryQuality) {
                     0 -> "상"
                     1 -> "중"
                     2 -> "하"
@@ -217,6 +224,7 @@ class BookSellingInquiryFragment : Fragment() {
                         0 -> "상"
                         1 -> "중"
                         2 -> "하"
+                        3 -> "매입 불가"
                         else -> "오류"
                     }
                     "최종 품질: $quality -> $staffQuality"
@@ -228,10 +236,10 @@ class BookSellingInquiryFragment : Fragment() {
                 // 나머지 데이터 설정
                 binding.textViewBookSellingInquiryListName.text = item.sellingInquiryBookName
                 binding.textViewBookSellingInquiryListAuthor.text = item.sellingInquiryBookAuthor
-                val priceText = if (item.sellingInquiryState == 2) {
-                    "판매가: ${item.sellingInquiryPrice}원 -> ${item.sellingInquiryFinalPrice}원"
+                val priceText = if (item.sellingInquiryApprovalResult == 2) {
+                    "판매가: ${formatNumber(item.sellingInquiryPrice)}원 -> ${formatNumber(item.sellingInquiryFinalPrice)}원"
                 } else {
-                    "예상 판매가: ${item.sellingInquiryPrice}원"
+                    "예상 판매가: ${formatNumber(item.sellingInquiryPrice)}원"
                 }
                 binding.textViewBookSellingInquiryListPrice.text = priceText
 
