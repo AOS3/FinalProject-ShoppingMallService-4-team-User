@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class BarcodeScanResultFragment : Fragment() {
@@ -150,7 +151,7 @@ class BarcodeScanResultFragment : Fragment() {
                 if (!userToken.isNullOrEmpty()) {
                     // 로그인이 되어 있는 경우
                     val sellingCartItem = SellingCartModel(
-                        sellingCartSellingPrice = (book.priceStandard * 0.7).toInt(),
+                        sellingCartSellingPrice = (book.priceStandard * 0.7).roundToInt(),
                         sellingCartQuality = 0,
                         sellingCartISBN = book.isbn13,
                         sellingCartUserToken = userToken,

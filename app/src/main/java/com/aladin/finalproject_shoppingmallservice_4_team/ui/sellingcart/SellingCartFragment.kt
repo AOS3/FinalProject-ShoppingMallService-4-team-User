@@ -36,6 +36,7 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class SellingCartFragment : Fragment() {
@@ -448,9 +449,9 @@ class SellingCartFragment : Fragment() {
             // 품질에 따른 계산
             private fun calculateEstimatedPrice(price: Int, quality: Int): Int {
                 return when (quality) {
-                    0 -> (price * 0.7).toInt()
-                    1 -> (price * 0.5).toInt()
-                    2 -> (price * 0.3).toInt()
+                    0 -> (price * 0.7).roundToInt()
+                    1 -> (price * 0.5).roundToInt()
+                    2 -> (price * 0.3).roundToInt()
                     else -> 0
                 }
             }

@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class SellingSearchFragment : Fragment() {
@@ -250,7 +251,7 @@ class SellingSearchFragment : Fragment() {
                 // 등록 버튼 클릭 리스너
                 buttonSellingSearchRegister.setOnClickListener {
                     val sellingCartItem = SellingCartModel(
-                        sellingCartSellingPrice = (item.priceStandard * 0.7).toInt(),
+                        sellingCartSellingPrice = (item.priceStandard * 0.7).roundToInt(),
                         sellingCartQuality = 0,
                         sellingCartISBN = item.isbn13,
                         sellingCartUserToken = userToken!!,

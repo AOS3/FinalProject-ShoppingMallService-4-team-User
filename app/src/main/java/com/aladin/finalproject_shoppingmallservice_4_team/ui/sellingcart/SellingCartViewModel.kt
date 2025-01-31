@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class SellingCartViewModel @Inject constructor(
@@ -183,9 +184,9 @@ class SellingCartViewModel @Inject constructor(
     // Firestore의 품질 및 예상 판매가 업데이트
     fun updateSellingCartQuality(item: SellingCartModel, bookPrice: Int, onComplete: (Boolean) -> Unit) {
         val updatedSellingPrice = when (item.sellingCartQuality) {
-            0 -> (bookPrice * 0.7).toInt()
-            1 -> (bookPrice * 0.5).toInt()
-            2 -> (bookPrice * 0.3).toInt()
+            0 -> (bookPrice * 0.7).roundToInt()
+            1 -> (bookPrice * 0.5).roundToInt()
+            2 -> (bookPrice * 0.3).roundToInt()
             else -> 0
         }
 
