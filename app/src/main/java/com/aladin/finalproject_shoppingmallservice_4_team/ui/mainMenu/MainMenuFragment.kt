@@ -122,6 +122,7 @@ class MainMenuFragment : Fragment() {
 
         fragmentMainMenuBinding.toolbarMainMenu.setOnMenuItemClickListener { item ->
             if (item.itemId == 1) {
+                removeFragment()
                 replaceMainFragment(SettingFragment(), true)
             }
             true
@@ -199,6 +200,7 @@ class MainMenuFragment : Fragment() {
         fragmentMainMenuBinding.apply {
             buttonMainMenuMyInfo.setOnClickListener {
                 // 내 정보로 이동
+                removeFragment()
                 replaceMainFragment(MyInfoFragment(),true)
             }
         }
@@ -206,6 +208,7 @@ class MainMenuFragment : Fragment() {
         fragmentMainMenuBinding.apply {
             buttonMainMenuOrderHistory.setOnClickListener {
                 // 주문 조회로 이동
+                removeFragment()
                 replaceMainFragment(OrderInquiryFragment(),true)
             }
         }
@@ -213,6 +216,7 @@ class MainMenuFragment : Fragment() {
         fragmentMainMenuBinding.apply {
             buttonMainMenuWishlist.setOnClickListener {
                 // 찜 목록으로 이동
+                removeFragment()
                 replaceMainFragment(LikeListFragment(),true)
             }
         }
@@ -251,30 +255,35 @@ class MainMenuFragment : Fragment() {
             val targetFragment = when (position) {
                 0 -> {
                     // 내가 판매하는 중고 도서로 이동
+                    removeFragment()
                     replaceMainFragment(SellingCartFragment(),true)
                 }
                 1 -> {
                     // 중고 도서로 이동
                     val dataBundle = Bundle()
                     dataBundle.putString("bookQuery", "Used")
+                    removeFragment()
                     replaceMainFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 2 -> {
                     // 신간 도서로 이동
                     val dataBundle = Bundle()
                     dataBundle.putString("bookQuery", "ItemNewAll")
+                    removeFragment()
                     replaceMainFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 3 -> {
                     // 베스트 셀러로 이동
                     val dataBundle = Bundle()
                     dataBundle.putString("bookQuery", "Bestseller")
+                    removeFragment()
                     replaceMainFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 4 -> {
                     // 블로거 추천으로 이동
                     val dataBundle = Bundle()
                     dataBundle.putString("bookQuery", "BlogBest")
+                    removeFragment()
                     replaceMainFragment(BookListFragment(),true,dataBundle = dataBundle)
                 }
                 else -> null
