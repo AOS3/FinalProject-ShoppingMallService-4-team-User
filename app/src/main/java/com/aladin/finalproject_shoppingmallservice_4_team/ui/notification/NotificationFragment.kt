@@ -18,6 +18,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.Notificatio
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.NotificationOnClickListener
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -144,6 +145,7 @@ class NotificationFragment : Fragment(), NotificationOnClickListener {
                 requireContext(),
                 onPositiveClick = {
                     removeFragment()
+                    replaceMainFragment(LoginFragment(), true)
                 },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px

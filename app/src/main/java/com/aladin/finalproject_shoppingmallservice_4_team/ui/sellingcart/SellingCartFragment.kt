@@ -25,6 +25,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.barcodescanner.Barc
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.booksellinginquiry.BookSellingInquiryFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.notification.NotificationFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellinglastpage.SellingLastPageFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.sellingsearch.SellingSearchFragment
@@ -112,7 +113,10 @@ class SellingCartFragment : Fragment() {
             // 로그인되지 않은 경우 다이얼로그 표시 및 프래그먼트 종료
             val loginDialog = CustomDialog(
                 requireContext(),
-                onPositiveClick = { removeFragment() },
+                onPositiveClick = {
+                    removeFragment()
+                    replaceMainFragment(LoginFragment(), true)
+                },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px
             )

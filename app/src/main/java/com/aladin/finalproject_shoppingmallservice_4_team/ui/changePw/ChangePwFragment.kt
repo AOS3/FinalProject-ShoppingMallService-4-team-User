@@ -11,7 +11,9 @@ import com.aladin.finalproject_shoppingmallservice_4_team.BookApplication
 import com.aladin.finalproject_shoppingmallservice_4_team.R
 import com.aladin.finalproject_shoppingmallservice_4_team.databinding.FragmentChangePwBinding
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialog
+import com.aladin.finalproject_shoppingmallservice_4_team.ui.login.LoginFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.showSoftInput
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -63,6 +65,7 @@ class ChangePwFragment : Fragment() {
                 requireContext(),
                 onPositiveClick = {
                     removeFragment()
+                    replaceMainFragment(LoginFragment(), true)
                 },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px
