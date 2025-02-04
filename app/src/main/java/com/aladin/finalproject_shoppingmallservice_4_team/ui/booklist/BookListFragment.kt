@@ -15,6 +15,7 @@ import com.aladin.finalproject_shoppingmallservice_4_team.ui.adapter.UsedBookLis
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.custom.CustomDialogProgressbar
 import com.aladin.finalproject_shoppingmallservice_4_team.ui.mainMenu.MainMenuFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.removeFragment
+import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceMainFragment
 import com.aladin.finalproject_shoppingmallservice_4_team.util.replaceSubFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -126,11 +127,11 @@ class BookListFragment : Fragment() {
             materialToolbarBookList.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.item_bookList_notification -> {
-                        replaceSubFragment(MainMenuFragment(), true)
+                        replaceMainFragment(MainMenuFragment(), true)
                     }
 
                     R.id.item_bookList_menu -> {
-                        replaceSubFragment(MainMenuFragment(), true)
+                        replaceMainFragment(MainMenuFragment(), true)
                     }
                 }
                 true

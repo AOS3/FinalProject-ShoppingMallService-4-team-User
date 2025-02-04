@@ -71,7 +71,7 @@ class MyInfoFragment : Fragment() {
     private fun showNotLoggedInDialog() {
         val dialog = CustomDialog(
             context = requireContext(),
-            contentText = "로그인 후 이용 가능합니다.",
+            contentText = "로그인을 먼저 진행해주세요.",
             icon = R.drawable.error_24px,
             positiveText = "확인",
             onPositiveClick = {

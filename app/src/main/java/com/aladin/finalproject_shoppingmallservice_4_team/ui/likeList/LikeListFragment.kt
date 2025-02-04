@@ -129,6 +129,7 @@ class LikeListFragment : Fragment() {
                 // 리스트 삭제 진행
                 onPositiveClick = {
                     removeFragment()
+                    replaceMainFragment(LoginFragment(), true)
                 },
                 contentText = "로그인을 먼저 진행해주세요.",
                 icon = R.drawable.error_24px
